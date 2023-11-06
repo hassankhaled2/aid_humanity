@@ -1,26 +1,20 @@
 import 'package:flutter/material.dart';
 import '../app_color/app_color_light.dart';
 
-ThemeData getThemeDataLight()=>ThemeData(
-  //theme بتاع ال text كله
-  primaryColor:AppColorsLight.primaryColor,
+ThemeData getThemeDataLight(BuildContext context) => ThemeData(
+    //theme بتاع ال text كله
+    primaryColor: AppColorsLight.primaryColor,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.white,
+      elevation: 0.5,
+    ),
     textButtonTheme: TextButtonThemeData(
 // بيسمع فى كل ال app من غير متعمل style فى ال TextButton
-   style:ButtonStyle (
-       foregroundColor:MaterialStateProperty.all(Color(0xFFF8B145))
-   ),
-
-
-),
-  bottomNavigationBarTheme:const BottomNavigationBarThemeData(selectedItemColor:AppColorsLight.bottomNavigationBarColor) ,
-  floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor:AppColorsLight.floatingActionButtonColor
-  ),
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFFF7B245)
+      style: ButtonStyle(foregroundColor: MaterialStateProperty.all(AppColorsLight.primaryColor)),
     ),
-  )
-
-);
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(selectedItemColor: AppColorsLight.primaryColor),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(backgroundColor: AppColorsLight.primaryColor),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(backgroundColor: AppColorsLight.primaryColor),
+    ));
 // ThemeData getThemeDataLight()=>ThemeData.light().copyWith();

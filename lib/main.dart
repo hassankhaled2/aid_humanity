@@ -1,5 +1,5 @@
-
-import 'package:aid_humanity/Feature/home/presentation/views/home_view.dart';
+import 'package:aid_humanity/Features/home/presentation/views/home_view.dart';
+import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 
@@ -14,10 +14,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme:getThemeDataLight(),
-      home: const HomeView(),
+      debugShowCheckedModeBanner: false,
+      theme: getThemeDataLight(context),
+      home: const ProfilePage(), //const HomeView(),
     );
   }
 }
-
-
