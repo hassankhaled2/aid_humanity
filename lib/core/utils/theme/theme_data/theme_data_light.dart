@@ -4,10 +4,7 @@ import '../app_color/app_color_light.dart';
 ThemeData getThemeDataLight(BuildContext context) => ThemeData(
     //theme بتاع ال text كله
     primaryColor: AppColorsLight.primaryColor,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.white,
-      elevation: 0.5,
-    ),
+    appBarTheme: const AppBarTheme(backgroundColor: Colors.white, elevation: 0),
     textButtonTheme: TextButtonThemeData(
 // بيسمع فى كل ال app من غير متعمل style فى ال TextButton
       style: ButtonStyle(foregroundColor: MaterialStateProperty.all(AppColorsLight.primaryColor)),

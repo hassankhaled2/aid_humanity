@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 
 class ProfileItemWidget extends StatelessWidget {
   final IconData icon;
+  final Color? iconColor;
   final String text;
   final bool isModeWidget;
-  const ProfileItemWidget({super.key, required this.icon, required this.text, required this.isModeWidget});
+  const ProfileItemWidget({super.key, required this.icon, required this.text, required this.isModeWidget, this.iconColor = Colors.black});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,7 @@ class ProfileItemWidget extends StatelessWidget {
         children: [
           Icon(
             icon,
+            color: iconColor,
             size: context.getDefaultSize() * 1.9,
           ),
           SizedBox(
