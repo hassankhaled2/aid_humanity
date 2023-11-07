@@ -1,0 +1,9 @@
+{
+   "profile":"Profile" ,
+   "language":"Language",
+    "notification":"Notification",
+    "history":"History",
+    "about":"About",
+    "help":"Help",
+    "logout":"Logout"
+}
