@@ -10,7 +10,6 @@ class AppLocalizations {
   static AppLocalizations? of(BuildContext context) {
     return Localizations.of<AppLocalizations>(context, AppLocalizations); // to tell flutter that this is my loc class
   }
-
   static LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
 
   late Map<String, String> _localizedStrings;

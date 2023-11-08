@@ -1,4 +1,4 @@
-import 'package:aid_humanity/core/utils/app_localization.dart';
+import 'package:aid_humanity/core/utils/Localization/app_localization.dart';
 import 'package:flutter/material.dart';
 
 extension TranslationExtension on BuildContext {
