@@ -7,11 +7,10 @@ class DefaultElevatedButton extends StatelessWidget {
   final double ?height;
   final VoidCallback onPressed;
   final String text;
-  final ButtonStyle style;
    final double  radius;
 
 
-  const DefaultElevatedButton({Key? key,this.width,this.height, required this.onPressed, required this.text, required this.style, required this.radius, }) : super(key: key);
+  const DefaultElevatedButton({Key? key,this.width,this.height, required this.onPressed, required this.text, required this.radius, }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SizedBox(
