@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../app_color/app_color_light.dart';
 
 ThemeData getThemeDataLight(BuildContext context) => ThemeData(
+
     //theme بتاع ال text كله
     primaryColor: AppColorsLight.primaryColor,
     appBarTheme: const AppBarTheme(backgroundColor: Colors.white, elevation: 0),
