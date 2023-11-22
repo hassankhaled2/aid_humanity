@@ -7,15 +7,15 @@ class DefaultElevatedButton extends StatelessWidget {
   final double ?height;
   final VoidCallback onPressed;
   final String text;
-   final double  radius;
+  final double radius;
 
 
   const DefaultElevatedButton({Key? key,this.width,this.height, required this.onPressed, required this.text, required this.radius, }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: height??context.getDefaultSize() * 3.0,
-        width: width,
+        height: height??context.getDefaultSize() * 4.0,
+        width: width??context.getDefaultSize() * 9.0,
         child: ElevatedButton(
           style:ElevatedButton.styleFrom(shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(radius),),),
           onPressed: onPressed,
