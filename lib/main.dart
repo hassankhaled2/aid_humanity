@@ -1,8 +1,8 @@
 
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
+import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
-import 'core/widgets/BottomNavigation.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +14,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+     routerConfig : AppRouter.router ,
       debugShowCheckedModeBanner: false,
       supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provie , which langs to use in our app
       localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
       },
       theme: getThemeDataLight,
-      home: const BottomNavigation(), //const HomeView(),
+
     );
   }
 }

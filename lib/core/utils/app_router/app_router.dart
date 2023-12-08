@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../widgets/bottom_navigation.dart';
+import '../../widgets/BottomNavigation.dart';
 
 //  تقدر تعرف كل ال screens الرئسيه اللى فى الApp من خلال ال class ده
 
