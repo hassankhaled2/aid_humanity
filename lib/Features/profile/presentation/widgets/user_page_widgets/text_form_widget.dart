@@ -9,15 +9,15 @@ class TextFromWidget extends StatelessWidget {
   final bool? obscureText;
   final TextInputType? keyboardType;
   final TextEditingController? controller;
-  const TextFromWidget({super.key, this.labelText, this.prefixIcon, this.suffixIcon, this.obscureText, this.keyboardType, required this.controller, this.maxLines=1});
+  const TextFromWidget({super.key, this.labelText, this.prefixIcon, this.suffixIcon, this.obscureText, this.keyboardType, required this.controller, this.maxLines = 1});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-        maxLines:maxLines,
+        maxLines: maxLines,
         controller: controller,
         obscureText: obscureText!, // for invisible Text as passwords
-        keyboardType: keyboardType, 
+        keyboardType: keyboardType,
         decoration: InputDecoration(
           iconColor: AppColorsLight.primaryColor,
           prefixIconColor: AppColorsLight.primaryColor,

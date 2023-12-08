@@ -1,7 +1,8 @@
+import 'package:aid_humanity/Features/home/presentation/pages/home_page.dart';
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
+
 import 'package:flutter/material.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
-import 'core/widgets/BottomNavigation.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
       },
       theme: getThemeDataLight(context),
-      home: const BottomNavigation(), //const HomeView(),
+      home: const HomePage(),
     );
   }
 }
