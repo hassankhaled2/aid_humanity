@@ -1,9 +1,11 @@
+import 'package:aid_humanity/Features/chat/pages/chats_pages.dart';
+
+import 'package:aid_humanity/Features/donation_details/pages/donation_details_page.dart';
 
 import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../Features/home/presentation/pages/home_page.dart';
-
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({Key? key}) : super(key: key);
@@ -13,51 +15,39 @@ class BottomNavigation extends StatefulWidget {
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {
-  int currentIndex=0;
+  int currentIndex = 0;
 
-  List<Widget>screens=
-  [
+  List<Widget> screens = [
     const HomePage(),
-    Container(),
-    Container(),
+    const DonationDetailsPage(),
+    const ChatsPage(),
     const ProfilePage(),
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold
-      (
-      body:screens[currentIndex] ,
+    return Scaffold(
+      body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: currentIndex,
           elevation: 70,
-          onTap:(index)
-          {
+          onTap: (index) {
             setState(() {
-              currentIndex=index;
+              currentIndex = index;
             });
-          } ,
-          items:
-          const [
+          },
+          items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),
               label: 'Home',
               backgroundColor: Colors.blueAccent,
-
             ),
             BottomNavigationBarItem(
-                icon: Icon(Icons.location_on_outlined),
-                label: 'Hunger Spot'
-            ),
+                icon: Icon(Icons.location_on_outlined), label: 'Hunger Spot'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.chat_outlined),
-                label: 'Chat'
-            ),
+                icon: Icon(Icons.chat_outlined), label: 'Chat'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline_rounded),
-                label: 'Profile'
-            ),
-
+                icon: Icon(Icons.person_outline_rounded), label: 'Profile'),
           ]),
     );
   }

@@ -1,4 +1,3 @@
-
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
 import 'package:flutter/material.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
@@ -16,12 +15,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provie , which langs to use in our app
+      supportedLocales: AppLocalizationsSetup
+          .supportedLocales, // this line to provide , which langs to use in our app
       localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
       localeResolutionCallback: (deviceLocale, supportedLocales) {
-        return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
+        return AppLocalizationsSetup.localeResolutionCallback(
+            deviceLocale!, supportedLocales);
       },
-      theme: getThemeDataLight,
+      theme: getThemeDataLight(context),
       home: const BottomNavigation(), //const HomeView(),
     );
   }
