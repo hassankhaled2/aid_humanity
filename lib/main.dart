@@ -1,4 +1,3 @@
-
 import 'package:aid_humanity/Features/home/presentation/pages/home_page.dart';
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
 import 'package:aid_humanity/core/widgets/BottomNavigation.dart';
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
       localeResolutionCallback: (deviceLocale, supportedLocales) {
         return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
       },
-      theme: getThemeDataLight(context),
+      theme: getThemeDataLight,
       home: const BottomNavigation(), //const HomeView(),
     );
   }

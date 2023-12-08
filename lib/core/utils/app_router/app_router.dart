@@ -1,8 +1,9 @@
 
+import 'package:aid_humanity/core/widgets/BottomNavigation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../widgets/bottom_navigation.dart';
+
 
 //  تقدر تعرف كل ال screens الرئسيه اللى فى الApp من خلال ال class ده
 
