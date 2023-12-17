@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "676376055999",
+    "project_id": "aid-humanity-2221d",
+    "storage_bucket": "aid-humanity-2221d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:676376055999:android:3e1856eebf7a5388e0360a",
+        "android_client_info": {
+          "package_name": "com.example.aid_humanity"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8Q5sjR4KOFvAGRoEdZeBg1mu_u8BoeNI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
