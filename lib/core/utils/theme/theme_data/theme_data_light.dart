@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../app_color/app_color_light.dart';
 
-ThemeData getThemeDataLight(BuildContext context) => ThemeData(
+ThemeData getThemeDataLight = ThemeData(
     //theme بتاع ال text كله
     primaryColor: AppColorsLight.primaryColor,
-    appBarTheme: const AppBarTheme(backgroundColor: Colors.white, elevation: 0),
+    appBarTheme: const AppBarTheme(elevation: 0,backgroundColor: Colors.white),
     textButtonTheme: TextButtonThemeData(
 // بيسمع فى كل ال app من غير متعمل style فى ال TextButton
       style: ButtonStyle(foregroundColor: MaterialStateProperty.all(AppColorsLight.primaryColor)),
