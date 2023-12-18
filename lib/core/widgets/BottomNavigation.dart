@@ -1,7 +1,8 @@
+import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
 import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 
-import '../../Features/home/presentation/pages/home_page.dart';
+
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({Key? key}) : super(key: key);
@@ -14,7 +15,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 0;
 
   List<Widget> screens = [
-    const HomePage(),
+    const HomeDeliveryPage(),
     Container(),
     Container(),
     const ProfilePage(),
