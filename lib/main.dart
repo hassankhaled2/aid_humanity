@@ -7,6 +7,7 @@ import 'core/utils/theme/theme_data/theme_data_light.dart';
 
 
 void main() async {
+  //the WidgetFlutterBinding is used to interact with the Flutter engine
    WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
   runApp(MyApp());
