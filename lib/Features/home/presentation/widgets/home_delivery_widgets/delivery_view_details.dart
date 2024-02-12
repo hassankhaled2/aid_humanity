@@ -19,6 +19,7 @@ class DeliveryViewDetails  extends StatelessWidget {
                   expandedHeight: 240,
                   flexibleSpace: FlexibleSpaceBar
                     (
+                      
                     title: Text("Hassan Khaled",style: TextStyle(color: Color(0xFFF8B145)),),
                     background: Image.network
                       (
@@ -44,7 +45,7 @@ class DeliveryViewDetails  extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
                children:
                [
-                 SizedBox(height: 400,),
+                 SizedBox(height: 200,),
                  DefaultElevatedButton(onPressed: (){}, text:"Call", radius:10,
 
                  ),
@@ -56,6 +57,6 @@ class DeliveryViewDetails  extends StatelessWidget {
               ],
             )
           )),
-    );
+ );
   }
 }
