@@ -1,4 +1,5 @@
 
+import 'package:aid_humanity/Features/splash/splashScreen.dart';
 import 'package:aid_humanity/core/widgets/BottomNavigation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -18,7 +19,7 @@ abstract class AppRouter
       GoRoute(
         //نقطه البدايه بتاعته ال / <--
         path: '/',
-        builder: (BuildContext context, GoRouterState state) =>const BottomNavigation(),
+        builder: (BuildContext context, GoRouterState state) =>const SplashScreen(),
       ),
       // GoRoute(
       //   //  أل path ده علشان تروح على ال widget اللى انت عايزها من خلال call اللى بتعمله

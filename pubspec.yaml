@@ -44,6 +44,10 @@ dependencies:
   firebase_messaging: ^14.7.5
   firebase_auth: ^4.14.1
   google_sign_in: ^6.1.6
+  shared_preferences: ^2.2.2
+  smooth_page_indicator: ^1.1.0
+
+
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
@@ -61,6 +65,9 @@ flutter:
   assets:
     - assets/lang/en.json
     - assets/lang/ar.json
+    - assets/images/onboarding1.png
+    - assets/images/onboarding2.png
+    - assets/images/onboardingWelcom.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

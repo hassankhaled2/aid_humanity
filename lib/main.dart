@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+
       routerConfig:AppRouter.router,
       debugShowCheckedModeBanner: false,
       supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provie , which langs to use in our app
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
       },
       theme: getThemeDataLight, //const HomeView(),
+
     );
   }
 }
