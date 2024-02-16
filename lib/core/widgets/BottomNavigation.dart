@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:aid_humanity/Features/donation_details/presentaion/pages/donation_form_page.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.dart';
@@ -5,6 +6,12 @@ import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.da
 import 'package:flutter/material.dart';
 
 
+=======
+import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
+import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
+import 'package:flutter/material.dart';
+
+>>>>>>> ae0ccd0362c12299fc3aed028f146a0a1c487061
 
 
 class BottomNavigation extends StatefulWidget {
@@ -17,11 +24,18 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 0;
 
+<<<<<<< HEAD
   List<Widget>screens=
   [
     const HomeDeliveryPage(),
     const HomeDonorPage(),
     const DonationFormPage(),
+=======
+  List<Widget> screens = [
+    const HomeDeliveryPage(),
+    Container(),
+    Container(),
+>>>>>>> ae0ccd0362c12299fc3aed028f146a0a1c487061
     const ProfilePage(),
   ];
   @override
@@ -41,22 +55,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
             BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),
               label: 'Home',
-              backgroundColor: Colors.blueAccent,
-
             ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.location_on_outlined),
-                label: 'Hunger Spot'
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.chat_outlined),
-                label: 'Chat'
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline_rounded),
-                label: 'Profile'
-            ),
-
+            BottomNavigationBarItem(icon: Icon(Icons.location_on_outlined), label: 'Hunger Spot'),
+            BottomNavigationBarItem(icon: Icon(Icons.chat_outlined), label: 'Chat'),
+            BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded), label: 'Profile'),
           ]),
     );
   }
