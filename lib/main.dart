@@ -1,10 +1,14 @@
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
+import 'package:aid_humanity/core/utils/app_router/app_router.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
-import 'core/widgets/BottomNavigation.dart';
 
-void main() {
-  runApp(const MyApp());
+
+void main() async {
+   WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -13,7 +17,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig:AppRouter.router,
       debugShowCheckedModeBanner: false,
       supportedLocales: AppLocalizationsSetup
           .supportedLocales, // this line to provide , which langs to use in our app
@@ -22,8 +27,8 @@ class MyApp extends StatelessWidget {
         return AppLocalizationsSetup.localeResolutionCallback(
             deviceLocale!, supportedLocales);
       },
-      theme: getThemeDataLight(context),
-      home: const BottomNavigation(), //const HomeView(),
+      theme: getThemeDataLight,
+      
     );
   }
 }
