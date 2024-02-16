@@ -29,7 +29,7 @@ class CustomButtonWidget extends StatelessWidget {
       ),
       child: Center(
         child: CustomTextWidget(
-            padding: 1, fontsize: fontSize, text: title, color: Colors.white),
+            padding: 0, fontsize: fontSize, text: title, color: Colors.white),
       ),
     );
   }

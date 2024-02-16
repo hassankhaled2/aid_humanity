@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../core/widgets/defualt_app_bar_widget.dart';
-import '../widgets/home_delivery_widgets/card_delivery_widget.dart';
+import '../widgets/home_delivery_widgets/card_widget.dart';
 import '../widgets/home_delivery_widgets/delivery_tab_buttons.dart';
 
 class HomeDeliveryPage extends StatelessWidget {

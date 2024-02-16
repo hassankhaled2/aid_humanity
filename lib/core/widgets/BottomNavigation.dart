@@ -1,4 +1,6 @@
+import 'package:aid_humanity/Features/donation_details/presentaion/pages/donation_form_page.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
+import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.dart';
 import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 
@@ -18,8 +20,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
   List<Widget>screens=
   [
     const HomeDeliveryPage(),
-    Container(),
-    Container(),
+    const HomeDonorPage(),
+    const DonationFormPage(),
     const ProfilePage(),
   ];
   @override

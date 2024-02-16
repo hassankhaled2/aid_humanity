@@ -6,7 +6,7 @@ import 'core/utils/theme/theme_data/theme_data_light.dart';
 
 
 void main() async {
-   WidgetsFlutterBinding.ensureInitialized();
+WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
   runApp(MyApp());
 }
@@ -28,7 +28,6 @@ class MyApp extends StatelessWidget {
             deviceLocale!, supportedLocales);
       },
       theme: getThemeDataLight,
-      
     );
   }
 }
