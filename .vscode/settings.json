@@ -1,3 +1,12 @@
 {
+<<<<<<< HEAD
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "cSpell.words": [
+        "autocorrect",
+        "fontsize",
+        "mediaquery"
+    ]
+=======
     "java.configuration.updateBuildConfiguration": "interactive"
+>>>>>>> ae0ccd0362c12299fc3aed028f146a0a1c487061
 }
