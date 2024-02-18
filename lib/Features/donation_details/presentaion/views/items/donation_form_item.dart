@@ -26,7 +26,7 @@ class DonationFormItem extends StatelessWidget {
           child: Row(
             children: [
               Padding(
-                padding: EdgeInsets.only(right: context.getDefaultSize() * 9),
+                padding: EdgeInsets.only(right: context.getDefaultSize() * 8),
                 child: Text(
                   "Donate Item Details",
                   style: TextStyle(
@@ -39,7 +39,7 @@ class DonationFormItem extends StatelessWidget {
               IconButton(
                 icon: Icon(
                   FontAwesomeIcons.circleXmark,
-                  color: Color.fromARGB(255, 133, 132, 132),
+                  color:const Color.fromARGB(255, 133, 132, 132),
                   size: context.getDefaultSize() * 3,
                 ),
                 onPressed: () {
@@ -74,8 +74,11 @@ class DonationFormItem extends StatelessWidget {
           )
         ])),
         Center(
-          child: CustomButtonWidget(
-              height: 4, width: 20, title: "Submit", fontSize: 2),
+          child: Padding(
+            padding: EdgeInsets.all(context.getDefaultSize()),
+            child: CustomButtonWidget(
+                height: 4, width: 20, title: "Submit", fontSize: 2),
+          ),
         )
       ],
     ));

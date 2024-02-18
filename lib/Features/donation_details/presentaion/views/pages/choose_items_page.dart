@@ -1,8 +1,8 @@
-import 'package:aid_humanity/Features/donation_details/presentaion/widgets/items/babies_items_item.dart';
-import 'package:aid_humanity/Features/donation_details/presentaion/widgets/items/boys_items_item.dart';
-import 'package:aid_humanity/Features/donation_details/presentaion/widgets/items/girls_items_item.dart';
-import 'package:aid_humanity/Features/donation_details/presentaion/widgets/items/men_items_item.dart';
-import 'package:aid_humanity/Features/donation_details/presentaion/widgets/items/women_items_item.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/views/items/babies_items_item.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/views/items/boys_items_item.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/views/items/girls_items_item.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/views/items/men_items_item.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/views/items/women_items_item.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
 import 'package:flutter/material.dart';

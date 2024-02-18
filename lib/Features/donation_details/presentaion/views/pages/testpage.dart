@@ -1,40 +1,17 @@
-/*import 'package:aid_humanity/Features/donation_details/widgets/items/add_images_Item.dart';
-
-import 'package:aid_humanity/core/widgets/defualt_app_bar_widget.dart';
-import 'package:flutter/material.dart';
-
-class AddImagesPage extends StatelessWidget {
-  const AddImagesPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: _buildAppBar(context),
-      body: _buildBody(),
-    );
-  }
-  AppBar _buildAppBar(BuildContext context) => getDefaultAppBarWidget(
-        context: context,
-        title: "Add Images",
-        color: Colors.black,
-      );
-
-  Widget _buildBody() => const AddImagesItem();
-}*/
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite_v2/tflite_v2.dart';
 
-class AddImagePage extends StatefulWidget {
-  const AddImagePage({super.key});
+class Test extends StatefulWidget {
+  const Test({super.key});
 
   @override
-  State<AddImagePage> createState() => _AddImagePageState();
+  State<Test> createState() => _TestState();
 }
 
-class _AddImagePageState extends State<AddImagePage> {
+class _TestState extends State<Test> {
   bool _loading = true;
   late File _image;
   final picker = ImagePicker();
@@ -55,12 +32,15 @@ class _AddImagePageState extends State<AddImagePage> {
   }
 
   Future<void> loadModel() async {
-    await Tflite.loadModel(model: "assets/models/model.tflite", labels: 'assets/models/labels.txt');
+    await Tflite.loadModel(
+        model: "assets/models/model.tflite",
+        labels: 'assets/models/labels.txt');
   }
 
   pickGallery() async {
     // ignore: body_might_complete_normally_catch_error
-    var image = await picker.pickImage(source: ImageSource.gallery).catchError((e) {
+    var image =
+        await picker.pickImage(source: ImageSource.gallery).catchError((e) {
       // ignore: avoid_print
       print(e.toString());
     });
@@ -73,7 +53,8 @@ class _AddImagePageState extends State<AddImagePage> {
 
   pickCamera() async {
     // ignore: body_might_complete_normally_catch_error
-    var image = await picker.pickImage(source: ImageSource.camera).catchError((e) {
+    var image =
+        await picker.pickImage(source: ImageSource.camera).catchError((e) {
       // ignore: avoid_print
       print(e.toString());
     });
@@ -104,7 +85,10 @@ class _AddImagePageState extends State<AddImagePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _loading == true ? Image.network("https://static.thenounproject.com/png/4974686-200.png") : Image.file(_image, height: 300, width: 300),
+            _loading == true
+                ? Image.network(
+                    "https://static.thenounproject.com/png/4974686-200.png")
+                : Image.file(_image, height: 300, width: 300),
             const SizedBox(
               height: 10,
             ),
@@ -133,7 +117,11 @@ class _AddImagePageState extends State<AddImagePage> {
             const SizedBox(
               height: 30,
             ),
-            _output.isEmpty ? const SizedBox() : const Text("Result", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            _output.isEmpty
+                ? const SizedBox()
+                : const Text("Result",
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(
               height: 10,
             ),
@@ -146,7 +134,8 @@ class _AddImagePageState extends State<AddImagePage> {
                         itemCount: _output.length,
                         itemBuilder: (context, index) {
                           return Text(
-                            "${index + 1} - " + _output[index]["label"].toString().substring(1),
+                            "${index + 1} - " +
+                                _output[index]["label"].toString().substring(1),
                             style: const TextStyle(fontSize: 20),
                           );
                         }),

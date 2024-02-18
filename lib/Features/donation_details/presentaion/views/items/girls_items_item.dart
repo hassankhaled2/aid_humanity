@@ -1,4 +1,4 @@
-import 'package:aid_humanity/Features/donation_details/presentaion/widgets/choose_item_wigdet.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/views/widgets/choose_item_wigdet.dart';
 import 'package:flutter/material.dart';
 
 class GirlsItemsItem extends StatelessWidget {

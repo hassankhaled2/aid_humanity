@@ -6,11 +6,7 @@ import 'core/utils/theme/theme_data/theme_data_light.dart';
 
 
 void main() async {
-<<<<<<< HEAD
-WidgetsFlutterBinding.ensureInitialized();
-=======
    WidgetsFlutterBinding.ensureInitialized();
->>>>>>> ae0ccd0362c12299fc3aed028f146a0a1c487061
     await Firebase.initializeApp();
   runApp(MyApp());
 }
@@ -31,11 +27,7 @@ class MyApp extends StatelessWidget {
         return AppLocalizationsSetup.localeResolutionCallback(
             deviceLocale!, supportedLocales);
       },
-<<<<<<< HEAD
-      theme: getThemeDataLight,
-=======
       theme: getThemeDataLight, //const HomeView(),
->>>>>>> ae0ccd0362c12299fc3aed028f146a0a1c487061
     );
   }
 }
