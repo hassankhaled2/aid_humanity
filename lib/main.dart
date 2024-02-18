@@ -1,15 +1,16 @@
-
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
+import 'package:aid_humanity/injection_container.dart' as di;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 
-
 void main() async {
-   WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  di.init(); // for object creation using dependency injection
+
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig:AppRouter.router,
+      routerConfig: AppRouter.router,
       debugShowCheckedModeBanner: false,
       supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provie , which langs to use in our app
       localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,

@@ -1,0 +1,142 @@
+0 Accessory Gift Sets
+1 Baby Dolls
+2 Backpacks
+3 Bangles
+4 Basketballs
+5 Bath Robes
+6 Beauty Accessories
+7 Belts
+8 Blazers
+9 Body Lotions
+10 Body Washes and Scrubs
+11 Booties
+12 Boxers
+13 Bras
+14 Bracelets
+15 Briefs
+16 Camisoles
+17 Capris
+18 Caps
+19 Casual Shoes
+20 Churidars
+21 Clothing Sets
+22 Clutches
+23 Compacts
+24 Concealers
+25 Cufflinks
+26 Cushion Covers
+27 Deodorants
+28 Dresses
+29 Duffel Bags
+30 Dupattas
+31 Earrings
+32 Eye Creams
+33 Eyeshadows
+34 Face Moisturisers
+35 Face Scrubs and Exfoliators
+36 Face Serums and Gels
+37 Face Washes and Cleansers
+38 Flats
+39 Flip Flops
+40 Footballs
+41 Formal Shoes
+42 Foundations and Primers
+43 Fragrance Gift Sets
+44 Free Gifts
+45 Gloves
+46 Hair Accessories
+47 Hair Colours
+48 Handbags
+49 Hats
+50 Headbands
+51 Heels
+52 Highlighters and Blushes
+53 Innerwear Vests
+54 iPads
+55 Jackets
+56 Jeans
+57 Jeggings
+58 Jewellery Sets
+59 Jumpsuits
+60 Kajals and Eyeliners
+61 Keychains
+62 Kurta Sets
+63 Kurtas
+64 Kurtis
+65 Laptop Bags
+66 Leggings
+67 Lehenga Cholis
+68 Lip Cares
+69 Lip Glosses
+70 Lip Liners
+71 Lip Plumpers
+72 Lipsticks
+73 Lounge Pants
+74 Lounge Shorts
+75 Lounge T-shirts
+76 Makeup Removers
+77 Mascaras
+78 Masks and Peels
+79 Men's Grooming Kits
+80 Messenger Bags
+81 Mobile Pouches
+82 Mufflers
+83 Nail Essentials
+84 Nail Polishes
+85 Necklaces and Chains
+86 Nehru Jackets
+87 Night Suits
+88 Nightdresses
+89 Patialas
+90 Pendants
+91 Perfume and Body Mists
+92 Rain Jackets
+93 Rain Trousers
+94 Rings
+95 Robes
+96 Rompers
+97 Rucksacks
+98 Salwars
+99 Salwars and Dupattas
+100 Sandals
+101 Sarees
+102 Scarves
+103 Shapewear
+104 Shirts
+105 Shoe Accessories
+106 Shoe Laces
+107 Shorts
+108 Shrugs
+109 Skirts
+110 Socks
+111 Sports Sandals
+112 Sports Shoes
+113 Stockings
+114 Stoles
+115 Sunglasses
+116 Sunscreens
+117 Suspenders
+118 Sweaters
+119 Sweatshirts
+120 Swimwear
+121 Tablet Sleeves
+122 Ties
+123 Ties and Cufflinks
+124 Tights
+125 Toners
+126 Tops
+127 Track Pants
+128 Tracksuits
+129 Travel Accessories
+130 Trolley Bags
+131 Trousers
+132 Trunks
+133 T-shirts
+134 Tunics
+135 Umbrellas
+136 Waist Pouches
+137 Waistcoats
+138 Wallets
+139 Watches
+140 Water Bottles
+141 Wristbands

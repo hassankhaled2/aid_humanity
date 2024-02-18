@@ -1,8 +1,7 @@
+import 'package:aid_humanity/Features/donation_details/presentaion/pages/donation_details_page.dart';
+import 'package:aid_humanity/core/constants/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../../core/widgets/defualt_app_bar_widget.dart';
-import '../widgets/home_delivery_widgets/card_delivery_widget.dart';
 import '../widgets/home_delivery_widgets/delivery_tab_buttons.dart';
 
 class HomeDeliveryPage extends StatelessWidget {
@@ -11,14 +10,19 @@ class HomeDeliveryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => (DonationDetailsPage())));
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: kPrimaryColor,
+      ),
       // appBar: _buildAppBar(context),
-      body:_buildBody() ,
-
-
-
+      body: _buildBody(),
     );
   }
-Widget _buildBody() => const DeliveryTabButtons();
+
+  Widget _buildBody() => const DeliveryTabButtons();
 
   // AppBar _buildAppBar(BuildContext context) => getDefaultAppBarWidget(
   //         context: context,
@@ -46,6 +50,4 @@ Widget _buildBody() => const DeliveryTabButtons();
   //           )),
   //     ]
   // );
-
-
 }
