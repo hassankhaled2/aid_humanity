@@ -1,4 +1,5 @@
 import 'package:aid_humanity/core/error/exceptions.dart';
+import 'package:aid_humanity/core/network/networkconnection/network_connection.dart';
 import 'package:dartz/dartz.dart';
 
 import 'package:aid_humanity/Features/donation_details/data/remote_data_source.dart';
@@ -8,7 +9,6 @@ import 'package:aid_humanity/core/entities/request_entity.dart';
 import 'package:aid_humanity/core/error/faliures.dart';
 import 'package:aid_humanity/core/models/item_model.dart';
 import 'package:aid_humanity/core/models/request_model.dart';
-import 'package:aid_humanity/core/network/connection/network_connection.dart';
 
 class DetailsRepositoryImpl extends DetailsRepository {
   DetailsRemoteDataSource detailsRemoteDataSource;

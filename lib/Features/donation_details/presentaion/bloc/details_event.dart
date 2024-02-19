@@ -15,4 +15,12 @@ class AddRequestEvent extends DetailsEvent {
     required this.requestEntity,
     required this.items,
   });
+  
+}
+// ignore: must_be_immutable
+class UploadImagesEvent extends DetailsEvent {
+  List<File> images;
+  UploadImagesEvent({
+    required this.images,
+  });
 }

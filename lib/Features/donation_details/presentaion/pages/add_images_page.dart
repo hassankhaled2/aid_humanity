@@ -43,9 +43,7 @@ class _TestModelState extends State<TestModel> {
   @override
   void initState() {
     super.initState();
-    loadModel().then((value) {
-      setState(() {});
-    });
+   
   }
 
   @override
@@ -54,9 +52,7 @@ class _TestModelState extends State<TestModel> {
     Tflite.close();
   }
 
-  Future<void> loadModel() async {
-    await Tflite.loadModel(model: "assets/ai_model/New_CNN.tflite", labels: "assets/ai_model/lables.txt",);
-  }
+  
 
   pickGallery() async {
     // ignore: body_might_complete_normally_catch_error

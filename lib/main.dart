@@ -1,15 +1,19 @@
+import 'package:aid_humanity/Features/donation_details/presentaion/bloc/details_bloc.dart';
+import 'package:aid_humanity/bloc_observer.dart';
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:aid_humanity/injection_container.dart' as di;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'Features/donation_details/presentaion/bloc/ai_model_cubit/cubit/classificaiton_cubit.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   di.init(); // for object creation using dependency injection
-
+  Bloc.observer = MyBlocObserver();
   runApp(const MyApp());
 }
 
@@ -22,12 +26,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: AppRouter.router,
       debugShowCheckedModeBanner: false,
-      supportedLocales: AppLocalizationsSetup
-          .supportedLocales, // this line to provide , which langs to use in our app
+      supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provide , which langs to use in our app
       localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
       localeResolutionCallback: (deviceLocale, supportedLocales) {
-        return AppLocalizationsSetup.localeResolutionCallback(
-            deviceLocale!, supportedLocales);
+        return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
       },
       theme: getThemeDataLight, //const HomeView(),
     );
