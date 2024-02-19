@@ -22,10 +22,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: AppRouter.router,
       debugShowCheckedModeBanner: false,
-      supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provie , which langs to use in our app
+      supportedLocales: AppLocalizationsSetup
+          .supportedLocales, // this line to provide , which langs to use in our app
       localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
       localeResolutionCallback: (deviceLocale, supportedLocales) {
-        return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
+        return AppLocalizationsSetup.localeResolutionCallback(
+            deviceLocale!, supportedLocales);
       },
       theme: getThemeDataLight, //const HomeView(),
     );

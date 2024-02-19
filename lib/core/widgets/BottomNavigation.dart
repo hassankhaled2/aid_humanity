@@ -1,4 +1,7 @@
+
+import 'package:aid_humanity/Features/donation_details/presentaion/views/pages/donation_form_page.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
+import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.dart';
 import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +17,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   List<Widget> screens = [
     const HomeDeliveryPage(),
-    Container(),
+    const HomeDonorPage(),
+    const DonationFormPage(),
     const ProfilePage(),
   ];
   @override
@@ -35,8 +39,12 @@ class _BottomNavigationState extends State<BottomNavigation> {
               icon: Icon(Icons.home_outlined),
               label: 'Home',
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.chat_outlined), label: 'Chat'),
-            BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded), label: 'Profile'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.location_on_outlined), label: 'Hunger Spot'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.chat_outlined), label: 'Chat'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline_rounded), label: 'Profile'),
           ]),
     );
   }

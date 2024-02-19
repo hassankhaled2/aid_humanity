@@ -1,10 +1,15 @@
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:flutter/material.dart';
-// ignore: must_be_immutable
+
 class CustomTextWidget extends StatelessWidget {
-  CustomTextWidget({super.key,required this.fontsize,required this.color,required this.padding,required this.text});
-double fontsize;
-String text;
+  CustomTextWidget(
+      {super.key,
+      required this.fontsize,
+      required this.color,
+      required this.padding,
+      required this.text});
+  double fontsize;
+  String text;
   double padding;
   Color color;
 
@@ -19,9 +24,11 @@ String text;
       child: Text(
         text,
         style: TextStyle(
-            fontSize: context.getDefaultSize() * fontsize, color: color),
+            fontSize: context.getDefaultSize() * fontsize,
+            color: color,
+            fontWeight: FontWeight.bold
+            ),
       ),
     );
   }
 }
- 

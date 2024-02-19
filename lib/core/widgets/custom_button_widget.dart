@@ -1,9 +1,8 @@
-import 'package:aid_humanity/core/constants/constants.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
+import 'package:aid_humanity/core/utils/constants.dart';
 import 'package:aid_humanity/core/widgets/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class CustomButtonWidget extends StatelessWidget {
   CustomButtonWidget({
     super.key,
@@ -30,7 +29,7 @@ class CustomButtonWidget extends StatelessWidget {
       ),
       child: Center(
         child: CustomTextWidget(
-            padding: 1, fontsize: fontSize, text: title, color: Colors.white),
+            padding: 0, fontsize: fontSize, text: title, color: Colors.white),
       ),
     );
   }
