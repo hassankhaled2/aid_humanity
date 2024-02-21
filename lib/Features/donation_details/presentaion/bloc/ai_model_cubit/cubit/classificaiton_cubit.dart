@@ -16,6 +16,7 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
       await Tflite.loadModel(
         model: "assets/ai_model/New_CNN.tflite",
         labels: "assets/ai_model/lables.txt",
+        
       );
       emit(ModelLoadedState());
     } catch (error) {
