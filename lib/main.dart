@@ -1,11 +1,13 @@
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/details_bloc.dart';
-import 'package:aid_humanity/bloc_observer.dart';
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
 import 'package:aid_humanity/injection_container.dart' as di;
+import 'package:aid_humanity/test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'Features/auth/presentation/pages/login_page.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 import 'core/widgets/BottomNavigation.dart';
@@ -13,7 +15,7 @@ import 'core/widgets/BottomNavigation.dart';
 void main() async {
   //the WidgetFlutterBinding is used to interact with the Flutter engine
   WidgetsFlutterBinding.ensureInitialized();
- 
+
   await Firebase.initializeApp(
     name: "initial",
     options: const FirebaseOptions(
@@ -23,12 +25,17 @@ void main() async {
       projectId: "aid-humanity-2221d",
     ),
   );
-   await di.init();
-  runApp(const MyApp());
+  await di.init();
+  Position position = await getPosition();
+  print(position.latitude);
+  runApp(MyApp(
+    position: position,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Position position;
+  const MyApp({super.key, required this.position});
   void initState() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
@@ -56,4 +63,13 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<Position> getPosition() async {
+  Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+  List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+  print(placemarks[0].street);
+  print(placemarks[0].locality);
+  return position;
 }
