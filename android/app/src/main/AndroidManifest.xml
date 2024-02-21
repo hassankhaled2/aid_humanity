@@ -3,6 +3,9 @@
         android:label="aid_humanity"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+    
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
        
         <activity
             android:name=".MainActivity"

@@ -22,6 +22,12 @@ abstract class AppRouter {
         path: kDeliveryViewDetails,
         builder: (BuildContext context, GoRouterState state) => const DeliveryViewDetails(),
       ),
+      GoRoute(
+        //  أل path ده علشان تروح على ال widget اللى انت عايزها من خلال call اللى بتعمله
+        path:kDeliveryViewDetails ,
+        builder: (BuildContext context, GoRouterState state) =>const DeliveryViewDetails(),
+      ),
+
     ],
   );
 }

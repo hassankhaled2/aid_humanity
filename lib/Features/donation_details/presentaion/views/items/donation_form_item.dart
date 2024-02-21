@@ -63,6 +63,8 @@ class _DonationFormItemState extends State<DonationFormItem> {
           }
 
           BlocProvider.of<DetailsBloc>(context).add(AddRequestEvent(requestEntity: RequestEntity(time: date, address: {"location": locationController.text}, numberOfItems: widget.items.length), items: items!));
+        } else if (state is UploadImagesErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please check your internet connection")));
         }
       },
       child: Scaffold(
@@ -132,7 +134,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Request Submitted successfully")),
                 );
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const BottomNavigation()));
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const BottomNavigation()), (route) => false);
               }
               if (state is AddRequestErrorState) {
                 if (state.message == "check your internet con``nection") {
@@ -143,7 +145,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
               }
             },
             builder: (context, state) {
-              if (state is AddRequestLoadingState) {
+              if (state is AddRequestLoadingState || state is UploadImagesLoadingState) {
                 return const Center(
                   child: CircularProgressIndicator(
                     color: AppColorsLight.primaryColor,

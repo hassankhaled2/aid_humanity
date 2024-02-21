@@ -7,6 +7,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:path/path.dart';
 
 import 'package:aid_humanity/Features/donation_details/domain/use_cases/add_request_use_case.dart';
@@ -22,7 +23,10 @@ class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
     on<DetailsEvent>((event, emit) async {
       if (event is UploadImagesEvent) {
         emit(UploadImagesLoadingState());
-        await _uploadRequestItemsImages(event.images);
+        if (await InternetConnectionChecker().hasConnection) {
+          await _uploadRequestItemsImages(event.images);
+        } else
+          (emit(UploadImagesErrorState()));
       } else if (event is AddRequestEvent) {
         emit(AddRequestLoadingState());
         final falureOrUnit = await addRequestUSeCase.addRequest(event.requestEntity, event.items);

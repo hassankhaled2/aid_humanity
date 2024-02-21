@@ -39,6 +39,7 @@ class UploadImagesSuccessState extends DetailsState {
 }
 
 class UploadImagesErrorState extends DetailsState {
+  const UploadImagesErrorState();
   @override
   List<Object> get props => [];
 }
