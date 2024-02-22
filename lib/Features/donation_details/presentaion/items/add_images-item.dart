@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/ai_model_cubit/cubit/classificaiton_cubit.dart';
-import 'package:aid_humanity/Features/donation_details/presentaion/views/pages/donation_form_page.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/pages/donation_form_page.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
 import 'package:aid_humanity/core/utils/theme/app_color/app_color_light.dart';

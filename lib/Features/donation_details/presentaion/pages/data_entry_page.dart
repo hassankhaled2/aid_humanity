@@ -1,5 +1,5 @@
 
-import 'package:aid_humanity/Features/donation_details/presentaion/views/widgets/data_entry_widgets.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/widgets/data_entry_widgets.dart';
 import 'package:aid_humanity/core/widgets/defualt_app_bar_widget.dart';
 import 'package:flutter/material.dart';
 

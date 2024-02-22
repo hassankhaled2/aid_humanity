@@ -1,11 +1,10 @@
-import 'package:aid_humanity/Features/donation_details/presentaion/widgets/items/babies_items_item.dart';
-import 'package:aid_humanity/Features/donation_details/presentaion/widgets/items/boys_items_item.dart';
-import 'package:aid_humanity/Features/donation_details/presentaion/widgets/items/girls_items_item.dart';
-import 'package:aid_humanity/Features/donation_details/presentaion/widgets/items/men_items_item.dart';
-import 'package:aid_humanity/Features/donation_details/presentaion/widgets/items/women_items_item.dart';
-import 'package:aid_humanity/core/constants/constants.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/items/babies_items_item.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/items/boys_items_item.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/items/girls_items_item.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/items/men_items_item.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/items/women_items_item.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
-
+import 'package:aid_humanity/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class ChooseItemsPage extends StatelessWidget {
@@ -14,17 +13,21 @@ class ChooseItemsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     
       body: Padding(
         padding: EdgeInsets.only(top: context.getDefaultSize() * 2),
         child: DefaultTabController(
           length: 5,
           child: NestedScrollView(
-            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverAppBar(
                   backgroundColor: Colors.white,
-                  title: Text('Choose Items', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: context.getDefaultSize() * 2)),
+                  title: Text('Choose Items',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontSize: context.getDefaultSize() * 2)),
                   pinned: true,
                   floating: true,
                   flexibleSpace: FlexibleSpaceBar(
@@ -43,29 +46,39 @@ class ChooseItemsPage extends StatelessWidget {
                       Tab(
                           child: Text(
                         'Men',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: context.getDefaultSize() * 2.5),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: context.getDefaultSize() * 2.5),
                       )),
                       Tab(
                           child: Text(
                         'Women',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: context.getDefaultSize() * 2.5),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: context.getDefaultSize() * 2.5),
                       )),
                       Tab(
                         child: Text(
                           'Boys',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: context.getDefaultSize() * 2.5),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: context.getDefaultSize() * 2.5),
                         ),
                       ),
                       Tab(
                         child: Text(
                           'Girls',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: context.getDefaultSize() * 2.5),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: context.getDefaultSize() * 2.5),
                         ),
                       ),
                       Tab(
                         child: Text(
                           'Babies',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: context.getDefaultSize() * 2.5),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: context.getDefaultSize() * 2.5),
                         ),
                       ),
                     ],

@@ -1,4 +1,4 @@
-import 'package:aid_humanity/Features/donation_details/presentaion/views/pages/donation_form_page.dart';
+import 'package:aid_humanity/Features/chat/pages/chats_pages.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.dart';
 import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
@@ -14,7 +14,7 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 0;
 
-  List<Widget> screens = [const HomeDeliveryPage(), const HomeDonorPage(), const ProfilePage(), const ProfilePage()];
+  List<Widget> screens = [const HomeDeliveryPage(), const HomeDonorPage(),  ChatsPage(), const ProfilePage()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

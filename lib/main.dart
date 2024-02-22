@@ -1,13 +1,10 @@
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/details_bloc.dart';
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
 import 'package:aid_humanity/injection_container.dart' as di;
-import 'package:aid_humanity/test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'Features/auth/presentation/pages/login_page.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 import 'core/widgets/BottomNavigation.dart';
@@ -26,16 +23,14 @@ void main() async {
     ),
   );
   await di.init();
-  Position position = await getPosition();
-  print(position.latitude);
-  runApp(MyApp(
-    position: position,
-  ));
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final Position position;
-  const MyApp({super.key, required this.position});
+  const MyApp({
+    super.key,
+  });
   void initState() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
@@ -52,24 +47,19 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (context) => di.getIt<DetailsBloc>(),
       child: MaterialApp(
-        home: FirebaseAuth.instance.currentUser == null ? LoginPage() : BottomNavigation(),
+        home: FirebaseAuth.instance.currentUser == null
+            ? LoginPage()
+            : BottomNavigation(),
         debugShowCheckedModeBanner: false,
-        supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provide , which langs to use in our app
+        supportedLocales: AppLocalizationsSetup
+            .supportedLocales, // this line to provide , which langs to use in our app
         localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
         localeResolutionCallback: (deviceLocale, supportedLocales) {
-          return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
+          return AppLocalizationsSetup.localeResolutionCallback(
+              deviceLocale!, supportedLocales);
         },
         theme: getThemeDataLight, //const HomeView(),
       ),
     );
   }
-}
-
-Future<Position> getPosition() async {
-  Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-  List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-  print(placemarks[0].street);
-  print(placemarks[0].locality);
-  return position;
 }

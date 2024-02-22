@@ -1,6 +1,5 @@
-import 'package:aid_humanity/core/constants/constants.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
-
+import 'package:aid_humanity/core/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 SizedBox textFieldDonationDetails(

@@ -1,7 +1,7 @@
-import 'package:aid_humanity/Features/donation_details/presentaion/views/pages/add_images_page.dart';
-import 'package:aid_humanity/Features/donation_details/presentaion/views/pages/choose_items_page.dart';
-import 'package:aid_humanity/Features/donation_details/presentaion/views/pages/data_entry_page.dart';
-import 'package:aid_humanity/Features/home/presentation/widgets/home_delivery_widgets/card_widget.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/pages/add_images_page.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/pages/choose_items_page.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/pages/data_entry_page.dart';
+import 'package:aid_humanity/Features/home/presentation/widgets/card_widget.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
@@ -78,13 +78,13 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
                     // make scroll in the same position if you are going to another screen and come back
                     key: const PageStorageKey<String>('CardDonorWidget'),
                     itemBuilder: (context, index) {
-                      return const CardWidget();
+                      return  CardWidget();
                     },
                   ),
                   ListView.builder(
                     key: const PageStorageKey<String>('Widget'),
                     itemBuilder: (context, index) {
-                      return const CardWidget();
+                      return  CardWidget();
                     },
                   ),
                 ],

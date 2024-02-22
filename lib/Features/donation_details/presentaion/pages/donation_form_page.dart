@@ -4,7 +4,7 @@ import 'package:aid_humanity/Features/donation_details/presentaion/bloc/details_
 import 'package:aid_humanity/injection_container.dart';
 import 'package:flutter/material.dart';
 
-import 'package:aid_humanity/Features/donation_details/presentaion/views/items/donation_form_item.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/items/donation_form_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DonationFormPage extends StatelessWidget {
