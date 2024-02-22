@@ -12,12 +12,17 @@ class CustomTextForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+
       obscureText:obscureText,
       onTapOutside: (event)=>FocusScope.of(context).unfocus(),
       validator: validator,
       controller: mycontroller,
       ///see it again
       decoration: InputDecoration(
+        // you should put this to mke border fixed when you click on the button
+        border:OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
         suffixIcon: suffix != null ? IconButton(
         onPressed: suffixpressed,
         icon: Icon(suffix),
@@ -30,9 +35,13 @@ class CustomTextForm extends StatelessWidget {
             borderSide: BorderSide(color:Colors.black)
         ),
     //اول لما تدوس على ال textformfield
+
+
+
+
     focusedBorder: OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(10)),
-    borderSide: BorderSide(color:Colors.orangeAccent)
+    borderSide: BorderSide(color:Colors.orangeAccent,)
     ),
       ),
 

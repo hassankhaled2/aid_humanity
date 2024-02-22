@@ -1,4 +1,5 @@
 
+import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../../../../core/utils/app_router/app_router.dart';
+
 import '../../../../core/utils/styles/styles.dart';
 import '../../../../core/widgets/BottomNavigation.dart';
 import '../widgets/text_form_field.dart';
@@ -29,6 +30,7 @@ class _State extends State<RegisterPage> {
   TextEditingController password = TextEditingController();
   GlobalKey<FormState>formState=GlobalKey();
   bool isPassword=true;
+
   Future signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -163,13 +165,28 @@ class _State extends State<RegisterPage> {
                           async {
     if(formState.currentState!.validate()) {
       try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+       final creditional= await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email.text,
           password: password.text,
         );
+     await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+       Navigator.of(context).pushNamedAndRemoveUntil(login, (route) => false);
+    // if(creditional.user!.emailVerified)
+    // {
+    // Navigator.of(context).pushReplacementNamed(bottomNavigation);
+    // }else {
+    //
+    //   AwesomeDialog(
+    //     context: context,
+    //     dialogType: DialogType.error,
+    //     animType: AnimType.rightSlide,
+    //     title: 'Error',
+    //     desc:
+    //     'please go to your gmail and make verify to your email',
+    //   ).show();
+    // }
         // GoRouter.of(context).push(AppRouter.KBottomNavigation);
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => BottomNavigation(),));
+
       } on FirebaseAuthException catch (e) {
          if (e.code ==e.code) {
           AwesomeDialog(

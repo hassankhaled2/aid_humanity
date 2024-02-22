@@ -1,11 +1,15 @@
 
+import 'package:aid_humanity/Features/auth/presentation/pages/register_page.dart';
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'Features/auth/presentation/pages/login_page.dart';
+import 'core/utils/app_router/app_router.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 import 'core/widgets/BottomNavigation.dart';
+
+
 
 
 void main() async {
@@ -42,7 +46,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: FirebaseAuth.instance.currentUser==null?LoginPage():BottomNavigation(),
+      routes:
+      {
+        register : (context) => RegisterPage() ,
+        login : (context) => LoginPage(),
+        bottomNavigation : (context) => BottomNavigation(),
+      },
+      home: FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser!.emailVerified?BottomNavigation():LoginPage(),
       debugShowCheckedModeBanner: false,
       supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provie , which langs to use in our app
       localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,

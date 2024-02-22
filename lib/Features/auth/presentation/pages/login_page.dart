@@ -1,11 +1,11 @@
 
-import 'package:aid_humanity/core/widgets/BottomNavigation.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../../../core/utils/app_router/app_router.dart';
 import '../../../../core/utils/styles/styles.dart';
 import '../widgets/text_form_field.dart';
 import 'register_page.dart';
@@ -24,7 +24,6 @@ class _State extends State<LoginPage> {
   GlobalKey<FormState>formState=GlobalKey();
   bool isPassword=true;
   bool isloading=false;
-
   Future signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -33,14 +32,14 @@ class _State extends State<LoginPage> {
     final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
     // Create a new credential
-    final credential = GoogleAuthProvider.credential(
+     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
 
     // Once signed in, return the UserCredential
     await FirebaseAuth.instance.signInWithCredential(credential);
-  Navigator.of(context).push(MaterialPageRoute(builder: (context) => BottomNavigation(),));
+    Navigator.of(context).pushNamedAndRemoveUntil(bottomNavigation, (route) => false);
 
     // addCateogry();
   }
@@ -115,13 +114,49 @@ class _State extends State<LoginPage> {
                       )
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left:200,top: 10),
+                    padding: const EdgeInsets.only(left:195,top: 10),
                     child: Row(children:
                     [
                       TextButton(onPressed: ()
-                      {
+                      async {
+                        if(email.text=='')
+                        {
+                          AwesomeDialog(
+                            context: context,
+                            showCloseIcon: true,
+                            dialogType:DialogType.warning,
+                            animType: AnimType.rightSlide,
+                            title: 'Error',
+                            desc:
+                            'please enter your email after that enter forget password',
+                          ).show();
+                          return;
+                        }
+                        try{
+                          await FirebaseAuth.instance.sendPasswordResetEmail(email: email.text);
+                          AwesomeDialog(
+                            context: context,
+                            showCloseIcon: true,
+                            dialogType:DialogType.success,
+                            animType: AnimType.rightSlide,
+                            title: 'Error',
+                            desc:
+                            'please go to your gmail and make verify to your email',
+                          ).show();
+                        }catch(e)
+                        {
+                          AwesomeDialog(
+                            context: context,
+                            showCloseIcon: true,
+                            dialogType:DialogType.warning,
+                            animType: AnimType.rightSlide,
+                            title: 'Error',
+                            desc:
+                            'there is something wrong in your account',
+                          ).show();
+                        }
 
-                      }, child:Text('Rest Passsword?',style:TextStyle(color: Colors.black),))
+                      }, child:Text('Forget Passsword?',style:TextStyle(color: Colors.black),))
                     ],),
                   ),
                   SizedBox(height: 30,),
@@ -133,24 +168,43 @@ class _State extends State<LoginPage> {
                         style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black),shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)))),
                           onPressed: ()
                           async {
+
                             if(formState.currentState!.validate())
                             {
                               try {
                                 isloading=true;
                                 setState((){});
-                              await FirebaseAuth.instance.signInWithEmailAndPassword(
+                         final  creditional=  await FirebaseAuth.instance.signInWithEmailAndPassword(
                                     email: email.text,
                                     password: password.text
-
                                 );
+                              if(creditional.user!.emailVerified)
+                              {
+                                Navigator.of(context).pushReplacementNamed(bottomNavigation);
+                              }else
+                              {
+                                FirebaseAuth.instance.currentUser!.sendEmailVerification();
+                                AwesomeDialog(
+                                  context: context,
+                                  showCloseIcon: true,
+                                  dialogType:DialogType.warning,
+                                  animType: AnimType.rightSlide,
+                                  title: 'Error',
+                                  desc:
+                                  'please go to your gmail and make verify to your email',
+                                ).show();
+
+                              }
                                 isloading=false;
                                 setState((){});
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) =>LoginPage()));
+
+
                               } on FirebaseAuthException catch (e) {
                                 isloading=false;
                                 setState(() {
 
                                 });
+
                                 ///Error in this line code
                                 if (e.code == e.code) {
                                   print('there is a something wrong in password or email.');
@@ -166,7 +220,7 @@ class _State extends State<LoginPage> {
                                   ).show();
                                  }else
                                  {
-                                   print('not valid');
+                                   // Navigator.of(context).push(MaterialPageRoute(builder: (context) =>BottomNavigation()));
                                  }
                               }
                             }
