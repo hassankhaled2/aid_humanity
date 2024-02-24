@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dartz/dartz_unsafe.dart';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tflite_v2/tflite_v2.dart';
@@ -16,7 +16,6 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
       await Tflite.loadModel(
         model: "assets/ai_model/New_CNN.tflite",
         labels: "assets/ai_model/lables.txt",
-        
       );
       emit(ModelLoadedState());
     } catch (error) {
@@ -45,7 +44,6 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
       emit(ClassificaitonErrorState());
     }
 
-    
   }
 
   List<String> _mapModelOutputsToLabels(List<dynamic> outputs) {
@@ -62,4 +60,6 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
 
     return result;
   }
+
+
 }
