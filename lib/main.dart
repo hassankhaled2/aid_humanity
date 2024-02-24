@@ -1,7 +1,11 @@
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/details_bloc.dart';
+import 'package:aid_humanity/Features/home/data/data_sources/remote_data_source.dart';
+import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
+import 'package:aid_humanity/bloc_observer.dart';
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
 import 'package:aid_humanity/injection_container.dart' as di;
 import 'package:aid_humanity/test.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -26,16 +30,15 @@ void main() async {
     ),
   );
   await di.init();
-  Position position = await getPosition();
-  print(position.latitude);
-  runApp(MyApp(
-    position: position,
-  ));
+  Bloc.observer = MyBlocObserver();
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final Position position;
-  const MyApp({super.key, required this.position});
+  const MyApp({
+    super.key,
+  });
   void initState() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
@@ -49,10 +52,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => di.getIt<DetailsBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => di.getIt<DetailsBloc>()),
+        BlocProvider(create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
+      ],
       child: MaterialApp(
-        home: FirebaseAuth.instance.currentUser == null ? LoginPage() : BottomNavigation(),
+        home: FirebaseAuth.instance.currentUser == null ? const LoginPage() : const BottomNavigation(),
         debugShowCheckedModeBanner: false,
         supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provide , which langs to use in our app
         localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,

@@ -74,19 +74,19 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
               },
               body: TabBarView(
                 children: [
-                  ListView.builder(
-                    // make scroll in the same position if you are going to another screen and come back
-                    key: const PageStorageKey<String>('CardDonorWidget'),
-                    itemBuilder: (context, index) {
-                      return const CardWidget();
-                    },
-                  ),
-                  ListView.builder(
-                    key: const PageStorageKey<String>('Widget'),
-                    itemBuilder: (context, index) {
-                      return const CardWidget();
-                    },
-                  ),
+                  // ListView.builder(
+                  //   // make scroll in the same position if you are going to another screen and come back
+                  //   key: const PageStorageKey<String>('CardDonorWidget'),
+                  //   itemBuilder: (context, index) {
+                  //     return const CardWidget();
+                  //   },
+                  // ),
+                  // ListView.builder(
+                  //   key: const PageStorageKey<String>('Widget'),
+                  //   itemBuilder: (context, index) {
+                  //     return const CardWidget();
+                  //   },
+                  // ),
                 ],
               ),
             ),

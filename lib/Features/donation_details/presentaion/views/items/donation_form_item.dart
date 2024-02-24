@@ -8,6 +8,7 @@ import 'package:aid_humanity/core/utils/constants.dart';
 import 'package:aid_humanity/core/utils/theme/app_color/app_color_light.dart';
 import 'package:aid_humanity/core/widgets/BottomNavigation.dart';
 import 'package:aid_humanity/core/widgets/custom_button_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -62,7 +63,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
             items = widget.items.map((item) => ItemEntity(type: item, size: "", season: " ", gender: " ", image: image, quantity: int.parse(quantityController.text))).toList();
           }
 
-          BlocProvider.of<DetailsBloc>(context).add(AddRequestEvent(requestEntity: RequestEntity(time: date, address: {"location": locationController.text}, numberOfItems: widget.items.length), items: items!));
+          BlocProvider.of<DetailsBloc>(context).add(AddRequestEvent(requestEntity: RequestEntity(time: date, address: {"location": locationController.text}, numberOfItems: widget.items.length, userId: FirebaseAuth.instance.currentUser!.uid, status: "Pending"), items: items!));
         } else if (state is UploadImagesErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please check your internet connection")));
         }

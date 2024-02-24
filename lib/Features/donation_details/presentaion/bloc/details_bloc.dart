@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aid_humanity/core/constants/strings/faliures_strings.dart';
 import 'package:aid_humanity/core/entities/item_entity.dart';
 import 'package:aid_humanity/core/entities/request_entity.dart';
 import 'package:aid_humanity/core/error/faliures.dart';
@@ -44,14 +45,12 @@ class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
       // this to get the extended types while run time :)
       // ignore: type_literal_in_constant_pattern
       case ServerFaliure:
-        return "something went wrong";
-
+        return SERVER_FALIURE_MESSAGE;
       // ignore: type_literal_in_constant_pattern
       case OfflineFaliure:
-        return "check your internet connection";
-
+        return OFFLINE_FALIURE_MESSAGE;
       default:
-        return "unexpected error";
+        return UN_EXCPECTED_ERROR_MESSAGE;
     }
   }
 
@@ -62,7 +61,7 @@ class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
     try {
       for (int i = 0; i < images.length; i++) {
         var imageName = basename(images[i].path);
-        var refStorage = FirebaseStorage.instance.ref("requestsImages/$imageName");
+        var refStorage = FirebaseStorage.instance.ref("requestsImages/req1/$imageName");
         await refStorage.putFile(images[i]);
         var url = await refStorage.getDownloadURL();
         imagesUrls.add(url);
