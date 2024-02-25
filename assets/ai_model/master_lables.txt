@@ -1,0 +1,7 @@
+0 Accessories 
+1 Apparel 
+2 Footwear 
+3 Free Items 
+4 Home 
+5 Personal Care 
+6 Sporting Goods 

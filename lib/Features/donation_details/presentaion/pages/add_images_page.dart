@@ -24,7 +24,7 @@ class AddImagePage extends StatelessWidget {
       );
 
   Widget _buildBody() => BlocProvider(
-        create: (context) => ClassificaitonCubit()..loadModel(),
+        create: (context) => ClassificaitonCubit(),
         child:const AddImagesItem(),
       );
 }

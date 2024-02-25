@@ -14,7 +14,7 @@ class DonationFormPage extends StatelessWidget {
     required this.itemsImages,
   });
 
-  final List<String> items;
+  final List<Map<String, dynamic>> items;
   final List<File> itemsImages;
   @override
   Widget build(BuildContext context) {

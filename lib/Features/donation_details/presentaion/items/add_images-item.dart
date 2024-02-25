@@ -35,7 +35,6 @@ class _AddImagesItemState extends State<AddImagesItem> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ClassificaitonCubit>(context).loadModel();
   }
 
   @override
@@ -134,7 +133,7 @@ class _AddImagesItemState extends State<AddImagesItem> {
                             backgroundColor: AppColorsLight.primaryColor,
                           ));
                         } else {
-                          BlocProvider.of<ClassificaitonCubit>(context).classifyImage(galleryImages!);
+                          BlocProvider.of<ClassificaitonCubit>(context).Classification(galleryImages!);
                         }
                       },
                     ),

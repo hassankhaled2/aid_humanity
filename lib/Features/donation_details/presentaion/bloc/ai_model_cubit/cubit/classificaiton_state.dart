@@ -30,7 +30,7 @@ final class ClassificaitonLoadingState extends ClassificaitonState {
 }
 
 final class ClassificaitonSuccessState extends ClassificaitonState {
-  final List<String> result;
+  final List<Map<String, dynamic>> result;
   final List<File> itemsImages;
 
   const ClassificaitonSuccessState({required this.itemsImages, required this.result});

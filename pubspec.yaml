@@ -80,8 +80,7 @@ flutter:
     - lib/core/utils/assets_images/girls clothes/
     - lib/core/utils/assets_images/boys clothes/
     - lib/core/utils/assets_images/babies clothes/
-    - assets/ai_model/New_CNN.tflite
-    - assets/ai_model/lables.txt
+    - assets/ai_model/
     - assets/font_families/static/
     - assets/pics/
     - assets/ai_model/

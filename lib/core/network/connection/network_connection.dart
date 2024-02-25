@@ -13,3 +13,4 @@ class ConnectionInfoImpl implements ConnctionInfo {
   @override
   Future<bool> get isConnected => internetConnectionChecker.hasConnection;
 }
+
