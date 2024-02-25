@@ -1,4 +1,5 @@
 
+import 'package:aid_humanity/Features/auth/presentation/pages/phone_number_page.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -154,6 +155,7 @@ class _State extends State<LoginPage> {
                             desc:
                             'there is something wrong in your account',
                           ).show();
+                        //  print(e);
                         }
 
                       }, child:Text('Forget Passsword?',style:TextStyle(color: Colors.black),))
@@ -266,6 +268,16 @@ class _State extends State<LoginPage> {
                       signInWithGoogle();
                     }, icon:Icon(FontAwesomeIcons.google), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
                   ),
+                   SizedBox(height: 10,),
+                  Center(
+                    child: ElevatedButton.icon(
+
+                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
+                      onPressed: ()
+                      {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PhoneNumberPage()));
+                      }, icon:Icon(FontAwesomeIcons.phone), label:Text('Continue with  Phone',style: TextStyle(color: Colors.white),),),
+                  )
                   // SizedBox(height: 10,),
                   // Center(
                   //   child: InkWell(

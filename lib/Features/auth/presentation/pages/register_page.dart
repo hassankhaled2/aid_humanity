@@ -1,4 +1,5 @@
 
+import 'package:aid_humanity/Features/auth/presentation/pages/phone_number_page.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,6 +27,7 @@ class RegisterPage extends StatefulWidget {
 class _State extends State<RegisterPage> {
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
+  TextEditingController phone = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   GlobalKey<FormState>formState=GlobalKey();
@@ -56,7 +58,7 @@ class _State extends State<RegisterPage> {
     return Scaffold
       (
       body: Padding(
-        padding: const EdgeInsets.only(top: 100,left: 20,right: 20),
+        padding: const EdgeInsets.only(top: 60,left: 20,right: 20),
         child: ListView(
           children:
           [
@@ -110,6 +112,53 @@ class _State extends State<RegisterPage> {
 
                   ),
                   Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child:CustomTextForm(
+                      keyboardType: TextInputType.phone,
+                      // inputFormatters:
+                      // [
+                      //   FilteringTextInputFormatter.allow(RegExp(r'^\-?(\d+\.?\d{0,2})?')),
+                      // ],
+                      obscureText: false,
+
+                      hinttext:"+20XXXXXXXXXX" ,
+                      mycontroller:phone ,
+                      validator: (val)
+                      {
+                        if(val=="")
+                        {
+                          return'can not to be empty';
+                        }
+                        return null;
+                      },
+
+                    ),
+//             child: IntlPhoneField(
+//               autofocus: true,
+//               focusNode:FocusNode(),
+//               // searchText:b ,
+//               // initialCountryCode: b,
+//                initialCountryCode: "IN",
+//                 controller:phone ,
+// onCountryChanged: (value)
+// {
+//   print("hhhhhhhhhhhhhhhhhhhhhh""${value.code}");
+// },
+//  onChanged: (value)
+//  {
+//
+//    print("Countryhghghghghghghghghghghghg""${value.countryCode}");
+//  },
+//               decoration: InputDecoration(
+//
+//                 hintText: 'Phone Number',
+//                 border: OutlineInputBorder(
+//                   borderSide: BorderSide(),
+//                 ),
+//               ),
+//             ),
+                  ),
+                  Padding(
                     padding: EdgeInsets.only(top: 15,),
                     child: CustomTextForm(
                       obscureText: false,
@@ -127,6 +176,7 @@ class _State extends State<RegisterPage> {
                     ),
 
                   ),
+
                   Padding(
                       padding: EdgeInsets.only(top: 15,),
                       child: CustomTextForm(
@@ -170,7 +220,7 @@ class _State extends State<RegisterPage> {
           password: password.text,
         );
      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
-       Navigator.of(context).pushNamedAndRemoveUntil(login, (route) => false);
+       Navigator.of(context).pushNamedAndRemoveUntil(bottomNavigation, (route) => false);
     // if(creditional.user!.emailVerified)
     // {
     // Navigator.of(context).pushReplacementNamed(bottomNavigation);
@@ -232,7 +282,17 @@ class _State extends State<RegisterPage> {
                         signInWithGoogle();
                       }, icon:Icon(FontAwesomeIcons.google), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
                   ),
-                  SizedBox(height: 30,),
+                  SizedBox(height: 20,),
+                  Center(
+                    child: ElevatedButton.icon(
+
+                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
+                      onPressed: ()
+                      {
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PhoneNumberPage()));
+                      }, icon:Icon(FontAwesomeIcons.phone), label:Text('Continue with  Phone',style: TextStyle(color: Colors.white),),),
+                  ),
+                  SizedBox(height: 20,),
                   Row(
                     mainAxisAlignment:MainAxisAlignment.center,
                     children:
@@ -247,7 +307,8 @@ class _State extends State<RegisterPage> {
                         )
                         );
                         // GoRouter.of(context).push(AppRouter.KLoginScreen);
-                        }, child:Text('Sign in',style: TextStyle(color: Colors.orange)))
+                        }, child:Text('Sign in',style: TextStyle(color: Colors.orange))),
+
 
                     ],
                   ),

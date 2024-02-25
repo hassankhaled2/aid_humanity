@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextForm extends StatelessWidget {
   final String hinttext ;
@@ -6,17 +7,21 @@ class CustomTextForm extends StatelessWidget {
   final String ?Function(String?)?validator;
    final IconData ?suffix;
    final  VoidCallback? suffixpressed;
-     final  bool obscureText;
-   CustomTextForm({super.key, required this.hinttext, required this.mycontroller,  this.validator, this.suffix, this.suffixpressed, required this.obscureText, });
+   final  bool obscureText;
+   final  TextInputType? keyboardType;
+   final List<TextInputFormatter>? inputFormatters;
+   CustomTextForm({super.key, required this.hinttext, required this.mycontroller, this.keyboardType, this.inputFormatters, this.validator, this.suffix, this.suffixpressed, required this.obscureText, });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-
+      inputFormatters:inputFormatters,
+      keyboardType:keyboardType,
       obscureText:obscureText,
       onTapOutside: (event)=>FocusScope.of(context).unfocus(),
       validator: validator,
       controller: mycontroller,
+
       ///see it again
       decoration: InputDecoration(
         // you should put this to mke border fixed when you click on the button

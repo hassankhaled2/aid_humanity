@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'Features/auth/presentation/pages/login_page.dart';
+import 'Features/auth/presentation/pages/phone_number_page.dart';
 import 'core/utils/app_router/app_router.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 import 'core/widgets/BottomNavigation.dart';
@@ -52,7 +53,8 @@ class MyApp extends StatelessWidget {
         login : (context) => LoginPage(),
         bottomNavigation : (context) => BottomNavigation(),
       },
-      home: FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser!.emailVerified?BottomNavigation():LoginPage(),
+      /// see it if worked or not
+      home: FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?BottomNavigation():LoginPage(),
       debugShowCheckedModeBanner: false,
       supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provie , which langs to use in our app
       localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
