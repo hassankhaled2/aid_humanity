@@ -1,10 +1,11 @@
+
+import 'package:aid_humanity/Features/home/presentation/widgets/view_details_widget.dart';
 import 'package:aid_humanity/core/entities/request_entity.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
-import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:aid_humanity/core/widgets/default_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
+
 
 class CardWidget extends StatelessWidget {
   final RequestEntity requestEntity;
@@ -80,7 +81,7 @@ class CardWidget extends StatelessWidget {
                       ),
                       DefaultElevatedButton(
                         onPressed: () {
-                          GoRouter.of(context).push(AppRouter.kViewDetails);
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => ViewDetailsWidget(requestEntity:requestEntity)));
                         },
                         text: "View Details",
                         radius: 10,

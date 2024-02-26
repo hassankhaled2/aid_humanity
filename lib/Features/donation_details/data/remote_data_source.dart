@@ -18,6 +18,7 @@ class DetailsRemoteDataSourceImplWithFireBase extends DetailsRemoteDataSource {
   Future<Either<Faliure, Unit>> addRequest(RequestModel requestModel, List<ItemModel> items) async {
     try {
       DocumentReference requestDocumentReference = await firestore.collection('request').add(requestModel.toJson(requestModel));
+      requestDocumentReference.update({"id": requestDocumentReference.id});
 
       for (var item in items) {
         firestore.collection('request').doc(requestDocumentReference.id).collection('items').add(item.toJson(item));

@@ -1,3 +1,4 @@
+import 'package:aid_humanity/Features/donation_details/presentaion/bloc/ai_model_cubit/cubit/classificaiton_cubit.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/details_bloc.dart';
 import 'package:aid_humanity/Features/home/data/data_sources/remote_data_source.dart';
 import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => di.getIt<DetailsBloc>()),
         BlocProvider(create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
+        BlocProvider(create: (_) => ClassificaitonCubit()),
       ],
       child: MaterialApp(
         home: FirebaseAuth.instance.currentUser == null ? const LoginPage() : const BottomNavigation(),

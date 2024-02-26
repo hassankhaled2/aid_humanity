@@ -12,7 +12,7 @@ class DeliveryTabButtons extends StatefulWidget {
   const DeliveryTabButtons({super.key});
 
   @override
-  State<DeliveryTabButtons> createState() => _DeliveryTabButtonsState();
+  State<StatefulWidget> createState() => _DeliveryTabButtonsState();
 }
 
 class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
@@ -22,16 +22,6 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
     BlocProvider.of<HomeBloc>(context).add(GetAllRequestsEvent());
   }
 
-  @override
-  State<DeliveryTabButtons> createState() => _DeliveryTabButtonsState();
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-}
-
-class DeliveryTabButtonsState extends State<DeliveryTabButtons> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -131,18 +121,18 @@ class DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                     }
                   },
                 ),
-                // ListView.builder(
-                //   key: const PageStorageKey<String>('CardDeliver'),
-                //   itemBuilder: (context, index) {
-                //     return const CardWidget();
-                //   },
-                // ),
-                // ListView.builder(
-                //   key: const PageStorageKey<String>('Widget'),
-                //   itemBuilder: (context, index) {
-                //     return const HistoryWidget();
-                //   },
-                // ),
+                ListView.builder(
+                  key: const PageStorageKey<String>('CardDeliver'),
+                  itemBuilder: (context, index) {
+                    return Center(child: const Text("Live"));
+                  },
+                ),
+                ListView.builder(
+                  key: const PageStorageKey<String>('Widget'),
+                  itemBuilder: (context, index) {
+                    return Center(child: const Text("history"));
+                  },
+                ),
               ],
             ),
           ),

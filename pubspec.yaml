@@ -57,6 +57,7 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   intl: ^0.18.1
   tflite_v2: ^1.0.0
+  dio: ^5.4.1
 
 dev_dependencies:
   flutter_lints: ^3.0.1
