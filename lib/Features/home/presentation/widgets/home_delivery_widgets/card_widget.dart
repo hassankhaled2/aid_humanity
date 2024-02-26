@@ -1,3 +1,4 @@
+import 'package:aid_humanity/Features/home/presentation/widgets/home_delivery_widgets/delivery_view_details.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:aid_humanity/core/widgets/default_elevated_button.dart';
@@ -97,8 +98,7 @@ class CardWidget extends StatelessWidget {
                       ),
                       DefaultElevatedButton(
                         onPressed: () {
-                          GoRouter.of(context)
-                              .push(AppRouter.kDeliveryViewDetails);
+                         Navigator.of(context).push(MaterialPageRoute(builder:(context)=>DeliveryViewDetails()));
                         },
                         text: "View Details",
                         radius: 10,

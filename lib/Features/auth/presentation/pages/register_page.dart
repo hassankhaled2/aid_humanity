@@ -1,5 +1,6 @@
 
 import 'package:aid_humanity/Features/auth/presentation/pages/phone_number_page.dart';
+import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -48,7 +49,7 @@ class _State extends State<RegisterPage> {
 
     // Once signed in, return the UserCredential
     await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => BottomNavigation(),));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => OnBoarding(),));
 
     // addCateogry();
   }
@@ -220,7 +221,7 @@ class _State extends State<RegisterPage> {
           password: password.text,
         );
      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
-       Navigator.of(context).pushNamedAndRemoveUntil(bottomNavigation, (route) => false);
+       Navigator.of(context).pushNamedAndRemoveUntil(login, (route) => false);
     // if(creditional.user!.emailVerified)
     // {
     // Navigator.of(context).pushReplacementNamed(bottomNavigation);

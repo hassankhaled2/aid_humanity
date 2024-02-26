@@ -47,6 +47,9 @@ dependencies:
   awesome_dialog: ^3.2.0
   pin_code_fields: ^8.0.1
   intl_phone_field: ^3.2.0
+  flutter_speed_dial: ^7.0.0
+  smooth_page_indicator: ^1.1.0
+  shared_preferences: ^2.2.2
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
@@ -62,6 +65,7 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/logo/logo.png
     - assets/lang/en.json
     - assets/lang/ar.json
   # An image asset can refer to one or more resolution-specific "variants", see

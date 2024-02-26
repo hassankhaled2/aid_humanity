@@ -40,7 +40,7 @@ class _State extends State<LoginPage> {
 
     // Once signed in, return the UserCredential
     await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.of(context).pushNamedAndRemoveUntil(bottomNavigation, (route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil(Onboarding, (route) => false);
 
     // addCateogry();
   }
@@ -182,7 +182,7 @@ class _State extends State<LoginPage> {
                                 );
                               if(creditional.user!.emailVerified)
                               {
-                                Navigator.of(context).pushReplacementNamed(bottomNavigation);
+                                Navigator.of(context).pushReplacementNamed(Onboarding);
                               }else
                               {
                                 FirebaseAuth.instance.currentUser!.sendEmailVerification();
