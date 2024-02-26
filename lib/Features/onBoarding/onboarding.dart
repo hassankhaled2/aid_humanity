@@ -48,7 +48,7 @@ class _OnBoardingState extends State<OnBoarding> {
       image: 'assets/images/onboardingWelcom.png',
       title: '',
       body:
-      'Welcome to Aid Humanity Connecting Communities, Sharing Meals', //Join our community and start sharing meals today.
+      'Welcome to Aid Humanity Connecting Communities, Sharing Aids', //Join our community and start sharing meals today.
       welcomeButton: MaterialButton(
         onPressed: ()
         {
