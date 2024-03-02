@@ -75,16 +75,13 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
 
   Map<String, dynamic> knnOutput = {};
   knnClassification(String description) {
-    print(description);
     emit(KnnClassificaitonsLoadingState());
     final dio = Dio();
     dio.post("http://10.0.2.2:5000/get_data", data: {"data": description}).then((value) {
-      print(value.data);
       results.add(value.data);
       emit(KnnClassificaitonsSuccessState(knnOutput: results));
     }).catchError((error) {
       emit(KnnClassificaitonsErrorState());
-      print(error);
     });
   }
 }

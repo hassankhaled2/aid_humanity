@@ -100,7 +100,7 @@ class _AddImagesItemState extends State<AddImagesItem> {
               }
             },
             builder: (context, state) {
-              if (state is ClassificaitonLoadingState ) {
+              if (state is ClassificaitonLoadingState) {
                 return Padding(
                     padding: EdgeInsets.all(context.getDefaultSize() * 1.5),
                     child: const CircularProgressIndicator(
