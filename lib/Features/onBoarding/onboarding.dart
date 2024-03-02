@@ -81,7 +81,7 @@ class _OnBoardingState extends State<OnBoarding> {
       value: true,
     ).then((value) {
       if (value = isLast) {
-        Navigator.of(context).pushNamedAndRemoveUntil(choicePage, (route) => false);
+        Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.bottomNavigation, (route) => false);
 
       }
     });
@@ -95,7 +95,7 @@ class _OnBoardingState extends State<OnBoarding> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(choicePage, (route) => false);
+              Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.bottomNavigation, (route) => false);
             },
             child: const Text(
               'SKIP',

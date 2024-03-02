@@ -67,7 +67,7 @@ class _OtpPageState extends State<OtpPage> {
               [
                 _buildintroText(context),
                 SizedBox(height: 88,),
-        Container(
+                Container(
           child: PinCodeTextField(
             controller:otpcontroller ,
             appContext: context,
@@ -108,8 +108,8 @@ class _OtpPageState extends State<OtpPage> {
         ),
                 SizedBox(height: 88,),
                 // _builtverifyButton(),
-           Center(
-      child: Container(
+                 Center(
+       child: Container(
       height: 35,
           width: 210,
           child: ElevatedButton(

@@ -56,7 +56,7 @@ class ProfileWidget extends StatelessWidget {
                 ()
             async {
               await FirebaseAuth.instance.signOut();
-           Navigator.of(context).pushNamedAndRemoveUntil(login, (route) => false);
+           Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
             }
             ),
           ]),

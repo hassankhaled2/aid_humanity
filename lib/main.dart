@@ -3,6 +3,7 @@ import 'package:aid_humanity/Features/auth/presentation/pages/register_page.dart
 import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
 import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
+import 'package:aid_humanity/core/widgets/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -52,19 +53,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes:
-      {
-        register : (context) => RegisterPage() ,
-        login : (context) => LoginPage(),
-        bottomNavigation : (context) => BottomNavigation(),
-        Onboarding:(context)=>OnBoarding(),
-        choicePage:(context)=>ChoicePage(),
-        homeDeliveryPage:(context)=>HomeDeliveryPage(),
-        homeDonorPage:(context)=>HomeDonorPage(),
-
-
-
-      },
+      routes:routes,
       /// see it if worked or not
       home: FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?BottomNavigation():SplashScreen(),
       debugShowCheckedModeBanner: false,

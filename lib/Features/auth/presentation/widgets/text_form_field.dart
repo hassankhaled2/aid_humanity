@@ -1,3 +1,4 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,9 +9,10 @@ class CustomTextForm extends StatelessWidget {
    final IconData ?suffix;
    final  VoidCallback? suffixpressed;
    final  bool obscureText;
+  final Widget? prefixIcon;
    final  TextInputType? keyboardType;
    final List<TextInputFormatter>? inputFormatters;
-   CustomTextForm({super.key, required this.hinttext, required this.mycontroller, this.keyboardType, this.inputFormatters, this.validator, this.suffix, this.suffixpressed, required this.obscureText, });
+   CustomTextForm({super.key, required this.hinttext, required this.mycontroller, this.keyboardType, this.inputFormatters, this.validator, this.suffix, this.suffixpressed, required this.obscureText, this.prefixIcon,   });
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class CustomTextForm extends StatelessWidget {
 
       ///see it again
       decoration: InputDecoration(
+        prefixIcon: prefixIcon,
         // you should put this to mke border fixed when you click on the button
         border:OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),

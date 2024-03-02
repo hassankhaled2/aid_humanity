@@ -1,17 +1,14 @@
-
 import 'package:aid_humanity/Features/auth/presentation/pages/phone_number_page.dart';
 import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-
 import '../../../../core/utils/styles/styles.dart';
-import '../../../../core/widgets/BottomNavigation.dart';
 import '../widgets/text_form_field.dart';
 import 'login_page.dart';
 
@@ -69,8 +66,8 @@ class _State extends State<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:
                 [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 5),
                     child: Text('Sign Up',style: Styles.textStyle25,),
                   ),
 
@@ -97,6 +94,9 @@ class _State extends State<RegisterPage> {
                   Padding(
                     padding: EdgeInsets.only(top: 15),
                     child: CustomTextForm(
+
+
+
                       obscureText: false,
                       hinttext:"Last Name" ,
                       mycontroller:lastName ,
@@ -116,7 +116,20 @@ class _State extends State<RegisterPage> {
                     padding: const EdgeInsets.only(top: 15),
                     child:CustomTextForm(
                       keyboardType: TextInputType.phone,
-                      // inputFormatters:
+                      // inputFormatters: [
+                      //   FilteringTextInputFormatter.digitsOnly
+
+                      // prefixIcon: CountryCodePicker(
+                      //   onChanged: (CountryCode countryCode) {},
+                      //   initialSelection: 'EG',
+                      //   showFlag: true,
+                      //   favorite: const ['+20', 'EG'],
+                      //   showCountryOnly: false,
+                      //   showOnlyCountryWhenClosed: false,
+                      //   alignLeft: false,
+                      //   showDropDownButton: true,
+                      //   padding: EdgeInsets.zero,
+                      // ),                      // inputFormatters:
                       // [
                       //   FilteringTextInputFormatter.allow(RegExp(r'^\-?(\d+\.?\d{0,2})?')),
                       // ],
@@ -179,7 +192,7 @@ class _State extends State<RegisterPage> {
                   ),
 
                   Padding(
-                      padding: EdgeInsets.only(top: 15,),
+                      padding: const EdgeInsets.only(top: 15,),
                       child: CustomTextForm(
                         obscureText:isPassword,
                         suffix: isPassword?Icons.visibility:Icons.visibility_off,
@@ -203,7 +216,7 @@ class _State extends State<RegisterPage> {
 
                       )
                   ),
-                  SizedBox(height: 50,),
+                  const SizedBox(height: 50,),
                   Center(
                     child: Container(
                       height: 35,
@@ -214,14 +227,14 @@ class _State extends State<RegisterPage> {
                           onPressed: ()
 
                           async {
-    if(formState.currentState!.validate()) {
+          if(formState.currentState!.validate()) {
       try {
        final creditional= await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email.text,
           password: password.text,
         );
      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
-       Navigator.of(context).pushNamedAndRemoveUntil(login, (route) => false);
+       Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
     // if(creditional.user!.emailVerified)
     // {
     // Navigator.of(context).pushReplacementNamed(bottomNavigation);
@@ -274,7 +287,7 @@ class _State extends State<RegisterPage> {
                         ),
                       ]
                   ),
-                  SizedBox(height: 30,),
+                  const SizedBox(height: 30,),
                   Center(
                     child: ElevatedButton.icon(
                       style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
@@ -283,7 +296,7 @@ class _State extends State<RegisterPage> {
                         signInWithGoogle();
                       }, icon:Icon(FontAwesomeIcons.google), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
                   ),
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   Center(
                     child: ElevatedButton.icon(
 
@@ -293,12 +306,12 @@ class _State extends State<RegisterPage> {
                         Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PhoneNumberPage()));
                       }, icon:Icon(FontAwesomeIcons.phone), label:Text('Continue with  Phone',style: TextStyle(color: Colors.white),),),
                   ),
-                  SizedBox(height: 20,),
+                  const SizedBox(height: 20,),
                   Row(
                     mainAxisAlignment:MainAxisAlignment.center,
                     children:
                     [
-                      Text('Are you have account?'),
+                      const Text('Are you have account?'),
                       TextButton(onPressed: ()
                        {
 
@@ -307,39 +320,11 @@ class _State extends State<RegisterPage> {
 
                         )
                         );
-                        // GoRouter.of(context).push(AppRouter.KLoginScreen);
                         }, child:Text('Sign in',style: TextStyle(color: Colors.orange))),
 
 
                     ],
                   ),
-                  // SizedBox(height: 10,),
-                  // Center(
-                  //   child: InkWell(
-                  //     onTap: ()
-                  //     {
-                  //
-                  //     },
-                  //     child: Ink(
-                  //       color: Color(0xFF397AF3),
-                  //       child: Padding(
-                  //         padding: EdgeInsets.all(6),
-                  //         child: Wrap(
-                  //           crossAxisAlignment: WrapCrossAlignment.center,
-                  //           children: [
-                  //             // Image.asset(AssetsData.googleLogo), // <-- Use 'Image.asset(...)' here
-                  //             SizedBox(width: 12),
-                  //             Text('Sign in with Google'),
-                  //           ],
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // )
-
-
-
-
                 ],
               ),
             ),
@@ -349,3 +334,26 @@ class _State extends State<RegisterPage> {
     );
   }
 }
+// SizedBox(height: 10,),
+// Center(
+//   child: InkWell(
+//     onTap: ()
+//     {
+//
+//     },
+//     child: Ink(
+//       color: Color(0xFF397AF3),
+//       child: Padding(
+//         padding: EdgeInsets.all(6),
+//         child: Wrap(
+//           crossAxisAlignment: WrapCrossAlignment.center,
+//           children: [
+//             // Image.asset(AssetsData.googleLogo), // <-- Use 'Image.asset(...)' here
+//             SizedBox(width: 12),
+//             Text('Sign in with Google'),
+//           ],
+//         ),
+//       ),
+//     ),
+//   ),
+// )

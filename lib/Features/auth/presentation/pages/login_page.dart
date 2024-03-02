@@ -25,7 +25,9 @@ class _State extends State<LoginPage> {
   GlobalKey<FormState>formState=GlobalKey();
   bool isPassword=true;
   bool isloading=false;
+
   Future signInWithGoogle() async {
+    // UserCredential userCredential;
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -34,13 +36,14 @@ class _State extends State<LoginPage> {
 
     // Create a new credential
      final credential = GoogleAuthProvider.credential(
+
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
 
     // Once signed in, return the UserCredential
     await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.of(context).pushNamedAndRemoveUntil(Onboarding, (route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.onBoarding, (route) => false);
 
     // addCateogry();
   }
@@ -182,7 +185,7 @@ class _State extends State<LoginPage> {
                                 );
                               if(creditional.user!.emailVerified)
                               {
-                                Navigator.of(context).pushReplacementNamed(Onboarding);
+                                Navigator.of(context).pushReplacementNamed(AppRouter.onBoarding);
                               }else
                               {
                                 FirebaseAuth.instance.currentUser!.sendEmailVerification();
@@ -266,7 +269,7 @@ class _State extends State<LoginPage> {
                     onPressed: ()
                     {
                       signInWithGoogle();
-                    }, icon:Icon(FontAwesomeIcons.google), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
+                    }, icon:Icon(FontAwesomeIcons.google,color:Colors.white,), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
                   ),
                    SizedBox(height: 10,),
                   Center(
@@ -276,7 +279,7 @@ class _State extends State<LoginPage> {
                       onPressed: ()
                       {
                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PhoneNumberPage()));
-                      }, icon:Icon(FontAwesomeIcons.phone), label:Text('Continue with  Phone',style: TextStyle(color: Colors.white),),),
+                      }, icon:Icon(FontAwesomeIcons.phone,color:Colors.white,), label:Text('Continue with  Phone',style: TextStyle(color: Colors.white),),),
                   )
                   // SizedBox(height: 10,),
                   // Center(
