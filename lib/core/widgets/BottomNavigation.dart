@@ -1,4 +1,4 @@
-
+import 'package:aid_humanity/Features/home/presentation/pages/choice_page.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.dart';
 import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
@@ -14,7 +14,12 @@ class BottomNavigation extends StatefulWidget {
 class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 0;
 
-  List<Widget> screens = [const HomeDeliveryPage(), const HomeDonorPage(),  Container(), const ProfilePage()];
+  List<Widget> screens = [
+    const HomeDeliveryPage(),
+    const HomeDonorPage(),
+    const ChoicePage(),
+    const ProfilePage()
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,9 +38,12 @@ class _BottomNavigationState extends State<BottomNavigation> {
               icon: Icon(Icons.home_outlined),
               label: 'Home',
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.location_on_outlined), label: 'Hunger Spot'),
-            BottomNavigationBarItem(icon: Icon(Icons.chat_outlined), label: 'Chat'),
-            BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded), label: 'Profile'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.location_on_outlined), label: 'Hunger Spot'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.chat_outlined), label: 'Chat'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline_rounded), label: 'Profile'),
           ]),
     );
   }
