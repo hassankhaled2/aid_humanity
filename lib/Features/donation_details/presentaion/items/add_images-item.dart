@@ -37,11 +37,6 @@ class _AddImagesItemState extends State<AddImagesItem> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   void deleteImage(int index) {
     setState(() {
       imageFileList.removeAt(index);
@@ -101,7 +96,7 @@ class _AddImagesItemState extends State<AddImagesItem> {
           BlocConsumer<ClassificaitonCubit, ClassificaitonState>(
             listener: (context, state) {
               if (state is ClassificaitonSuccessState) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DonationFormPage(items: state.result, itemsImages: state.itemsImages)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => DonationFormPage(items: state.result, itemsImages: state.itemsImages,isKnn: false,)));
               }
             },
             builder: (context, state) {

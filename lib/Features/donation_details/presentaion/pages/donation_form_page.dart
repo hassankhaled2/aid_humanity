@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aid_humanity/Features/donation_details/presentaion/bloc/ai_model_cubit/cubit/classificaiton_cubit.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/details_bloc.dart';
 import 'package:aid_humanity/injection_container.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +13,9 @@ class DonationFormPage extends StatelessWidget {
     super.key,
     required this.items,
     required this.itemsImages,
+    required this.isKnn
   });
-
+  final isKnn;
   final List<Map<String, dynamic>> items;
   final List<File> itemsImages;
   @override
@@ -24,8 +26,9 @@ class DonationFormPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBody() => BlocProvider(
-        create: (context) => getIt<DetailsBloc>(),
-        child: DonationFormItem(items: items, itemsImages: itemsImages),
-      );
+  Widget _buildBody() => MultiBlocProvider(providers: [
+    BlocProvider(create: (_) => getIt<DetailsBloc>()),
+        BlocProvider(create: (_) => ClassificaitonCubit()),
+  ],
+  child: DonationFormItem(items: items, itemsImages: itemsImages,isKnn: this.isKnn,));
 }

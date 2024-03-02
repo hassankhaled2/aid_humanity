@@ -42,3 +42,21 @@ final class ClassificaitonErrorState extends ClassificaitonState {
   @override
   List<Object> get props => [];
 }
+
+final class KnnClassificaitonsSuccessState extends ClassificaitonState {
+  final List< Map<String, dynamic>> knnOutput;
+
+  const KnnClassificaitonsSuccessState({required this.knnOutput});
+  @override
+  List<Object> get props => [];
+}
+
+final class KnnClassificaitonsErrorState extends ClassificaitonState {
+  @override
+  List<Object> get props => [];
+}
+
+final class KnnClassificaitonsLoadingState extends ClassificaitonState {
+  @override
+  List<Object> get props => [];
+}

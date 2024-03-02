@@ -22,6 +22,7 @@ class HomeRemoteDataSourceImplWithFireBase extends HomeRemoteDataSource {
         var itemsSnapshot = await requestsdoc.reference.collection('items').get();
         List<ItemModel> itemModels = itemsSnapshot.docs.map((doc) => ItemModel.fromJson(doc.data())).toList();
         RequestModel requestModel = RequestModel.fromJson(requestsdoc.data() as Map<String, dynamic>, itemModels);
+
         requests.add(requestModel);
       }
       if (requests.isEmpty) {
@@ -29,7 +30,7 @@ class HomeRemoteDataSourceImplWithFireBase extends HomeRemoteDataSource {
       } else {
         return requests;
       }
-    } on FirebaseException  {
+    } on FirebaseException {
       throw ServerException();
     }
   }

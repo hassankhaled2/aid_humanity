@@ -18,14 +18,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         emit(GetAllRequestsLoading());
 
         final faliureOrRequests = await getAllRequestsUseCase();
-      
+
         emit(_mapFaliureOrRequestToState(faliureOrRequests));
       }
     });
   }
 
   HomeState _mapFaliureOrRequestToState(Either<Faliure, List<RequestEntity>> faliureOrRequests) {
-    return faliureOrRequests.fold((faliure) => GetAllRequestsFailure(message: _mapFaliureToMessage(faliure)), (requests) => GetAllRequestsSuccess(requests: requests));
+    return faliureOrRequests.fold((faliure) => GetAllRequestsFailure(message: _mapFaliureToMessage(faliure)), (requests) {
+      return GetAllRequestsSuccess(requests: requests);
+    });
   }
 
   String _mapFaliureToMessage(Faliure failure) {

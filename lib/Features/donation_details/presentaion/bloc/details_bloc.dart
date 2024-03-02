@@ -61,11 +61,15 @@ class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
     try {
       for (int i = 0; i < images.length; i++) {
         var imageName = basename(images[i].path);
-        var refStorage = FirebaseStorage.instance.ref("requestsImages/req1/$imageName");
+        var refStorage = FirebaseStorage.instance.ref("requestsImages/$imageName");
         await refStorage.putFile(images[i]);
         var url = await refStorage.getDownloadURL();
         imagesUrls.add(url);
       }
+      print("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
+      print(imagesUrls);
+      print("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
+
       emit(UploadImagesSuccessState(imagesUrls: imagesUrls));
     } catch (e) {
       // ignore: invalid_use_of_visible_for_testing_member

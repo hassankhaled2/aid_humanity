@@ -1,17 +1,21 @@
-import 'dart:io';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/message_format.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:aid_humanity/core/constants/constants.dart';
+import 'package:aid_humanity/core/entities/request_entity.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/widgets/custom_button_widget.dart';
 import 'package:aid_humanity/core/widgets/defualt_app_bar_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 
 class ViewDetailsWidget extends StatefulWidget {
-  ViewDetailsWidget({Key? key, required this.position}) : super(key: key);
-  final Position position;
+  final RequestEntity requestEntity;
+  const ViewDetailsWidget({
+    super.key,
+    required this.requestEntity,
+  });
 
   @override
   State<ViewDetailsWidget> createState() => _ViewDetailsWidgetState();
@@ -35,20 +39,14 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
           Expanded(
             child: GoogleMap(
               markers: {
-                Marker(
-                    markerId: const MarkerId("1"),
-                    position: LatLng(
-                      widget.position.latitude,
-                      widget.position.latitude,
-                    ))
+                Marker(markerId: const MarkerId("1"), position: LatLng(5, 5))
               },
               mapType: MapType.normal,
               onMapCreated: (GoogleMapController controller) {
                 googleMapController = controller;
               },
               initialCameraPosition: CameraPosition(
-                target:
-                    LatLng(widget.position.latitude, widget.position.latitude),
+                target: LatLng(5, 5),
                 zoom: 14,
               ),
             ),
@@ -71,145 +69,199 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: ListView(
+                    child: Column(
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
                             top: context.getDefaultSize() * 2,
                             left: context.getDefaultSize() * 2,
                           ),
-                          child: Row(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Column(
+                              Row(
                                 children: [
                                   Text(
-                                    "Menna Ahmed",
+                                    "Donor's name:",
                                     style: TextStyle(
-                                        fontSize: context.getDefaultSize() * 2,
-                                        color: Colors.black,
+                                        color: kPrimaryColor,
+                                        fontSize:
+                                            context.getDefaultSize() * 1.8,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(height: context.getDefaultSize() * 3)
+                                  SizedBox(
+                                    width: context.getDefaultSize(),
+                                  ),
+                                  Container(
+                                    height: context.getDefaultSize() * 3,
+                                    width: context.getDefaultSize() * 14.5,
+                                    child: ListView(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      children: [
+                                        Text(
+                                          "Menna Ahmed",
+                                          style: TextStyle(
+                                              fontSize:
+                                                  context.getDefaultSize() * 2,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(
+                                        context.getDefaultSize()),
+                                    child: Container(
+                                      width: context.getDefaultSize() * 10,
+                                      decoration: BoxDecoration(
+                                        color: kSecondryColor,
+                                        borderRadius: BorderRadius.circular(
+                                          context.getDefaultSize() * 2,
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "2 min ago",
+                                          style: TextStyle(
+                                              fontSize:
+                                                  context.getDefaultSize() *
+                                                      1.5,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
-                              SizedBox(
-                                width: context.getDefaultSize() * 14,
-                              ),
-                              Column(
+                              Row(
                                 children: [
-                                  Container(
-                                    width: context.getDefaultSize() * 10,
-                                    decoration: BoxDecoration(
-                                      color: kSecondryColor,
-                                      borderRadius: BorderRadius.circular(
-                                        context.getDefaultSize() * 2,
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "2 min ago",
-                                        style: TextStyle(
-                                            fontSize:
-                                                context.getDefaultSize() * 1.5,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
+                                  Text(
+                                    "Location:",
+                                    style: TextStyle(
+                                        color: kPrimaryColor,
+                                        fontSize:
+                                            context.getDefaultSize() * 1.6,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   SizedBox(
-                                    height: context.getDefaultSize(),
+                                    width: context.getDefaultSize(),
                                   ),
-                                  Row(children: [
-                                    Icon(
-                                      FontAwesomeIcons.arrowUpRightFromSquare,
-                                      size: 12,
-                                      color: Colors.grey[600],
+                                  Container(
+                                    height: context.getDefaultSize() * 3,
+                                    width: context.getDefaultSize() * 25,
+                                    child: ListView(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      children: [
+                                        Center(
+                                          child: Text(
+                                            "Cairo, El-Shrouk city, Dar Masr,-----------",
+                                            style: TextStyle(
+                                              fontSize:
+                                                  context.getDefaultSize() *
+                                                      1.6,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(
-                                      width: context.getDefaultSize() * 1,
-                                    ),
-                                    Text(
-                                      "8 km",
-                                      style: TextStyle(
-                                          fontSize:
-                                              context.getDefaultSize() * 1.7,
-                                          color: Colors.grey[600]),
-                                    ),
-                                  ]),
+                                  ),
                                 ],
                               ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Phone no.:",
+                                    style: TextStyle(
+                                        color: kPrimaryColor,
+                                        fontSize:
+                                            context.getDefaultSize() * 1.6,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    width: context.getDefaultSize(),
+                                  ),
+                                  Text(
+                                    "01002736659",
+                                    style: TextStyle(
+                                      fontSize: context.getDefaultSize() * 1.6,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                         ),
                         SizedBox(
-                          height: context.getDefaultSize(),
+                          height: context.getDefaultSize() * 2,
                         ),
-                        Row(
-                          children: [
-                            addressText(context, "quantity"),
-                            SizedBox(
-                              width: context.getDefaultSize() * 14,
-                            ),
-                            addressText(context, "Pickup day"),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            formTextField(context, "1"),
-                            SizedBox(
-                              width: context.getDefaultSize() * 4,
-                            ),
-                            formTextField(context, "24/2/2024"),
-                          ],
-                        ),
-                        addressText(context, "Items"),
-                        Row(
-                          children: [
-                            formTextField(context, "Dress , jacket"),
-                            SizedBox(
-                              width: context.getDefaultSize() * 8,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            photoWidget(context,
-                                "https://th.bing.com/th/id/OIP._P6WHcsoWvC4yo4NQ8AsuQHaIk?rs=1&pid=ImgDetMain"),
-                            photoWidget(context,
-                                "https://th.bing.com/th/id/OIP.RW9duj31xhyK9oXhY5IXmAHaGS?rs=1&pid=ImgDetMain")
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            addressText(context, "Gender:"),
-                            SizedBox(
-                              width: context.getDefaultSize(),
-                            ),
-                            Text(
-                              "Female , Male",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontSize: context.getDefaultSize() * 1.4),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            addressText(context, "Season:"),
-                            SizedBox(
-                              width: context.getDefaultSize(),
-                            ),
-                            Text(
-                              "Summer , Winter",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontSize: context.getDefaultSize() * 1.4),
-                            )
-                          ],
+                        Expanded(
+                          child: ListView(
+                            children: [
+                              Row(
+                                children: [
+                                  addressText(context, "quantity"),
+                                  SizedBox(
+                                    width: context.getDefaultSize() * 14,
+                                  ),
+                                  addressText(context, "Pickup day"),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  formTextField(
+                                      context,
+                                      widget.requestEntity.numberOfItems
+                                          .toString()),
+                                  SizedBox(
+                                    width: context.getDefaultSize() * 4,
+                                  ),
+                                  formTextField(
+                                      context,
+                                      DateFormat('yyyy-MM-dd')
+                                          .format(widget.requestEntity.time)),
+                                ],
+                              ),
+                              addressText(context, "Items"),
+                              Container(
+                                  height: 100,
+                                  child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount:
+                                          widget.requestEntity.numberOfItems,
+                                      itemBuilder: (_, index) => formTextField(
+                                          context,
+                                          widget.requestEntity.items![index]
+                                              .type))),
+                              SizedBox(
+                                width: context.getDefaultSize() * 8,
+                              ),
+                              Container(
+                                height: 150,
+                                child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount:
+                                        widget.requestEntity.items!.length,
+                                    itemBuilder: (_, index) => Column(
+                                          children: [
+                                            photoWidget(
+                                                context,
+                                                widget.requestEntity
+                                                    .items![index].image),
+                                            Text("category:"),
+                                            Text(widget.requestEntity
+                                                .items![index].category)
+                                          ],
+                                        )),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -217,8 +269,38 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                   Center(
                     child: Padding(
                       padding: EdgeInsets.all(context.getDefaultSize() * 2),
-                      child: CustomButtonWidget(
-                          height: 4, width: 18, title: "Accept", fontSize: 2),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              final Uri url = Uri(
+                                scheme: 'tel',
+                                path: "0100 273 6659",
+                              );
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url);
+                              } else {
+                                print("cannot lunch this url");
+                              }
+                            },
+                            child: CustomButtonWidget(
+                                height: 4,
+                                width: 18,
+                                title: "CALL NOW",
+                                fontSize: 1.8),
+                          ),
+                          SizedBox(
+                            width: context.getDefaultSize(),
+                          ),
+                          GestureDetector(
+                              onTap: () {},
+                              child: CustomButtonWidget(
+                                  height: 4,
+                                  width: 18,
+                                  title: "ACCEPT",
+                                  fontSize: 1.8)),
+                        ],
+                      ),
                     ),
                   )
                 ]),

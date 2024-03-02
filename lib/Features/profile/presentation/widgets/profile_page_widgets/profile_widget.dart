@@ -4,12 +4,10 @@ import 'package:aid_humanity/Features/profile/presentation/widgets/profile_page_
 import 'package:aid_humanity/Features/profile/presentation/widgets/profile_page_widgets/profile_user_item_widget.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/extensions/translation_extension.dart';
-import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../../auth/presentation/pages/login_page.dart';
+import '../../../../../core/utils/app_router/app_router.dart';
 
 class ProfileWidget extends StatelessWidget {
   const ProfileWidget({super.key});
@@ -58,9 +56,7 @@ class ProfileWidget extends StatelessWidget {
                 ()
             async {
               await FirebaseAuth.instance.signOut();
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) =>LoginPage(),
-              )
-              );
+           Navigator.of(context).pushNamedAndRemoveUntil(login, (route) => false);
             }
             ),
           ]),

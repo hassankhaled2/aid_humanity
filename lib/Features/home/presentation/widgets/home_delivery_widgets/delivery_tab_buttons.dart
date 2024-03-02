@@ -124,13 +124,13 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                 ListView.builder(
                   key: const PageStorageKey<String>('CardDeliver'),
                   itemBuilder: (context, index) {
-                    return const Center(child: Text("Live"));
+                    return Center(child: const Text("Live"));
                   },
                 ),
                 ListView.builder(
                   key: const PageStorageKey<String>('Widget'),
                   itemBuilder: (context, index) {
-                    return const Center(child: Text("history"));
+                    return Center(child: const Text("history"));
                   },
                 ),
               ],
