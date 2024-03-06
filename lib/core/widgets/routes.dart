@@ -13,8 +13,8 @@ import 'BottomNavigation.dart';
 Map<String,Widget Function(BuildContext)>routes=
 {
   // AppRouter.splash : (context) => SplashScreen() ,
-  AppRouter.register : (context) => RegisterPage() ,
   AppRouter. login : (context) => LoginPage(),
+  AppRouter.register : (context) => RegisterPage() ,
   AppRouter. bottomNavigation : (context) => BottomNavigation(),
   AppRouter. onBoarding:(context)=>OnBoarding(),
   // AppRouter. choicePage:(context)=>ChoicePage(),
