@@ -4,7 +4,10 @@ import 'package:aid_humanity/Features/profile/presentation/widgets/profile_page_
 import 'package:aid_humanity/Features/profile/presentation/widgets/profile_page_widgets/profile_user_item_widget.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/extensions/translation_extension.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../../core/utils/app_router/app_router.dart';
 
 class ProfileWidget extends StatelessWidget {
   const ProfileWidget({super.key});
@@ -49,7 +52,13 @@ class ProfileWidget extends StatelessWidget {
             ProfileItemWidget(icon: Icons.history, text: context.translate("history"), isModeWidget: false, onTap: () {}),
             ProfileItemWidget(icon: Icons.help, text: context.translate("help"), isModeWidget: false, onTap: () {}),
             ProfileItemWidget(icon: Icons.info_outline, text: context.translate("about"), isModeWidget: false, onTap: () {}),
-            ProfileItemWidget(icon: Icons.logout, text: context.translate("logout"), isModeWidget: false, iconColor: Colors.red, onTap: () {}),
+            ProfileItemWidget(icon: Icons.logout, text: context.translate("logout"), isModeWidget: false, iconColor: Colors.red, onTap:
+                ()
+            async {
+              await FirebaseAuth.instance.signOut();
+           Navigator.of(context).pushNamedAndRemoveUntil(login, (route) => false);
+            }
+            ),
           ]),
         )
       ]),

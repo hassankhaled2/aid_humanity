@@ -1,11 +1,11 @@
-import 'package:aid_humanity/Features/donation_details/presentaion/views/pages/add_images_page.dart';
-import 'package:aid_humanity/Features/donation_details/presentaion/views/pages/choose_items_page.dart';
-import 'package:aid_humanity/Features/donation_details/presentaion/views/pages/data_entry_page.dart';
-import 'package:aid_humanity/Features/home/presentation/widgets/home_delivery_widgets/card_widget.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/pages/add_images_page.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/pages/choose_items_page.dart';
+import 'package:aid_humanity/Features/donation_details/presentaion/pages/donation_with_text_page.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DonorTapButtons extends StatefulWidget {
@@ -16,8 +16,6 @@ class DonorTapButtons extends StatefulWidget {
 }
 
 class _DonorTapButtonsState extends State<DonorTapButtons> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,13 +24,11 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
           child: DefaultTabController(
             length: 2,
             child: NestedScrollView(
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
+              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                 return <Widget>[
                   SliverAppBar(
                     backgroundColor: Colors.white,
-                    title: const Text('Aid Humanity',
-                        style: TextStyle(color: Color(0xFFF8B145))),
+                    title: const Text('Aid Humanity', style: TextStyle(color: Color(0xFFF8B145))),
                     actions: [
                       IconButton(
                           onPressed: () {},
@@ -78,19 +74,19 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
               },
               body: TabBarView(
                 children: [
-                  ListView.builder(
-                    // make scroll in the same position if you are going to another screen and come back
-                    key: const PageStorageKey<String>('CardDonorWidget'),
-                    itemBuilder: (context, index) {
-                      return const CardWidget();
-                    },
-                  ),
-                  ListView.builder(
-                    key: const PageStorageKey<String>('Widget'),
-                    itemBuilder: (context, index) {
-                      return const CardWidget();
-                    },
-                  ),
+                  // ListView.builder(
+                  //   // make scroll in the same position if you are going to another screen and come back
+                  //   key: const PageStorageKey<String>('CardDonorWidget'),
+                  //   itemBuilder: (context, index) {
+                  //     return const CardWidget();
+                  //   },
+                  // ),
+                  // ListView.builder(
+                  //   key: const PageStorageKey<String>('Widget'),
+                  //   itemBuilder: (context, index) {
+                  //     return const CardWidget();
+                  //   },
+                  // ),
                 ],
               ),
             ),
@@ -110,8 +106,7 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
         childPadding: const EdgeInsets.all(5),
         spaceBetweenChildren: 4,
         //.....
-        buttonSize: const Size.fromRadius(
-            35), //speedDial size which defaults to 56 itself
+        buttonSize: const Size.fromRadius(35), //speedDial size which defaults to 56 itself
         //iconTheme:IconThemeData(size:22),
         /*label:
             extend ? const Text("Open") : null, //the label of the main button
@@ -153,8 +148,7 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => (const DataEntryPage())),
+                MaterialPageRoute(builder: (context) => (const DonationWithTextPage())),
               );
             },
           ),
@@ -166,8 +160,7 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => (const ChooseItemsPage())),
+                MaterialPageRoute(builder: (context) => (const ChooseItemsPage())),
               );
             },
           ),

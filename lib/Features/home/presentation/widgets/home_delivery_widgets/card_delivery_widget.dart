@@ -1,9 +1,9 @@
+import 'package:aid_humanity/Features/home/presentation/widgets/home_delivery_widgets/delivery_view_details.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
-import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:aid_humanity/core/widgets/default_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
+
 
 class CardDeliverWidget extends StatelessWidget {
   const CardDeliverWidget({Key? key}) : super(key: key);
@@ -73,7 +73,7 @@ class CardDeliverWidget extends StatelessWidget {
         SizedBox(width: context.getDefaultSize()*11,),
         DefaultElevatedButton(onPressed: ()
         {
-          GoRouter.of(context).push(AppRouter.kDeliveryViewDetails);
+       Navigator.of(context).push(MaterialPageRoute(builder: (context) => DeliveryViewDetails(),));
         }, text: "View Details", radius: 10,height:context.getDefaultSize()*2.85,width:context.getDefaultSize()*14.2 ,)
       ],),
     ),
