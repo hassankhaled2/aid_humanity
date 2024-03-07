@@ -60,7 +60,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => di.getIt<DetailsBloc>()),
-        BlocProvider(create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
+        BlocProvider(
+            create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
         BlocProvider(create: (_) => ClassificaitonCubit()),
       ],
       child: MaterialApp(
@@ -75,12 +76,14 @@ class MyApp extends StatelessWidget {
         },
 
         /// see it if worked or not
-        home: BottomNavigation(),
+        home: LoginPage(),
         debugShowCheckedModeBanner: false,
-        supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provide , which langs to use in our app
+        supportedLocales: AppLocalizationsSetup
+            .supportedLocales, // this line to provide , which langs to use in our app
         localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
         localeResolutionCallback: (deviceLocale, supportedLocales) {
-          return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
+          return AppLocalizationsSetup.localeResolutionCallback(
+              deviceLocale!, supportedLocales);
         },
         theme: getThemeDataLight, //const HomeView(),
       ),
