@@ -4,7 +4,6 @@ import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.da
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/app_router/app_router.dart';
 
 
 
@@ -17,15 +16,28 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 0;
+  String displayName = "";
+  String email = "";
+  String photoUrl = "";
 
-  List<Widget> screens = [
+  List<Widget> screens = [];
 
-    const HomeDeliveryPage(),
-    //     // const HomeDonorPage(),
-    Container(),
-    Container(),
-    const ProfilePage(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      displayName = user.displayName ?? "";
+      email = user.email ?? "";
+      photoUrl = user.photoURL ?? "";
+    }
+    screens.addAll([
+      const HomeDeliveryPage(),
+      Container(),
+      Container(),
+      ProfilePage(displayName: displayName, photoUrl: photoUrl, email: email),
+    ]);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

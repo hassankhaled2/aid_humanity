@@ -10,16 +10,18 @@ import 'package:flutter/material.dart';
 import '../../../../../core/utils/app_router/app_router.dart';
 
 class ProfileWidget extends StatelessWidget {
-  const ProfileWidget({super.key});
-
+  const ProfileWidget({super.key, required this.displayName, required this.email, required this.photoUrl});
+  final String displayName;
+  final String email;
+  final String  photoUrl;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
         UserItemWidget(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const UserInfoPage()));
-          },
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserInfoPage(displayName: displayName,email: email,photoUrl:photoUrl ,)));
+          }, displayName: displayName, photoUrl: photoUrl,
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: context.getDefaultSize() * 2),

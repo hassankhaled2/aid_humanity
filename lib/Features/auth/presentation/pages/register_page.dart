@@ -2,6 +2,7 @@ import 'package:aid_humanity/Features/auth/presentation/pages/phone_number_page.
 import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,14 +24,43 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _State extends State<RegisterPage> {
-  TextEditingController firstName = TextEditingController();
-  TextEditingController lastName = TextEditingController();
+  TextEditingController fullName = TextEditingController();
+  // TextEditingController lastName = TextEditingController();
   TextEditingController phone = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController address = TextEditingController();
   GlobalKey<FormState>formState=GlobalKey();
-  bool isPassword=true;
+  bool isloading =true;
+  bool isPassword =true;
+  CollectionReference categories = FirebaseFirestore.instance.collection('UsersAuth');
 
+  // addUsersData() async{
+  //   if(formState.currentState!.validate()) {
+  //     try {
+  //       isloading=true;
+  //       setState(() {
+  //
+  //       });
+  //       //???
+  //
+  //       // Navigator.of(context).pushReplacementNamed('homepage');
+  //       // // if process done right , print for me (.....)
+  //       // .then((value) => print("User Added"))
+  //       // //not run right, print for me (.....)
+  //       // .catchError((error) => print("Failed to add user: $error"));
+  //     }catch(e)
+  //     {
+  //       isloading=false;
+  //       setState(() {
+  //
+  //       });
+  //       print('Error $e');
+  //     }
+  //   }
+  //   // Call the user's CollectionReference to add a new user
+  //
+  // }
   Future signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -77,8 +107,8 @@ class _State extends State<RegisterPage> {
                       obscureText: false,
 
 
-                      hinttext:"First Name" ,
-                      mycontroller:firstName ,
+                      hinttext:"Full Name" ,
+                      mycontroller:fullName ,
                       validator: (val)
                       {
                         if(val=="")
@@ -91,27 +121,7 @@ class _State extends State<RegisterPage> {
                     ),
 
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 15),
-                    child: CustomTextForm(
 
-
-
-                      obscureText: false,
-                      hinttext:"Last Name" ,
-                      mycontroller:lastName ,
-                      validator: (val)
-                      {
-                        if(val=="")
-                        {
-                          return'can not to be empty';
-                        }
-                        return null;
-                      },
-
-                    ),
-
-                  ),
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
                     child:CustomTextForm(
@@ -171,6 +181,25 @@ class _State extends State<RegisterPage> {
 //                 ),
 //               ),
 //             ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 15),
+                    child: CustomTextForm(
+                      maxLines: 4,
+                      obscureText: false,
+                      hinttext:"Enter your Address" ,
+                      mycontroller:address ,
+                      validator: (val)
+                      {
+                        if(val=="")
+                        {
+                          return'can not to be empty';
+                        }
+                        return null;
+                      },
+
+                    ),
+
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 15,),
@@ -233,7 +262,16 @@ class _State extends State<RegisterPage> {
           email: email.text,
           password: password.text,
         );
-     await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+       DocumentReference add=await categories.add({
+         "Full Name":fullName.text,
+         "Email":email.text,
+         "Phone":phone.text,
+         "Address":address.text,
+         // to determine which each user add to firestore that depend on  their ID
+         "id":FirebaseAuth.instance.currentUser!.uid
+       });
+       // addUsersData();
+      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
        Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
     // if(creditional.user!.emailVerified)
     // {
@@ -287,7 +325,7 @@ class _State extends State<RegisterPage> {
                         ),
                       ]
                   ),
-                  const SizedBox(height: 30,),
+                  const SizedBox(height: 20,),
                   Center(
                     child: ElevatedButton.icon(
                       style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
@@ -296,7 +334,7 @@ class _State extends State<RegisterPage> {
                         signInWithGoogle();
                       }, icon:Icon(FontAwesomeIcons.google), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 15,),
                   Center(
                     child: ElevatedButton.icon(
 

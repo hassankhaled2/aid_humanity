@@ -10,13 +10,15 @@ class CustomTextForm extends StatelessWidget {
    final  VoidCallback? suffixpressed;
    final  bool obscureText;
   final Widget? prefixIcon;
+  final int? maxLines;
    final  TextInputType? keyboardType;
    final List<TextInputFormatter>? inputFormatters;
-   CustomTextForm({super.key, required this.hinttext, required this.mycontroller, this.keyboardType, this.inputFormatters, this.validator, this.suffix, this.suffixpressed, required this.obscureText, this.prefixIcon,   });
+   CustomTextForm({super.key, required this.hinttext, required this.mycontroller, this.keyboardType, this.inputFormatters, this.validator, this.suffix, this.suffixpressed, required this.obscureText, this.prefixIcon ,this.maxLines=1  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLines: maxLines,
       inputFormatters:inputFormatters,
       keyboardType:keyboardType,
       obscureText:obscureText,
@@ -27,6 +29,7 @@ class CustomTextForm extends StatelessWidget {
       ///see it again
       decoration: InputDecoration(
         prefixIcon: prefixIcon,
+
         // you should put this to mke border fixed when you click on the button
         border:OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -37,7 +40,7 @@ class CustomTextForm extends StatelessWidget {
       )
             : null,
         hintText: hinttext,
-        contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 20),
+        contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         enabledBorder:OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             borderSide: BorderSide(color:Colors.black)

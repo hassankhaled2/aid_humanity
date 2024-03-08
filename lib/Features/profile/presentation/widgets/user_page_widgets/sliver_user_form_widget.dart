@@ -2,9 +2,16 @@ import 'package:aid_humanity/Features/profile/presentation/widgets/user_page_wid
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:flutter/material.dart';
 
-class SliverUSerFormWidget extends StatelessWidget {
-  const SliverUSerFormWidget({super.key});
+class SliverUSerFormWidget extends StatefulWidget {
+   SliverUSerFormWidget({super.key, required this.displayName, required this.email, required this.photoUrl,});
+   final String displayName;
+  final String email;
+  final String photoUrl;
+  @override
+  State<SliverUSerFormWidget> createState() => _SliverUSerFormWidgetState();
+}
 
+class _SliverUSerFormWidgetState extends State<SliverUSerFormWidget> {
   @override
   Widget build(BuildContext context) {
     return SliverList(
@@ -19,14 +26,14 @@ class SliverUSerFormWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Name",
+                     'Name',
                       style: TextStyle(fontSize: context.getDefaultSize() * 2, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       height: context.getDefaultSize() * 0.3,
                     ),
                     TextFromWidget(
-                      controller: TextEditingController(text: "Omar Salama"),
+                      controller: TextEditingController(text:  widget.displayName),
                       obscureText: false,
                       prefixIcon: Icons.person,
                       keyboardType: TextInputType.name,
@@ -43,7 +50,7 @@ class SliverUSerFormWidget extends StatelessWidget {
                       height: context.getDefaultSize() * 0.3,
                     ),
                     TextFromWidget(
-                      controller: TextEditingController(text: "Omar Salama"),
+                      controller: TextEditingController(text:widget.email),
                       obscureText: false,
                       prefixIcon: Icons.email_outlined,
                       keyboardType: TextInputType.emailAddress,

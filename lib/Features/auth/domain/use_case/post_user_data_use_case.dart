@@ -11,6 +11,7 @@ final AuthRepo authRepo;
   postUserDataUseCase(this.authRepo);
 Future<Either<Failure,List<UserEntity>>>postUserData()
 {
+  //check permission
  return authRepo.postUserData();
 }
 }

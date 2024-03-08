@@ -4,19 +4,27 @@ import 'package:aid_humanity/Features/profile/presentation/widgets/user_page_wid
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:flutter/material.dart';
 
-class UserPageWidget extends StatelessWidget {
-  const UserPageWidget({super.key});
+class UserPageWidget extends StatefulWidget {
+  const UserPageWidget({super.key, required this.displayName, required this.email, required this.photoUrl,});
+  final String displayName;
+  final String email;
+  final String  photoUrl;
+  @override
+  State<UserPageWidget> createState() => _UserPageWidgetState();
+}
 
+class _UserPageWidgetState extends State<UserPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Expanded(
+         Expanded(
           child: CustomScrollView(
             physics: BouncingScrollPhysics(),
             slivers: [
-              UserSliverAppBar(),
-              SliverPadding(padding: EdgeInsets.all(8.0), sliver: SliverUSerFormWidget()),
+
+              UserSliverAppBar(photoUrl:widget.photoUrl ,displayName:widget.displayName ),
+              SliverPadding(padding: EdgeInsets.all(8.0), sliver: SliverUSerFormWidget(displayName:widget.displayName,email: widget.email,photoUrl:widget.photoUrl,)),
             ],
           ),
         ),

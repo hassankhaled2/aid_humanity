@@ -3,14 +3,21 @@ import 'package:aid_humanity/core/utils/theme/app_color/app_color_light.dart';
 import 'package:aid_humanity/core/widgets/custom_divider_widget.dart';
 import 'package:flutter/material.dart';
 
-class UserItemWidget extends StatelessWidget {
-  const UserItemWidget({super.key, required this.onTap});
+class UserItemWidget extends StatefulWidget {
+  const UserItemWidget({super.key,  this.onTap,required this.displayName,required this.photoUrl});
   final Function()? onTap;
+  final String displayName;
+  final String photoUrl;
 
+  @override
+  State<UserItemWidget> createState() => _UserItemWidgetState();
+}
+
+class _UserItemWidgetState extends State<UserItemWidget> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: SizedBox(
         width: double.infinity,
         height: context.getDefaultSize() * 6,
@@ -25,8 +32,8 @@ class UserItemWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CircleAvatar(
-                      backgroundImage: const NetworkImage(
-                        "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?cs=srgb&dl=pexels-simon-robben-614810.jpg&fm=jpg",
+                      backgroundImage:  NetworkImage(
+                        widget.photoUrl,
                       ),
                       radius: context.getDefaultSize() * 2,
                     ),
@@ -36,7 +43,7 @@ class UserItemWidget extends StatelessWidget {
                     Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
                       Text(
-                        "Omar Salama",
+                        widget.displayName,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: context.getDefaultSize() * 1.8,
