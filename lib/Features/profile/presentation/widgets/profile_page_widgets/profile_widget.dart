@@ -6,6 +6,7 @@ import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/utils/app_router/app_router.dart';
 
@@ -57,6 +58,8 @@ class ProfileWidget extends StatelessWidget {
             ProfileItemWidget(icon: Icons.logout, text: context.translate("logout"), isModeWidget: false, iconColor: Colors.red, onTap:
                 ()
             async {
+              GoogleSignIn googleSign =GoogleSignIn();
+              googleSign.disconnect();
               await FirebaseAuth.instance.signOut();
            Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
             }

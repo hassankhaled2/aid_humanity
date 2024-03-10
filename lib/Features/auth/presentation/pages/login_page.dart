@@ -32,33 +32,33 @@ class _State extends State<LoginPage> {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    if (googleUser != null) {
-      // Extract user information
-      final String displayName = googleUser.displayName ?? "";
-      final String email = googleUser.email ?? "";
-      final String photoUrl = googleUser.photoUrl ?? "";
-
-      // Handle successful sign-in and navigate to profile screen
-      // Navigator.of(context).push(
-      //   MaterialPageRoute(
-      //     builder: (context) => ProfilePage(
-      //       displayName: displayName,
-      //       email:email,
-      //       photoUrl:photoUrl,
-      //     ),
-      //   ),
-      // );
-      //   ProfilePage(
-      //              displayName:displayName,
-      //               email:email,
-      //               photoUrl:photoUrl,
-      //       );
-      UserItemWidget(displayName:displayName,photoUrl: photoUrl);
-     UserSliverAppBar(displayName:displayName,photoUrl: photoUrl,);
-    } else {
-      // Handle sign-in cancellation or error
-      print("Sign-in cancelled by user.");
-    }
+    // if (googleUser != null) {
+    //   // Extract user information
+    //   final String displayName = googleUser.displayName ?? "";
+    //   final String email = googleUser.email ?? "";
+    //   final String photoUrl = googleUser.photoUrl ?? "";
+    //
+    //   // Handle successful sign-in and navigate to profile screen
+    //   // Navigator.of(context).push(
+    //   //   MaterialPageRoute(
+    //   //     builder: (context) => ProfilePage(
+    //   //       displayName: displayName,
+    //   //       email:email,
+    //   //       photoUrl:photoUrl,
+    //   //     ),
+    //   //   ),
+    //   // );
+    //   //   ProfilePage(
+    //   //              displayName:displayName,
+    //   //               email:email,
+    //   //               photoUrl:photoUrl,
+    //   //       );
+    //  //  UserItemWidget(displayName:displayName,photoUrl: photoUrl);
+    //  // UserSliverAppBar(displayName:displayName,photoUrl: photoUrl,);
+    // } else {
+    //   // Handle sign-in cancellation or error
+    //   print("Sign-in cancelled by user.");
+    // }
     // Obtain the auth details from the request
     googleAuth = await googleUser?.authentication;
 

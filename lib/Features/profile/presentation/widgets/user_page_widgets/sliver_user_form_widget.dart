@@ -1,7 +1,9 @@
 import 'package:aid_humanity/Features/profile/presentation/widgets/user_page_widgets/text_form_widget.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+/// handle google sign in details with google sign up
 class SliverUSerFormWidget extends StatefulWidget {
    SliverUSerFormWidget({super.key, required this.displayName, required this.email, required this.photoUrl,});
    final String displayName;
@@ -12,6 +14,44 @@ class SliverUSerFormWidget extends StatefulWidget {
 }
 
 class _SliverUSerFormWidgetState extends State<SliverUSerFormWidget> {
+  List<QueryDocumentSnapshot>data=[];
+  bool isloading=true;
+
+  String FullName = '';
+  String Email = '';
+  String Phone = '';
+  String Address = '';
+  // String displayName='';
+  String photoUrl='';
+  getdata()async
+  {
+
+
+    // QuerySnapShot --> to can take a data(list of document) from collection
+    //FirebaseFirestore.instance.collection("categories").where("id",isEqualTo:FirebaseAuth.instance.currentUser!.uid ).get(); to get the data from firestore that belong to user
+    QuerySnapshot querySnapshot=await FirebaseFirestore.instance.collection("UsersAuth").where("id",isEqualTo:FirebaseAuth.instance.currentUser!.uid, ).get();
+    //addAll -->Appends all objects of [iterable] to the end of this list
+    data.addAll(querySnapshot.docs);
+    await Future.delayed(Duration(seconds: 2));
+    isloading=false;
+    final userData = data.first; // Assuming only one document
+    FullName = userData['Full Name'];
+    Email=userData['Email'];
+    Phone=userData['Phone'];
+    Address=userData['Address'];
+    // علشان يعمل رفرش لليوزر انترفيس بعد جلب ال بيانات
+    setState(() {
+
+    });
+  }
+
+  @override
+  void initState() {
+      getdata();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SliverList(
@@ -33,7 +73,7 @@ class _SliverUSerFormWidgetState extends State<SliverUSerFormWidget> {
                       height: context.getDefaultSize() * 0.3,
                     ),
                     TextFromWidget(
-                      controller: TextEditingController(text:  widget.displayName),
+                      controller: TextEditingController(text: FullName ),
                       obscureText: false,
                       prefixIcon: Icons.person,
                       keyboardType: TextInputType.name,
@@ -50,7 +90,7 @@ class _SliverUSerFormWidgetState extends State<SliverUSerFormWidget> {
                       height: context.getDefaultSize() * 0.3,
                     ),
                     TextFromWidget(
-                      controller: TextEditingController(text:widget.email),
+                      controller: TextEditingController(text:Email),
                       obscureText: false,
                       prefixIcon: Icons.email_outlined,
                       keyboardType: TextInputType.emailAddress,
@@ -67,7 +107,7 @@ class _SliverUSerFormWidgetState extends State<SliverUSerFormWidget> {
                       height: context.getDefaultSize() * 0.3,
                     ),
                     TextFromWidget(
-                      controller: TextEditingController(text: "Omar Salama"),
+                      controller: TextEditingController(text: Phone),
                       obscureText: false,
                       prefixIcon: Icons.phone_android_outlined,
                       keyboardType: TextInputType.phone,
@@ -102,7 +142,7 @@ class _SliverUSerFormWidgetState extends State<SliverUSerFormWidget> {
                     ),
                     TextFromWidget(
                       maxLines: 5,
-                      controller: TextEditingController(text: "htrhrthrthrthrthrthrttttttttttttttttttnghghthtttttttttttttttttttttbbbbbbbbbbbbbbbbbbbbbbbbbbbbfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffngggggggggggggggggggggggggggggggggggggggggggggggggfffffffffffffffffffffffffffffffffffffttttttttttttttttttttttttttttttttttttt"),
+                      controller: TextEditingController(text:Address),
                       obscureText: false,
                       prefixIcon: Icons.location_on_outlined,
                       keyboardType: TextInputType.text,
