@@ -1,10 +1,15 @@
 class UserEntity
 {
-  final String firstName;
-  final String lastName;
-  final String phoneNumber;
-  final String emailAddress;
-  final String password;
+  final String ?fullName;
+  final String ?phoneNumber;
+  final String ?email;
+  final String ?address;
 
-  UserEntity(this.firstName, this.lastName, this.phoneNumber, this.emailAddress, this.password);
+
+  UserEntity({
+    required this.fullName,
+    required this.phoneNumber,
+    required this.email,
+    required this.address,
+  });
 }

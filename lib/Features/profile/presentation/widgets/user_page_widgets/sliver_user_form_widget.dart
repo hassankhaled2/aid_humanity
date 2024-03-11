@@ -34,12 +34,12 @@ class _SliverUSerFormWidgetState extends State<SliverUSerFormWidget> {
     data.addAll(querySnapshot.docs);
     await Future.delayed(Duration(seconds: 2));
     isloading=false;
-    final userData = data.first; // Assuming only one document
+    final userData = data.first;
     FullName = userData['Full Name'];
     Email=userData['Email'];
     Phone=userData['Phone'];
     Address=userData['Address'];
-    // علشان يعمل رفرش لليوزر انترفيس بعد جلب ال بيانات
+    // علشان يعمل رفرش لليوزر انترفيس بعد  ال getdata
     setState(() {
 
     });
@@ -116,20 +116,20 @@ class _SliverUSerFormWidgetState extends State<SliverUSerFormWidget> {
                     SizedBox(
                       height: context.getDefaultSize() * 1.5,
                     ),
-                    Text(
-                      "Password",
-                      style: TextStyle(fontSize: context.getDefaultSize() * 2, fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: context.getDefaultSize() * 0.3,
-                    ),
-                    TextFromWidget(
-                      controller: TextEditingController(text: "Omar Salama"),
-                      obscureText: false,
-                      prefixIcon: Icons.lock_open_outlined,
-                      keyboardType: TextInputType.text,
-                      labelText: null,
-                    ),
+                    // Text(
+                    //   "Password",
+                    //   style: TextStyle(fontSize: context.getDefaultSize() * 2, fontWeight: FontWeight.bold),
+                    // ),
+                    // SizedBox(
+                    //   height: context.getDefaultSize() * 0.3,
+                    // ),
+                    // TextFromWidget(
+                    //   controller: TextEditingController(text: "Omar Salama"),
+                    //   obscureText: false,
+                    //   prefixIcon: Icons.lock_open_outlined,
+                    //   keyboardType: TextInputType.text,
+                    //   labelText: null,
+                    // ),
                     SizedBox(
                       height: context.getDefaultSize() * 1.5,
                     ),

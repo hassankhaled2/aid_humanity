@@ -27,9 +27,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
     super.initState();
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      displayName = user.displayName ?? "";
+      displayName = user.displayName ?? "Hassan";
       email = user.email ?? "";
-      photoUrl = user.photoURL ?? "";
+      photoUrl = user.photoURL ?? "https://img.freepik.com/free-vector/man-delivery-package-white-background_1308-46613.jpg?w=740&t=st=1710189458~exp=1710190058~hmac=8976eab32f98feb54f4ae609dfe8eba12acb1a536083a2428ac3b32abb49a967";
     }
     screens.addAll([
       const HomeDeliveryPage(),

@@ -16,8 +16,11 @@ import 'core/utils/app_router/app_router.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 import 'core/widgets/BottomNavigation.dart';
 
-
-
+///make it later
+// Widget getHomeWidget() {
+//   final user = FirebaseAuth.instance.currentUser;
+//   return user != null && (user.emailVerified || user.phoneNumber != null) ? BottomNavigation() : SplashScreen();
+// }
 
 void main() async {
   //the WidgetFlutterBinding is used to interact with the Flutter engine

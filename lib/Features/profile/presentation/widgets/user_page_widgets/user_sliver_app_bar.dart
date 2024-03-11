@@ -17,7 +17,7 @@ class _UserSliverAppBarState extends State<UserSliverAppBar> {
 
     super.initState();
   }
-///delete this
+
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -42,7 +42,8 @@ class _UserSliverAppBarState extends State<UserSliverAppBar> {
             borderRadius: BorderRadius.only(
               bottomRight: Radius.circular(context.getDefaultSize() * 3),
             ),
-            child:  Image.network(widget.photoUrl,fit: BoxFit.fill, errorBuilder: (context, error, stackTrace) =>  const Center(child: CircularProgressIndicator(color: Colors.orangeAccent,)),),
+            child:  Image.network(widget.photoUrl,
+              fit: BoxFit.fill, errorBuilder: (context, error, stackTrace) =>  const Center(child: CircularProgressIndicator(color: Colors.orangeAccent,)),),
       ),
       ),
     );

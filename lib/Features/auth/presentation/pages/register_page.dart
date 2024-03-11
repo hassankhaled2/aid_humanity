@@ -86,7 +86,7 @@ class _State extends State<RegisterPage> {
     return Scaffold
       (
       body: Padding(
-        padding: const EdgeInsets.only(top: 60,left: 20,right: 20),
+        padding: const EdgeInsets.only(top: 55,left: 20,right: 20),
         child: ListView(
           children:
           [
