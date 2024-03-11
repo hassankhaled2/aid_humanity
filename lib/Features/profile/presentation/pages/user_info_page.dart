@@ -2,8 +2,10 @@ import 'package:aid_humanity/Features/profile/presentation/widgets/user_page_wid
 import 'package:flutter/material.dart';
 
 class UserInfoPage extends StatelessWidget {
-  const UserInfoPage({super.key});
-
+  const UserInfoPage({super.key, required this.displayName, required this.email, required this.photoUrl});
+  final String displayName;
+  final String email;
+  final String  photoUrl;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,6 +14,6 @@ class UserInfoPage extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return const UserPageWidget();
+    return  UserPageWidget(photoUrl:displayName,email: email,displayName: displayName,);
   }
 }

@@ -4,16 +4,16 @@
 // import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 // import 'package:aid_humanity/core/widgets/custom_button_widget.dart';
 // import 'package:flutter/material.dart';
-
+//
 // import '../../core/utils/constants.dart';
-
+//
 // class ChoiceItem extends StatefulWidget {
 //   const ChoiceItem({super.key});
-
+//
 //   @override
 //   State<ChoiceItem> createState() => _ChoiceItemState();
 // }
-
+//
 // class _ChoiceItemState extends State<ChoiceItem> {
 //   bool pressedDon = false;
 //   bool pressedDel = false;
@@ -138,9 +138,9 @@
 //           GestureDetector(
 //             onTap: () {
 //               if (pressedDel == true) {
-//                 Navigator.of(context).pushNamedAndRemoveUntil(bottomNavigation, (route) => false);
+//                 Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.bottomNavigation, (route) => false);
 //               } else {
-//                 Navigator.of(context).pushNamedAndRemoveUntil(homeDonorPage, (route) => false);
+//                 Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.homeDonorPage, (route) => false);
 //               }
 //             },
 //             child: CustomButtonWidget(

@@ -1,6 +1,7 @@
 
 
 import 'package:aid_humanity/Features/auth/presentation/widgets/phone.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -83,6 +84,19 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
               Padding(
               padding: const EdgeInsets.all(10.0),
                 child:CustomTextForm(
+                  // prefixIcon: CountryCodePicker(
+                  //   onChanged: (CountryCode countryCode)
+                  //   {
+                  //   },
+                  //   initialSelection: 'EG',
+                  //   showFlag: true,
+                  //   favorite: const ['+20', 'EG'],
+                  //    showCountryOnly: false,
+                  //   showOnlyCountryWhenClosed: false,
+                  //     alignLeft: false,
+                  //    showDropDownButton: true,
+                  //   padding: EdgeInsets.zero,
+                  //  ),
                   keyboardType: TextInputType.phone,
                   // inputFormatters:
                   // [

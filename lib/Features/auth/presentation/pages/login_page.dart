@@ -1,13 +1,14 @@
 
 import 'package:aid_humanity/Features/auth/presentation/pages/phone_number_page.dart';
+import 'package:aid_humanity/Features/profile/presentation/widgets/user_page_widgets/user_sliver_app_bar.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import '../../../../core/utils/app_router/app_router.dart';
 import '../../../../core/utils/styles/styles.dart';
+import '../../../profile/presentation/widgets/profile_page_widgets/profile_user_item_widget.dart';
 import '../widgets/text_form_field.dart';
 import 'register_page.dart';
 
@@ -25,22 +26,52 @@ class _State extends State<LoginPage> {
   GlobalKey<FormState>formState=GlobalKey();
   bool isPassword=true;
   bool isloading=false;
+  late GoogleSignInAuthentication?googleAuth;
   Future signInWithGoogle() async {
+    // UserCredential userCredential;
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
+    // if (googleUser != null) {
+    //   // Extract user information
+    //   final String displayName = googleUser.displayName ?? "";
+    //   final String email = googleUser.email ?? "";
+    //   final String photoUrl = googleUser.photoUrl ?? "";
+    //
+    //   // Handle successful sign-in and navigate to profile screen
+    //   // Navigator.of(context).push(
+    //   //   MaterialPageRoute(
+    //   //     builder: (context) => ProfilePage(
+    //   //       displayName: displayName,
+    //   //       email:email,
+    //   //       photoUrl:photoUrl,
+    //   //     ),
+    //   //   ),
+    //   // );
+    //   //   ProfilePage(
+    //   //              displayName:displayName,
+    //   //               email:email,
+    //   //               photoUrl:photoUrl,
+    //   //       );
+    //  //  UserItemWidget(displayName:displayName,photoUrl: photoUrl);
+    //  // UserSliverAppBar(displayName:displayName,photoUrl: photoUrl,);
+    // } else {
+    //   // Handle sign-in cancellation or error
+    //   print("Sign-in cancelled by user.");
+    // }
     // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    googleAuth = await googleUser?.authentication;
 
     // Create a new credential
      final credential = GoogleAuthProvider.credential(
+
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
 
     // Once signed in, return the UserCredential
     await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.of(context).pushNamedAndRemoveUntil(Onboarding, (route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.onBoarding, (route) => false);
 
     // addCateogry();
   }
@@ -178,11 +209,12 @@ class _State extends State<LoginPage> {
                                 setState((){});
                          final  creditional=  await FirebaseAuth.instance.signInWithEmailAndPassword(
                                     email: email.text,
-                                    password: password.text
+                                    password: password.text,
+
                                 );
                               if(creditional.user!.emailVerified)
                               {
-                                Navigator.of(context).pushReplacementNamed(Onboarding);
+                                Navigator.of(context).pushReplacementNamed(AppRouter.onBoarding);
                               }else
                               {
                                 FirebaseAuth.instance.currentUser!.sendEmailVerification();
@@ -266,7 +298,8 @@ class _State extends State<LoginPage> {
                     onPressed: ()
                     {
                       signInWithGoogle();
-                    }, icon:Icon(FontAwesomeIcons.google), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
+
+                    }, icon:Icon(FontAwesomeIcons.google,color:Colors.white,), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
                   ),
                    SizedBox(height: 10,),
                   Center(
@@ -276,7 +309,7 @@ class _State extends State<LoginPage> {
                       onPressed: ()
                       {
                       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PhoneNumberPage()));
-                      }, icon:Icon(FontAwesomeIcons.phone), label:Text('Continue with  Phone',style: TextStyle(color: Colors.white),),),
+                      }, icon:Icon(FontAwesomeIcons.phone,color:Colors.white,), label:Text('Continue with  Phone',style: TextStyle(color: Colors.white),),),
                   )
                   // SizedBox(height: 10,),
                   // Center(
