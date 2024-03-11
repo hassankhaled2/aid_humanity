@@ -9,8 +9,8 @@ class HistoryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-          horizontal: context.getDefaultSize(),
-          vertical: context.getDefaultSize() / 2),
+          horizontal: context.getDefaultSize() * 3,
+          vertical: context.getDefaultSize() / 1.5),
       child: Container(
         width: context.getDefaultSize(),
         decoration: BoxDecoration(
@@ -27,55 +27,75 @@ class HistoryWidget extends StatelessWidget {
                   Icon(
                     Icons.person,
                     color: kPrimaryColor,
+                    size: context.getDefaultSize() * 1.5,
                   ),
                   "Donor name",
-                  "Menna Ahmed"),
+                  "Menna Ahmed",
+                  context),
               rowDataWidget(
                   Icon(
                     Icons.location_on,
                     color: kPrimaryColor,
+                    size: context.getDefaultSize() * 1.5,
                   ),
                   "Location",
-                  "El-shrouk city"),
+                  "El-shrouk city",
+                  context),
               rowDataWidget(
                   Icon(
                     Icons.phone,
                     color: kPrimaryColor,
+                    size: context.getDefaultSize() * 1.5,
                   ),
                   "Contact number",
-                  "+011465697336"),
+                  "+011465697336",
+                  context),
               rowDataWidget(
                   Icon(
                     Icons.location_city,
                     color: kPrimaryColor,
+                    size: context.getDefaultSize() * 1.5,
                   ),
                   "Address",
-                  "compound dar masr,..........."),
+                  "compound dar masr,...........",
+                  context),
             ],
           ),
-          Column(
-            children: [
-              const Text("Date:24/2/23 "),
-              const Text("Time: 11:11pm"),
-              SizedBox(
-                height: context.getDefaultSize() * 2,
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.delete,
-                  color: kPrimaryColor,
+          Padding(
+            padding: EdgeInsets.only(
+                top: context.getDefaultSize(), left: context.getDefaultSize()),
+            child: Column(
+              children: [
+                Text(
+                  "Date:24/2/23 ",
+                  style: TextStyle(fontSize: context.getDefaultSize()),
                 ),
-                alignment: Alignment.bottomRight,
-              ),
-            ],
+                Text(
+                  "Time: 11:11pm",
+                  style: TextStyle(fontSize: context.getDefaultSize()),
+                ),
+                SizedBox(
+                  height: context.getDefaultSize() * 2,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.delete,
+                    color: kPrimaryColor,
+                    size: context.getDefaultSize() * 2,
+                  ),
+                  alignment: Alignment.bottomRight,
+                ),
+              ],
+            ),
           )
         ]),
       ),
     );
   }
 
-  Padding rowDataWidget(Icon icon, String title, String data) {
+  Padding rowDataWidget(
+      Icon icon, String title, String data, BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(4),
       child: Row(
@@ -83,12 +103,13 @@ class HistoryWidget extends StatelessWidget {
           icon,
           Text(
             "$title :",
-            style: const TextStyle(color: Colors.black),
+            style: TextStyle(
+                color: Colors.black, fontSize: context.getDefaultSize() * 1.2),
           ),
           Text(data,
               style: TextStyle(
-                color: Colors.black.withOpacity(0.6),
-              ))
+                  color: Colors.black.withOpacity(0.6),
+                  fontSize: context.getDefaultSize() * 1.2))
         ],
       ),
     );

@@ -34,18 +34,18 @@ class _OnBoardingState extends State<OnBoarding> {
 
   List<BoardingModels> boarding = [
     BoardingModels(
-      image: 'assets/images/onboarding1.png',
+      image: 'assets/pics/onboarding1.png',
       title: '',
       body: 'Feeding Hope, One Helping Hand at a Time.',
     ),
     BoardingModels(
-      image: 'assets/images/onboarding2.png',
+      image: 'assets/pics/onboarding2.png',
       title: 'Together, we can make a difference! Help us fight hunger',
       body:
       'Your contribution can make a big difference in the lives of those in need.',
     ),
     BoardingModels(
-      image: 'assets/images/onboardingWelcom.png',
+      image: 'assets/pics/onboardingWelcom.png',
       title: '',
       body:
       'Welcome to Aid Humanity Connecting Communities, Sharing Aids', //Join our community and start sharing meals today.
@@ -81,7 +81,7 @@ class _OnBoardingState extends State<OnBoarding> {
       value: true,
     ).then((value) {
       if (value = isLast) {
-        Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.bottomNavigation, (route) => false);
+        Navigator.of(context).pushNamedAndRemoveUntil(bottomNavigation, (route) => false);
 
       }
     });
@@ -95,7 +95,7 @@ class _OnBoardingState extends State<OnBoarding> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.bottomNavigation, (route) => false);
+              Navigator.of(context).pushNamedAndRemoveUntil(bottomNavigation, (route) => false);
             },
             child: const Text(
               'SKIP',
