@@ -1,14 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
-import 'package:intl/message_format.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:aid_humanity/core/constants/constants.dart';
 import 'package:aid_humanity/core/entities/request_entity.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/widgets/custom_button_widget.dart';
 import 'package:aid_humanity/core/widgets/defualt_app_bar_widget.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ViewDetailsWidget extends StatefulWidget {
   final RequestEntity requestEntity;

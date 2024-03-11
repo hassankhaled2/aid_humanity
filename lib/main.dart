@@ -20,6 +20,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'Features/auth/presentation/pages/login_page.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 import 'core/widgets/BottomNavigation.dart';
+import 'core/widgets/routes.dart';
 
 void main() async {
   //the WidgetFlutterBinding is used to interact with the Flutter engine
@@ -65,18 +66,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => ClassificaitonCubit()),
       ],
       child: MaterialApp(
-        routes: {
-          register: (context) => RegisterPage(),
-          login: (context) => LoginPage(),
-          bottomNavigation: (context) => BottomNavigation(),
-          Onboarding: (context) => OnBoarding(),
-          // choicePage: (context) => ChoicePage(),
-          homeDeliveryPage: (context) => HomeDeliveryPage(),
-          homeDonorPage: (context) => HomeDonorPage(),
-        },
+        routes: routes,
 
         /// see it if worked or not
-        home: LoginPage(),
+        home:  FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?BottomNavigation():SplashScreen(),
         debugShowCheckedModeBanner: false,
         supportedLocales: AppLocalizationsSetup
             .supportedLocales, // this line to provide , which langs to use in our app
