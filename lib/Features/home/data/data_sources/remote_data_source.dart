@@ -31,7 +31,7 @@ class HomeRemoteDataSourceImplWithFireBase extends HomeRemoteDataSource {
         return requests;
       }
     } on FirebaseException {
-      throw ServerException();
+      throw ServerException(exceptionName: " Exception in firebase");
     }
   }
 }

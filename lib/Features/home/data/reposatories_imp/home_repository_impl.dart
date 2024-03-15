@@ -15,7 +15,7 @@ class HomeRepositoryImpl implements HomeRepository {
     required this.networkInfo,
   });
   @override
-  Future<Either<Faliure, List<RequestEntity>>> getAllRequests() async {
+  Future<Either<Failure, List<RequestEntity>>> getAllRequests() async {
     if (await networkInfo.isConnected) {
       try {
         return right(await homeRemoteDataSource.getAllRequests());

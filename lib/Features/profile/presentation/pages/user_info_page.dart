@@ -14,6 +14,6 @@ class UserInfoPage extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return  UserPageWidget(photoUrl:displayName,email: email,displayName: displayName,);
+    return  UserPageWidget();
   }
 }

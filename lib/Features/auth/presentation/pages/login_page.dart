@@ -41,7 +41,7 @@ class _State extends State<LoginPage> {
 
     // Once signed in, return the UserCredential
     await FirebaseAuth.instance.signInWithCredential(credential);
-    // Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.onBoarding, (route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.onBoarding, (route) => false);
   }
   @override
   Widget build(BuildContext context) {

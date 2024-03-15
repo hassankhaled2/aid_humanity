@@ -5,10 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 /// handle google sign in details with google sign up
 class SliverUSerFormWidget extends StatefulWidget {
-   SliverUSerFormWidget({super.key, required this.displayName, required this.email, required this.photoUrl,});
-   final String displayName;
-  final String email;
-  final String photoUrl;
+   SliverUSerFormWidget({super.key,});
+  //  final String FullName;
+  // final String email;
+  // final String photoUrl;
   @override
   State<SliverUSerFormWidget> createState() => _SliverUSerFormWidgetState();
 }

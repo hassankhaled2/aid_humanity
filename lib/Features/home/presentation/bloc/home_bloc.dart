@@ -24,13 +24,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     });
   }
 
-  HomeState _mapFaliureOrRequestToState(Either<Faliure, List<RequestEntity>> faliureOrRequests) {
+  HomeState _mapFaliureOrRequestToState(Either<Failure, List<RequestEntity>> faliureOrRequests) {
     return faliureOrRequests.fold((faliure) => GetAllRequestsFailure(message: _mapFaliureToMessage(faliure)), (requests) {
       return GetAllRequestsSuccess(requests: requests);
     });
   }
 
-  String _mapFaliureToMessage(Faliure failure) {
+  String _mapFaliureToMessage(Failure failure) {
     switch (failure.runtimeType) {
       // this to get the extended types while run time :)
       // ignore: type_literal_in_constant_pattern

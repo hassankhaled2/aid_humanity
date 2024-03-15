@@ -1,9 +1,9 @@
-abstract class Faliure {}
+abstract class Failure {}
 
-class OfflineFaliure extends Faliure{}
+class OfflineFaliure extends Failure{}
 
-class ServerFaliure extends Faliure{}
+class ServerFaliure extends Failure{}
 
-class NoDataFaliure extends Faliure{
+class NoDataFaliure extends Failure{
   
 }
