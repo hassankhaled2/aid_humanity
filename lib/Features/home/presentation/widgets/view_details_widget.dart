@@ -203,6 +203,7 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                         ),
                         Expanded(
                           child: ListView(
+                            scrollDirection: Axis.vertical,
                             children: [
                               Row(
                                 children: [
@@ -230,36 +231,43 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                               ),
                               addressText(context, "Items"),
                               Container(
-                                  height: 100,
-                                  child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount:
-                                          widget.requestEntity.numberOfItems,
-                                      itemBuilder: (_, index) => formTextField(
-                                          context,
-                                          widget.requestEntity.items![index]
-                                              .type))),
-                              SizedBox(
-                                width: context.getDefaultSize() * 8,
-                              ),
-                              Container(
                                 height: 150,
                                 child: ListView.builder(
                                     scrollDirection: Axis.horizontal,
                                     itemCount:
                                         widget.requestEntity.items!.length,
-                                    itemBuilder: (_, index) => Column(
-                                          children: [
-                                            photoWidget(
-                                                context,
-                                                widget.requestEntity
-                                                    .items![index].image),
-                                            Text("category:"),
-                                            Text(widget.requestEntity
-                                                .items![index].category)
-                                          ],
-                                        )),
+                                    itemBuilder: (_, index) => photoWidget(
+                                        context,
+                                        widget
+                                            .requestEntity.items![index].image,
+                                        index)),
                               ),
+                              SizedBox(
+                                height: 25,
+                              ),
+                              Container(
+                                height: 100,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: widget.requestEntity.items!.length,
+                                  itemBuilder: (_, index) => Column(
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 45,
+                                        ),
+                                        child: Text("category:"),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 45, vertical: 2),
+                                        child: Text(widget.requestEntity
+                                            .items![index].category),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
                             ],
                           ),
                         ),
@@ -361,15 +369,46 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
     );
   }
 
-  Padding photoWidget(BuildContext context, String photo) {
+  Padding photoWidget(BuildContext context, String photo, int index) {
     return Padding(
-      padding: EdgeInsets.all(context.getDefaultSize()),
-      child: Container(
-        height: context.getDefaultSize() * 9,
-        width: context.getDefaultSize() * 9,
-        decoration: BoxDecoration(
-            image:
-                DecorationImage(image: NetworkImage(photo), fit: BoxFit.cover)),
+      padding: EdgeInsets.only(
+          top: context.getDefaultSize() * 5,
+          right: context.getDefaultSize(),
+          left: context.getDefaultSize()),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            height: context.getDefaultSize() * 15,
+            width: context.getDefaultSize() * 18,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: NetworkImage(photo), fit: BoxFit.cover)),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: Container(
+              color: Colors.grey.withOpacity(0.4),
+              height: context.getDefaultSize() * 12.2,
+              width: context.getDefaultSize() * 18,
+              child: Center(
+                child: Text(
+                  widget.requestEntity.items![index].quantity.toString(),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: context.getDefaultSize() * 3),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            right: 50,
+            top: -25,
+            child: Text(widget.requestEntity.items![index].type),
+          )
+        ],
       ),
     );
   }

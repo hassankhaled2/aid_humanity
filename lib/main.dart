@@ -76,7 +76,9 @@ class MyApp extends StatelessWidget {
         },
 
         /// see it if worked or not
-        home: LoginPage(),
+        home: FirebaseAuth.instance.currentUser == null
+            ? SplashScreen()
+            : BottomNavigation(),
         debugShowCheckedModeBanner: false,
         supportedLocales: AppLocalizationsSetup
             .supportedLocales, // this line to provide , which langs to use in our app

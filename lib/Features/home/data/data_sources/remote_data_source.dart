@@ -15,13 +15,20 @@ class HomeRemoteDataSourceImplWithFireBase extends HomeRemoteDataSource {
   Future<List<RequestModel>> getAllRequests() async {
     List<RequestModel> requests = [];
     try {
-      CollectionReference<Map<String, dynamic>> requestsCollectionRef = firebaseFirestore.collection('request');
+      CollectionReference<Map<String, dynamic>> requestsCollectionRef =
+          firebaseFirestore.collection('request');
       QuerySnapshot requestSnapshot = await requestsCollectionRef.get();
 
       for (QueryDocumentSnapshot requestsdoc in requestSnapshot.docs) {
-        var itemsSnapshot = await requestsdoc.reference.collection('items').get();
-        List<ItemModel> itemModels = itemsSnapshot.docs.map((doc) => ItemModel.fromJson(doc.data())).toList();
-        RequestModel requestModel = RequestModel.fromJson(requestsdoc.data() as Map<String, dynamic>, itemModels);
+        var itemsSnapshot =
+            await requestsdoc.reference.collection('items').get();
+        print(itemsSnapshot.docs.first.data());
+        List<ItemModel> itemModels = itemsSnapshot.docs
+            .map((doc) => ItemModel.fromJson(doc.data()))
+            .toList();
+        print("-------------------------------");
+        RequestModel requestModel = RequestModel.fromJson(
+            requestsdoc.data() as Map<String, dynamic>, itemModels);
 
         requests.add(requestModel);
       }
