@@ -30,5 +30,5 @@ class DonationFormPage extends StatelessWidget {
     BlocProvider(create: (_) => getIt<DetailsBloc>()),
         BlocProvider(create: (_) => ClassificaitonCubit()),
   ],
-  child: DonationFormItem(items: items, itemsImages: itemsImages,isKnn: this.isKnn,));
+  child: DonationFormItem(items: items, itemsImages: itemsImages,isKnn: isKnn,));
 }

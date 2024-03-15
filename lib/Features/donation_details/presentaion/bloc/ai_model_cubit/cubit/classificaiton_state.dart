@@ -52,9 +52,14 @@ final class KnnClassificaitonsSuccessState extends ClassificaitonState {
 }
 
 final class KnnClassificaitonsErrorState extends ClassificaitonState {
+  final String errorMessage;
+
+  KnnClassificaitonsErrorState(this.errorMessage);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [errorMessage];
 }
+
 
 final class KnnClassificaitonsLoadingState extends ClassificaitonState {
   @override

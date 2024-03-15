@@ -4,6 +4,8 @@ import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/widgets/default_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
+
 
 class AddDonationWithTextWidget extends StatefulWidget {
   AddDonationWithTextWidget({super.key});
@@ -14,76 +16,141 @@ class AddDonationWithTextWidget extends StatefulWidget {
 
 class _AddDonationWithTextWidgetState extends State<AddDonationWithTextWidget> {
   final GlobalKey<FormState> formState = GlobalKey();
+  final List<TextEditingController> textControllers = [];// List of controllers
+  List<Map<String, dynamic>> classifiedItems = [];
 
-  final TextEditingController text = TextEditingController();
+
+  void addTextField() {
+    setState(() {
+      textControllers.add(TextEditingController());
+    });
+  }
+
+  List<String> getDescriptions() {
+    return textControllers.map((controller) => controller.text).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
+    return SingleChildScrollView(
+      child: Form(
         key: formState,
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(bottom: 10, top: 130, left: 20, right: 20),
-              child: TextFormField(
-                controller: text,
-                validator: (val) {
-                  if (val!.isEmpty) {
-                    return 'can not to be empty';
-                  }
-                  return null;
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: textControllers.length,
+                itemBuilder: (context, index) {
+                  return DescriptionTextField( // Use DescriptionTextField widget
+                    controller: textControllers[index],
+                    onRemove: () {
+                      setState(() {
+                        textControllers.removeAt(index);
+                      });
+                    },
+                  );
                 },
-                enabled: true,
-                decoration: const InputDecoration(
-                    hintText: 'Enter Your Description Item',
-                    disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                        )),
-                    labelStyle: TextStyle(color: Colors.black)),
               ),
-            ),
-            SizedBox(
-              height: context.getDefaultSize() * 9.0,
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 80),
-                  child: BlocConsumer<ClassificaitonCubit, ClassificaitonState>(
-                    listener: (context, state) {
-                      if (state is KnnClassificaitonsSuccessState) {
-                        print("omarrrr");
-                        Navigator.push(
+
+
+              SizedBox(
+                height: 20,
+              ),
+              DefaultElevatedButton(
+                onPressed: addTextField,
+                text: "Add More",
+                radius: 10,
+                width: context.getDefaultSize() * 24.0,
+              ),
+
+              SizedBox(
+                height: 25,
+              ),
+
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 80),
+                    child: BlocConsumer<ClassificaitonCubit, ClassificaitonState>(
+                      listener: (context, state) {
+                        if (state is KnnClassificaitonsSuccessState) {
+                          print("Classification successful");
+                          print(state.knnOutput);
+                          // Handle successful classification (navigate, display results)
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => DonationFormItem(
-                                  items:state.knnOutput,
-                                      isKnn: true,
-                                    )));
-                      }
-                    },
-                    builder: (context, state) {
-                      if (state is ClassificaitonLoadingState) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
+                              builder: (_) => DonationFormItem(
+                                items: state.knnOutput, // Pass the classified items
+                                isKnn: true,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state is ClassificaitonLoadingState) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        return DefaultElevatedButton(
+                          onPressed: () {
+                            if (formState.currentState!.validate()) {
+                              List<String> descriptions = getDescriptions();
+                              // Pass the list of descriptions for classification
+                              BlocProvider.of<ClassificaitonCubit>(context)
+                                  .knnClassification(descriptions);
+                            }
+                          },
+                          text: "Submit",
+                          radius: 10,
+                          width: context.getDefaultSize() * 24.0,
                         );
-                      }
-                      return DefaultElevatedButton(
-                        onPressed: () {
-                          if (formState.currentState!.validate()) BlocProvider.of<ClassificaitonCubit>(context).knnClassification(text.text);
-                        },
-                        text: "Submit",
-                        radius: 10,
-                        width: context.getDefaultSize() * 24.0,
-                      );
-                    },
-                  ),
-                )
-              ],
-            )
-          ],
-        ));
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+class DescriptionTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final void Function() onRemove;
+
+  const DescriptionTextField({
+    super.key,
+    required this.controller,
+    required this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              controller: controller,
+              decoration: InputDecoration(
+                hintText: 'what do you want to donate ?',
+              ),
+            ),
+          ),
+          IconButton(
+            onPressed: onRemove,
+            icon: const Icon(Icons.remove),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -11,6 +11,7 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
   ClassificaitonCubit() : super(ClassificaitonInitial());
 
   List<Map<String, dynamic>> results = [];
+
   Classification(List<File> images) async {
     emit(ClassificaitonLoadingState());
     try {
@@ -75,17 +76,36 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
       }
     }
   }
-
-  Map<String, dynamic> knnOutput = {};
-  knnClassification(String description) {
+  void knnClassification(List<String> descriptions) async {
     emit(KnnClassificaitonsLoadingState());
+
     final dio = Dio();
-    dio.post("http://10.0.2.2:5000/get_data", data: {"data": description}).then(
-        (value) {
-      results.add(value.data);
-      emit(KnnClassificaitonsSuccessState(knnOutput: results));
-    }).catchError((error) {
-      emit(KnnClassificaitonsErrorState());
-    });
+    results = [];
+
+    for (var description in descriptions) {
+      try {
+        final response = await dio.post(
+          "http://10.0.2.2:5000/get_data",
+          data: {"data": description},
+        );
+
+        if (response.data is List<Map<String, dynamic>>) {
+          results.addAll(response.data as Iterable<Map<String, dynamic>>); // Cast to expected type
+        } else {
+          print("Unexpected response format. Description: $description");
+          print("Received data: ${response.data}"); // Log the actual data
+
+          // Handle the unexpected response (e.g., retry the API call)
+          // You can also display a message to the user here
+        }
+      } catch (error) {
+        print("Error classifying description: $description - $error");
+        // Handle network errors or other exceptions
+      }
+    }
+
+    emit(KnnClassificaitonsSuccessState(knnOutput: results));
   }
+
+
 }

@@ -2,7 +2,6 @@ import 'package:aid_humanity/Features/auth/presentation/pages/register_page.dart
 import 'package:aid_humanity/Features/choose%20page/choose_page.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/ai_model_cubit/cubit/classificaiton_cubit.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/details_bloc.dart';
-
 import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.dart';
@@ -12,7 +11,6 @@ import 'package:aid_humanity/bloc_observer.dart';
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:aid_humanity/injection_container.dart' as di;
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +74,7 @@ class MyApp extends StatelessWidget {
         },
 
         /// see it if worked or not
-        home: LoginPage(),
+        home: FirebaseAuth.instance.currentUser!=null? BottomNavigation() :LoginPage(),
         debugShowCheckedModeBanner: false,
         supportedLocales: AppLocalizationsSetup
             .supportedLocales, // this line to provide , which langs to use in our app

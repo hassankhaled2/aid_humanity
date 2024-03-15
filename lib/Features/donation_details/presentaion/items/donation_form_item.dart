@@ -59,7 +59,20 @@ class _DonationFormItemState extends State<DonationFormItem> {
   Widget build(BuildContext context) {
     return BlocListener<ClassificaitonCubit, ClassificaitonState>(
       listener: (context, state) {
-        if (state is KnnClassificaitonsSuccessState) {}
+        if (state is KnnClassificaitonsSuccessState) {
+          final knnResults = state.knnOutput;
+          print(knnResults);// Access the results
+          for (int i = 0; i < widget.items.length; i++) {
+            ItemEntity itemEntity = ItemEntity(
+              type: widget.items[i]["Type"]!,
+              category: widget.items[i]["Master"]!,
+              gender: widget.items[i]["Gender"]!,
+              image: '',
+            );
+            items.add(itemEntity);
+          }
+
+        }
       },
       child: BlocListener<DetailsBloc, DetailsState>(
         listener: (context, state) {
@@ -74,7 +87,13 @@ class _DonationFormItemState extends State<DonationFormItem> {
               items.add(itemEntity);
             }
 
-            BlocProvider.of<DetailsBloc>(context).add(AddRequestEvent(requestEntity: RequestEntity(time: date, address: {"location": locationController.text}, numberOfItems: widget.items.length, userId: FirebaseAuth.instance.currentUser!.uid, status: "Pending"), items: items));
+            BlocProvider.of<DetailsBloc>(context).add(AddRequestEvent(requestEntity: RequestEntity(
+                time: date,
+                address: {"location": locationController.text},
+                numberOfItems: widget.items.length,
+                userId: FirebaseAuth.instance.currentUser!.uid,
+                status: "Pending"),
+                items: items));
           } else if (state is UploadImagesErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please check your internet connection")));
           }
@@ -156,7 +175,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const BottomNavigation()), (route) => false);
                 }
                 if (state is AddRequestErrorState) {
-                  if (state.message == "check your internet con``nection") {
+                  if (state.message == "check your internet connection") {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("check your internet connection")),
                     );
@@ -177,14 +196,28 @@ class _DonationFormItemState extends State<DonationFormItem> {
                       child: GestureDetector(
                         onTap: () {
                           if (widget.isKnn) {
-                            List<ItemEntity> items = [ItemEntity(type: widget.items[0]['Type'], category: widget.items[0]['Master'], gender: widget.items[0]['Gender'], image: "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")];
-                            BlocProvider.of<DetailsBloc>(context).add(AddRequestEvent(requestEntity: RequestEntity(time: date, address: {"location": locationController.text}, numberOfItems: widget.items.length, userId: FirebaseAuth.instance.currentUser!.uid, status: "Pending"), items: items));
+                            final currentState = BlocProvider.of<ClassificaitonCubit>(context).state;
+                            if (currentState is KnnClassificaitonsSuccessState) {
+
+
+
+                              // After adding items to the list, you may want to update the UI
+
+                            } else if (currentState is KnnClassificaitonsErrorState) {
+                              // Handle error state, display error message, etc.
+                              print('Error: ${currentState}');
+                            }
                           } else {
-                            BlocProvider.of<DetailsBloc>(context).add(UploadImagesEvent(images: widget.itemsImages!));
+                            print('Not using KNN');
                           }
                         },
                         child: CustomButtonWidget(height: 4, width: 20, title: "Submit", fontSize: 2),
                       ),
+
+
+
+
+
                     ),
                   );
                 }
