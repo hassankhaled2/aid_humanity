@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,14 +88,14 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
           data: {"data": description},
         );
 
-        if (response.data is List<Map<String, dynamic>>) {
-          results.addAll(response.data as Iterable<Map<String, dynamic>>); // Cast to expected type
+        if (response.data is Map<String, dynamic>) {
+
+          results.add(response.data); // Cast to expected type
         } else {
           print("Unexpected response format. Description: $description");
           print("Received data: ${response.data}"); // Log the actual data
 
-          // Handle the unexpected response (e.g., retry the API call)
-          // You can also display a message to the user here
+         
         }
       } catch (error) {
         print("Error classifying description: $description - $error");

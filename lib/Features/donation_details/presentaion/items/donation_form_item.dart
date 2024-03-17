@@ -240,7 +240,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
     );
   }
 
-  Padding formTextField(BuildContext context, {TextEditingController? textEditingController, VoidCallback? onTap}) {
+  Padding formTextField(BuildContext context, {TextEditingController? textEditingController, VoidCallback? onTap }) {
     return Padding(
       padding: EdgeInsets.only(right: context.getDefaultSize() * 2, left: context.getDefaultSize() * 2, bottom: context.getDefaultSize() * 2),
       child: TextField(
