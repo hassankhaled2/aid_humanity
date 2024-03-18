@@ -86,7 +86,7 @@ class _State extends State<RegisterPage> {
     return Scaffold
       (
       body: Padding(
-        padding: const EdgeInsets.only(top: 55,left: 20,right: 20),
+        padding: const EdgeInsets.only(top: 95,left: 20,right: 20),
         child: ListView(
           children:
           [
@@ -325,7 +325,7 @@ class _State extends State<RegisterPage> {
                         ),
                       ]
                   ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 15,),
                   Center(
                     child: ElevatedButton.icon(
                       style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
@@ -334,17 +334,17 @@ class _State extends State<RegisterPage> {
                         signInWithGoogle();
                       }, icon:Icon(FontAwesomeIcons.google), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
                   ),
-                  const SizedBox(height: 15,),
-                  Center(
-                    child: ElevatedButton.icon(
-
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
-                      onPressed: ()
-                      {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PhoneNumberPage()));
-                      }, icon:Icon(FontAwesomeIcons.phone), label:Text('Continue with  Phone',style: TextStyle(color: Colors.white),),),
-                  ),
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 18,),
+                  // Center(
+                  //   child: ElevatedButton.icon(
+                  //
+                  //     style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
+                  //     onPressed: ()
+                  //     {
+                  //       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PhoneNumberPage()));
+                  //     }, icon:Icon(FontAwesomeIcons.phone), label:Text('Continue with  Phone',style: TextStyle(color: Colors.white),),),
+                  // ),
+                  // const SizedBox(height: 20,),
                   Row(
                     mainAxisAlignment:MainAxisAlignment.center,
                     children:

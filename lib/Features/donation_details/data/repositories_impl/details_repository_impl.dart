@@ -32,10 +32,10 @@ class DetailsRepositoryImpl extends DetailsRepository {
       try {
         return await detailsRemoteDataSource.addRequest(requestModel, itemsModels);
       } on ServerException {
-        return left(ServerFaliure());
+        return left(ServerFaliure("ServerFaliure"));
       }
     } else {
-      return Left(OfflineFaliure());
+      return Left(OfflineFaliure("OfflineFailure"));
     }
   }
 }

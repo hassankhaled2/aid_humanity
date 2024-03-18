@@ -9,15 +9,12 @@ class UserDataModel extends UserEntity
      required String? displayNameGoogle,
      required String? email,
      required String? photoUrl,
-     required String? idToken,
-     required String? accessToken,
      String? fullName,
-     String? fcmToken,
      String? address,
      String? phoneNumber,
      required String? userId,
 
-  }) : super(fullName:fullName ,phoneNumber:phoneNumber,address:address ,email: email,photoUrl:photoUrl,accessToken:accessToken ,displayNameGoogle:displayNameGoogle ,fcmToken:fcmToken ,idToken: idToken,userId: userId );
+  }) : super(fullName:fullName ,phoneNumber:phoneNumber,address:address ,email: email,photoUrl:photoUrl ,displayNameGoogle:displayNameGoogle  );
    factory UserDataModel.fromJson(Map<String, dynamic> json) => _$UserDataModelFromJson(json);
 
    /// Connect the generated [_$PersonToJson] function to the `toJson` method.

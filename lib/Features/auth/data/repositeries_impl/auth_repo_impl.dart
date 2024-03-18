@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../../../core/constants/constants.dart';
 import '../../../../core/error/faliures.dart';
 import '../../../../core/network/connection/network_connection.dart';
 import '../../../onBoarding/onboarding.dart';
@@ -21,12 +22,12 @@ class AuthRepoImpl extends AuthRepo
    required this.networkInfo,
   });
   @override
-  Future<Either<Failure, UserEntity>> login()async{
+  Future<Either<Failure, UserDataModel>> login()async{
     try {
       UserDataModel userDataModel=await authRemoteDataSource.login();
       return Future.value(Right(userDataModel));
     } catch (exception) {
-      return Left(ServerFaliure());
+      return Left(ServerFaliure(""));
     }
   }
 

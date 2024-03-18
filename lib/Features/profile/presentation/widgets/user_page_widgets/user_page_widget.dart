@@ -21,12 +21,12 @@ class _UserPageWidgetState extends State<UserPageWidget> {
             physics: BouncingScrollPhysics(),
             slivers: [
 
-              UserSliverAppBar( ),
+              UserSliverAppBar(),
               SliverPadding(padding: EdgeInsets.all(8.0), sliver: SliverUSerFormWidget())
             ],
           ),
         ),
-        Padding(padding: EdgeInsets.all(context.getDefaultSize() * 1.3), child: const SavaChangesButtonWidget()),
+        Padding(padding: EdgeInsets.all(context.getDefaultSize() * 1.3), child:  SavaChangesButtonWidget()),
       ],
     );
   }

@@ -13,9 +13,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
+import 'Features/auth/data/data_sources/login_remote_data_source/auth_remote_data_source.dart';
+import 'Features/auth/data/repositeries_impl/auth_repo_impl.dart';
+
 GetIt getIt = GetIt.instance;
 
 Future<void> init() async {
+
 //! Features-details
 // bloc
   getIt.registerFactory(() => DetailsBloc(getIt()));
@@ -40,4 +44,16 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => InternetConnectionChecker());
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   getIt.registerLazySingleton(() => firestore);
+
+  // feature AuthRepoImpl
+  getIt.registerLazySingleton<AuthRemoteDataSource>(
+        () => AuthRemoteDataSourceImpl(),
+  );
+
+  getIt.registerLazySingleton<AuthRepoImpl>(
+        () => AuthRepoImpl(
+      authRemoteDataSource: getIt<AuthRemoteDataSource>(),
+      networkInfo: getIt<ConnctionInfo>(),
+    ),
+  );
 }

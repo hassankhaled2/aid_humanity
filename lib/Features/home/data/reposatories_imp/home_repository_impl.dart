@@ -20,12 +20,12 @@ class HomeRepositoryImpl implements HomeRepository {
       try {
         return right(await homeRemoteDataSource.getAllRequests());
       } on ServerException {
-        return left(ServerFaliure());
+        return left(ServerFaliure(""));
       } on NoDataExecption {
-        return left(NoDataFaliure());
+        return left(NoDataFaliure(""));
       }
     } else {
-      return Left(OfflineFaliure());
+      return Left(OfflineFaliure(""));
     }
   }
 }

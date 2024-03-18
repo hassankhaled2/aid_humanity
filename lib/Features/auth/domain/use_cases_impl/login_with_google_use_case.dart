@@ -15,8 +15,7 @@ class CallLoginWithGoogleUseCase extends UseCase<UserEntity,NoParam>
   @override
   Future<Either<Failure, UserEntity>> call([NoParam ?param]) async {
     return authRepo.login();
+
   }
-
-
 }
 

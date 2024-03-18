@@ -33,7 +33,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     }
     screens.addAll([
       const HomeDeliveryPage(),
-      Container(),
+       HomeDonorPage(),
       Container(),
       ProfilePage(displayName: displayName, photoUrl: photoUrl, email: email),
     ]);

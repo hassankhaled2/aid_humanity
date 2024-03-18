@@ -9,6 +9,8 @@ class SliverUSerFormWidget extends StatefulWidget {
   //  final String FullName;
   // final String email;
   // final String photoUrl;
+  //  final String docid;
+  //  final String oldname;
   @override
   State<SliverUSerFormWidget> createState() => _SliverUSerFormWidgetState();
 }
@@ -23,6 +25,17 @@ class _SliverUSerFormWidgetState extends State<SliverUSerFormWidget> {
   String Address = '';
   // String displayName='';
   String photoUrl='';
+  CollectionReference categories = FirebaseFirestore.instance.collection("UsersAuth");
+
+  // editCategory() async {
+  //
+  //
+  //       await categories.doc(widget.docid).set({"FullName": FullName,"id":FirebaseAuth.instance.currentUser!.uid});
+  //
+  //       setState(() {});
+  //
+  //
+  // }
   getdata()async
   {
 
@@ -48,7 +61,7 @@ class _SliverUSerFormWidgetState extends State<SliverUSerFormWidget> {
   @override
   void initState() {
       getdata();
-
+ // FullName=widget.oldname;
     super.initState();
   }
 

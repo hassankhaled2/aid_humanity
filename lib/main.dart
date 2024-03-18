@@ -1,3 +1,9 @@
+import 'package:aid_humanity/Features/auth/data/data_sources/login_remote_data_source/auth_remote_data_source.dart';
+import 'package:aid_humanity/Features/auth/data/repositeries_impl/auth_repo_impl.dart';
+import 'package:aid_humanity/Features/auth/domain/entites/user_entity.dart';
+import 'package:aid_humanity/Features/auth/domain/use_cases_impl/login_with_google_use_case.dart';
+import 'package:aid_humanity/Features/auth/domain/use_cases_impl/post_user_data_use_case.dart';
+import 'package:aid_humanity/Features/auth/presentation/cubit/auth_login_cubit/auth_login_cubit.dart';
 import 'package:aid_humanity/Features/auth/presentation/pages/register_page.dart';
 import 'package:aid_humanity/Features/choose%20page/choose_page.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/ai_model_cubit/cubit/classificaiton_cubit.dart';
@@ -17,10 +23,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'Features/auth/presentation/pages/login_page.dart';
+import 'core/constants/constants.dart';
+import 'core/network/connection/network_connection.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 import 'core/widgets/BottomNavigation.dart';
 import 'core/widgets/routes.dart';
+import 'injection_container.dart';
 
 void main() async {
   //the WidgetFlutterBinding is used to interact with the Flutter engine
@@ -39,6 +49,8 @@ void main() async {
   Bloc.observer = MyBlocObserver();
 
   runApp(MyApp());
+  // Hive.registerAdapter(UserEntityAdapter());
+  // Hive.openBox(KFearured);
 }
 
 class MyApp extends StatelessWidget {
@@ -64,6 +76,18 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
         BlocProvider(create: (_) => ClassificaitonCubit()),
+        BlocProvider(
+            create: (context)
+        {
+          return AuthLoginCubit(CallLoginWithGoogleUseCase(getIt.get<AuthRepoImpl>()));
+        }
+
+        )
+
+        // BlocProvider.value(
+        //     value: AuthLoginCubit(CallLoginWithGoogleUseCase(getIt.get<AuthRepoImpl>())),
+        //
+        // )
       ],
       child: MaterialApp(
         routes: routes,
