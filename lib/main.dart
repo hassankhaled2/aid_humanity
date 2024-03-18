@@ -69,15 +69,9 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
           return MaterialApp(
-            routes: {
-              register: (context) => RegisterPage(),
-              login: (context) => LoginPage(),
-              bottomNavigation: (context) => BottomNavigation(),
-              Onboarding: (context) => OnBoarding(),
-              // choicePage: (context) => ChoicePage(),
-              homeDeliveryPage: (context) => HomeDeliveryPage(),
-              homeDonorPage: (context) => HomeDonorPage(),
-            },
+            routes: 
+             routes
+            ,
 
             /// see it if worked or not
             home: FirebaseAuth.instance.currentUser == null ? SplashScreen() : BottomNavigation(),
