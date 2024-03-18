@@ -4,9 +4,6 @@ import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.da
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
-
-
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({Key? key}) : super(key: key);
 
@@ -33,11 +30,12 @@ class _BottomNavigationState extends State<BottomNavigation> {
     }
     screens.addAll([
       const HomeDeliveryPage(),
-      Container(),
+      const HomeDonorPage(),
       Container(),
       ProfilePage(displayName: displayName, photoUrl: photoUrl, email: email),
     ]);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +56,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       //             ('verify your email',style: TextStyle(color: Colors.white),)),
       //         ),
       //       ),
-      body:screens[currentIndex],
+      body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: currentIndex,
