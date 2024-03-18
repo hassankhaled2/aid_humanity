@@ -10,8 +10,18 @@ class RequestEntity extends Equatable {
   final List<ItemEntity>? items;
   final String userId;
   final String status;
+  final String? deliveryId;
 
-  const RequestEntity({required this.time, required this.address, required this.numberOfItems, required this.userId, required this.status, this.items,this.id});
+  const RequestEntity({
+    this.id,
+    required this.time,
+    required this.address,
+    required this.numberOfItems,
+    this.items,
+    required this.userId,
+    required this.status,
+    this.deliveryId,
+  });
 
   @override
   List<Object?> get props => [time, address, numberOfItems, items, userId];

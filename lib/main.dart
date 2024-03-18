@@ -1,8 +1,6 @@
 import 'package:aid_humanity/Features/auth/presentation/pages/register_page.dart';
-import 'package:aid_humanity/Features/choose%20page/choose_page.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/ai_model_cubit/cubit/classificaiton_cubit.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/details_bloc.dart';
-
 import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.dart';
@@ -11,8 +9,8 @@ import 'package:aid_humanity/Features/spalsh/spalsh.dart';
 import 'package:aid_humanity/bloc_observer.dart';
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
+import 'package:aid_humanity/core/utils/theme/cubit/theme_cubit.dart';
 import 'package:aid_humanity/injection_container.dart' as di;
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -61,28 +59,36 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => di.getIt<DetailsBloc>()),
         BlocProvider(create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
-        BlocProvider(create: (_) => ClassificaitonCubit()),
+        BlocProvider(
+          create: (_) => ClassificaitonCubit(),
+        ),
+        BlocProvider(create: (_) => di.getIt<ThemeCubit>()..getCurrentLocale())
       ],
-      child: MaterialApp(
-        routes: {
-          register: (context) => RegisterPage(),
-          login: (context) => LoginPage(),
-          bottomNavigation: (context) => BottomNavigation(),
-          Onboarding: (context) => OnBoarding(),
-          // choicePage: (context) => ChoicePage(),
-          homeDeliveryPage: (context) => HomeDeliveryPage(),
-          homeDonorPage: (context) => HomeDonorPage(),
-        },
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, state) {
+          return MaterialApp(
+            routes: {
+              register: (context) => RegisterPage(),
+              login: (context) => LoginPage(),
+              bottomNavigation: (context) => BottomNavigation(),
+              Onboarding: (context) => OnBoarding(),
+              // choicePage: (context) => ChoicePage(),
+              homeDeliveryPage: (context) => HomeDeliveryPage(),
+              homeDonorPage: (context) => HomeDonorPage(),
+            },
 
-        /// see it if worked or not
-        home: BottomNavigation(),
-        debugShowCheckedModeBanner: false,
-        supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provide , which langs to use in our app
-        localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
-        localeResolutionCallback: (deviceLocale, supportedLocales) {
-          return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
+            /// see it if worked or not
+            home: FirebaseAuth.instance.currentUser == null ? SplashScreen() : BottomNavigation(),
+            debugShowCheckedModeBanner: false,
+            locale: BlocProvider.of<ThemeCubit>(context).locale,
+            supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provide , which langs to use in our app
+            localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
+            localeResolutionCallback: (deviceLocale, supportedLocales) {
+              return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
+            },
+            theme: getThemeDataLight, //const HomeView(),
+          );
         },
-        theme: getThemeDataLight, //const HomeView(),
       ),
     );
   }

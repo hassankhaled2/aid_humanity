@@ -28,4 +28,32 @@ class HomeRepositoryImpl implements HomeRepository {
       return Left(OfflineFaliure());
     }
   }
+
+  @override
+  Future<Either<Faliure, List<RequestEntity>>> getLiveRequests(String userId) async {
+    if (await networkInfo.isConnected) {
+      try {
+        return right(await homeRemoteDataSource.getLiveRequests(userId));
+      } on ServerException {
+        return left(ServerFaliure());
+      } on NoDataExecption {
+        return left(NoDataFaliure());
+      }
+    } else {
+      return Left(OfflineFaliure());
+    }
+  }
+
+  @override
+  Future<Either<Faliure, Unit>> updateRequest(String requestId, String userId, String status) async {
+    if (await networkInfo.isConnected) {
+      try {
+        return right(await homeRemoteDataSource.updateRequest(requestId, userId, status));
+      } on ServerException {
+        return left(ServerFaliure());
+      }
+    } else {
+      return Left(OfflineFaliure());
+    }
+  }
 }

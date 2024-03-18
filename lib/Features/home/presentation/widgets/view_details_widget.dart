@@ -1,5 +1,9 @@
+import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
+import 'package:aid_humanity/core/widgets/BottomNavigation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:aid_humanity/core/constants/constants.dart';
@@ -162,9 +166,24 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                   padding: EdgeInsets.all(context.getDefaultSize() * 2),
                   child: GestureDetector(
                       onTap: () {
-                      
+                        BlocProvider.of<HomeBloc>(context).add(AcceptRequestEvent(requestId: widget.requestEntity.id!, deliveryId: FirebaseAuth.instance.currentUser!.uid, status: "inProgress"));
                       },
-                      child: CustomButtonWidget(height: 4, width: 18, title: "Accept", fontSize: 2)),
+                      child: BlocConsumer<HomeBloc, HomeState>(
+                        listener: (context, state) {
+                          if (state is AcceptRequsetSuccessState) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Request Accepted Successfuly")));
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const BottomNavigation()), (route) => false);
+                          }
+                        },
+                        builder: (context, state) {
+                          if (state is AcceptRequsetLoadingState) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return widget.requestEntity.status == "Pending" ? CustomButtonWidget(height: 4, width: 18, title: "Accept", fontSize: 2) : Container();
+                        },
+                      )),
                 ),
               )
             ]),

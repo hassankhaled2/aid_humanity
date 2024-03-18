@@ -4,4 +4,6 @@ import 'package:dartz/dartz.dart';
 
 abstract class HomeRepository {
   Future<Either<Faliure, List<RequestEntity>>> getAllRequests();
+  Future<Either<Faliure,List<RequestEntity>>> getLiveRequests(String userId);
+  Future<Either<Faliure,Unit>>updateRequest(String requestId,String userId,String status);
 }
