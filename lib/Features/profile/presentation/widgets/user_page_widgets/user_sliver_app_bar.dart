@@ -2,8 +2,21 @@ import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/theme/app_color/app_color_light.dart';
 import 'package:flutter/material.dart';
 
-class UserSliverAppBar extends StatelessWidget {
-  const UserSliverAppBar({super.key});
+class UserSliverAppBar extends StatefulWidget {
+  const UserSliverAppBar({super.key, required this.displayName, required this.photoUrl});
+  final String displayName;
+  final String photoUrl;
+
+  @override
+  State<UserSliverAppBar> createState() => _UserSliverAppBarState();
+}
+
+class _UserSliverAppBarState extends State<UserSliverAppBar> {
+  @override
+  void initState() {
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +33,8 @@ class UserSliverAppBar extends StatelessWidget {
       ],
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
-        title: const Text(
-          "Omar Salama",
+        title:  Text(
+          widget.displayName,
           style: TextStyle(color: AppColorsLight.primaryColor),
         ),
         titlePadding: const EdgeInsets.only(left: 10, bottom: 10),
@@ -29,7 +42,9 @@ class UserSliverAppBar extends StatelessWidget {
             borderRadius: BorderRadius.only(
               bottomRight: Radius.circular(context.getDefaultSize() * 3),
             ),
-            child: const Image(image: NetworkImage("https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?cs=srgb&dl=pexels-simon-robben-614810.jpg&fm=jpg"), fit: BoxFit.fitWidth)),
+            child:  Image.network(widget.photoUrl,
+              fit: BoxFit.fill, errorBuilder: (context, error, stackTrace) =>  const Center(child: CircularProgressIndicator(color: Colors.orangeAccent,)),),
+      ),
       ),
     );
   }
