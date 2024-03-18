@@ -1,8 +1,11 @@
 import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.dart';
 import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+
+
 
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({Key? key}) : super(key: key);
@@ -13,13 +16,28 @@ class BottomNavigation extends StatefulWidget {
 
 class _BottomNavigationState extends State<BottomNavigation> {
   int currentIndex = 0;
+  String displayName = "";
+  String email = "";
+  String photoUrl = "";
 
-  List<Widget> screens = [
-    const HomeDeliveryPage(),
-    const HomeDonorPage(),
-    Container(),
-    const ProfilePage(),
-  ];
+  List<Widget> screens = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      displayName = user.displayName ?? "Hassan";
+      email = user.email ?? "";
+      photoUrl = user.photoURL ?? "https://img.freepik.com/free-vector/man-delivery-package-white-background_1308-46613.jpg?w=740&t=st=1710189458~exp=1710190058~hmac=8976eab32f98feb54f4ae609dfe8eba12acb1a536083a2428ac3b32abb49a967";
+    }
+    screens.addAll([
+      const HomeDeliveryPage(),
+      Container(),
+      Container(),
+      ProfilePage(displayName: displayName, photoUrl: photoUrl, email: email),
+    ]);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +58,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
       //             ('verify your email',style: TextStyle(color: Colors.white),)),
       //         ),
       //       ),
-      body: screens[currentIndex],
+      body:screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: currentIndex,

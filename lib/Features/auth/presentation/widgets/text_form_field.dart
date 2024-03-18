@@ -1,3 +1,4 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,13 +9,16 @@ class CustomTextForm extends StatelessWidget {
    final IconData ?suffix;
    final  VoidCallback? suffixpressed;
    final  bool obscureText;
+  final Widget? prefixIcon;
+  final int? maxLines;
    final  TextInputType? keyboardType;
    final List<TextInputFormatter>? inputFormatters;
-   const CustomTextForm({super.key, required this.hinttext, required this.mycontroller, this.keyboardType, this.inputFormatters, this.validator, this.suffix, this.suffixpressed, required this.obscureText, });
+   CustomTextForm({super.key, required this.hinttext, required this.mycontroller, this.keyboardType, this.inputFormatters, this.validator, this.suffix, this.suffixpressed, required this.obscureText, this.prefixIcon ,this.maxLines=1  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      maxLines: maxLines,
       inputFormatters:inputFormatters,
       keyboardType:keyboardType,
       obscureText:obscureText,
@@ -24,8 +28,10 @@ class CustomTextForm extends StatelessWidget {
 
       ///see it again
       decoration: InputDecoration(
+        prefixIcon: prefixIcon,
+
         // you should put this to mke border fixed when you click on the button
-        border:const OutlineInputBorder(
+        border:OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         suffixIcon: suffix != null ? IconButton(
@@ -34,8 +40,8 @@ class CustomTextForm extends StatelessWidget {
       )
             : null,
         hintText: hinttext,
-        contentPadding:const EdgeInsets.symmetric(vertical: 2, horizontal: 20),
-        enabledBorder:const OutlineInputBorder(
+        contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+        enabledBorder:OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             borderSide: BorderSide(color:Colors.black)
         ),
@@ -44,7 +50,7 @@ class CustomTextForm extends StatelessWidget {
 
 
 
-    focusedBorder:const OutlineInputBorder(
+    focusedBorder: OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(10)),
     borderSide: BorderSide(color:Colors.orangeAccent,)
     ),

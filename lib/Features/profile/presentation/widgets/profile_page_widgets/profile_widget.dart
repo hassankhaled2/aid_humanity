@@ -6,20 +6,23 @@ import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/utils/app_router/app_router.dart';
 
 class ProfileWidget extends StatelessWidget {
-  const ProfileWidget({super.key});
-
+  const ProfileWidget({super.key, required this.displayName, required this.email, required this.photoUrl});
+  final String displayName;
+  final String email;
+  final String  photoUrl;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
         UserItemWidget(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const UserInfoPage()));
-          },
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserInfoPage(displayName: displayName,email: email,photoUrl:photoUrl ,)));
+          }, displayName: displayName, photoUrl: photoUrl,
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: context.getDefaultSize() * 2),
@@ -55,8 +58,10 @@ class ProfileWidget extends StatelessWidget {
             ProfileItemWidget(icon: Icons.logout, text: context.translate("logout"), isModeWidget: false, iconColor: Colors.red, onTap:
                 ()
             async {
+              GoogleSignIn googleSign =GoogleSignIn();
+              googleSign.disconnect();
               await FirebaseAuth.instance.signOut();
-           Navigator.of(context).pushNamedAndRemoveUntil(login, (route) => false);
+           Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
             }
             ),
           ]),

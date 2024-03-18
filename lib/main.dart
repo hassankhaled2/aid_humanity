@@ -18,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'Features/auth/presentation/pages/login_page.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 import 'core/widgets/BottomNavigation.dart';
+import 'core/widgets/routes.dart';
 
 void main() async {
   //the WidgetFlutterBinding is used to interact with the Flutter engine
@@ -58,7 +59,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => di.getIt<DetailsBloc>()),
-        BlocProvider(create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
+        BlocProvider(
+            create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
         BlocProvider(
           create: (_) => ClassificaitonCubit(),
         ),
