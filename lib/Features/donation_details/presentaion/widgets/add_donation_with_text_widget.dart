@@ -10,7 +10,8 @@ class AddDonationWithTextWidget extends StatefulWidget {
   AddDonationWithTextWidget({super.key});
 
   @override
-  State<AddDonationWithTextWidget> createState() => _AddDonationWithTextWidgetState();
+  State<AddDonationWithTextWidget> createState() =>
+      _AddDonationWithTextWidgetState();
 }
 
 class _AddDonationWithTextWidgetState extends State<AddDonationWithTextWidget> {
@@ -78,26 +79,37 @@ class _AddDonationWithTextWidgetState extends State<AddDonationWithTextWidget> {
                     BlocConsumer<ClassificaitonCubit, ClassificaitonState>(
                       listener: (context, state) {
                         if (state is KnnClassificaitonsSuccessState) {
-                          print("Classification successful");
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => DonationFormItem(
-                                items: state.knnOutput,
-                                isKnn: true,
+
+                          print("Classification successful"); //hena
+                          print(state.knnOutput);
+                          final knnOutput = state.knnOutput;
+                          if (knnOutput != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => DonationFormItem(
+                                  items: state.knnOutput,
+                                  isKnn: true,
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          } else {
+                            // Handle null knnOutput
+                            print("knnOutput is null");
+                          }
                         }
                       },
                       builder: (context, state) {
+                        // Replace this builder part with the modified code
                         if (state is ClassificaitonLoadingState) {
-                          return const Center(child: CircularProgressIndicator());
+                          return const Center(
+                              child: CircularProgressIndicator());
                         }
                         return DefaultElevatedButton(
                           onPressed: () {
                             if (formState.currentState!.validate() &&
-                                textControllers.any((c) => c.text.trim().isNotEmpty)) {
+                                textControllers
+                                    .any((c) => c.text.trim().isNotEmpty)) {
                               List<String> descriptions = getDescriptions();
                               BlocProvider.of<ClassificaitonCubit>(context)
                                   .knnClassification(descriptions);
@@ -105,7 +117,8 @@ class _AddDonationWithTextWidgetState extends State<AddDonationWithTextWidget> {
                               // Show a snackbar for missing input
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Please enter a description for your donation.'),
+                                  content: Text(
+                                      'Please enter a description for your donation.'),
                                 ),
                               );
                             }
@@ -120,14 +133,13 @@ class _AddDonationWithTextWidgetState extends State<AddDonationWithTextWidget> {
                 ),
               ],
             ),
-          
-
           ),
         ),
       ),
     );
   }
 }
+
 class DescriptionTextField extends StatelessWidget {
   final TextEditingController controller;
   final void Function() onRemove;

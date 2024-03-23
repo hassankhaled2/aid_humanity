@@ -75,6 +75,7 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
       }
     }
   }
+
   void knnClassification(List<String> descriptions) async {
     emit(KnnClassificaitonsLoadingState());
 
@@ -89,13 +90,10 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
         );
 
         if (response.data is Map<String, dynamic>) {
-
           results.add(response.data); // Cast to expected type
         } else {
           print("Unexpected response format. Description: $description");
           print("Received data: ${response.data}"); // Log the actual data
-
-         
         }
       } catch (error) {
         print("Error classifying description: $description - $error");
@@ -105,6 +103,4 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
 
     emit(KnnClassificaitonsSuccessState(knnOutput: results));
   }
-
-
 }
