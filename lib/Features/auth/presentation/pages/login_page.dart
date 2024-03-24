@@ -1,22 +1,10 @@
-import 'package:aid_humanity/Features/auth/data/models/user_data_model.dart';
-import 'package:aid_humanity/Features/auth/presentation/pages/phone_number_page.dart';
-import 'package:aid_humanity/Features/profile/presentation/widgets/user_page_widgets/user_sliver_app_bar.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
-import '../../../../core/network/connection/network_connection.dart';
 import '../../../../core/utils/app_router/app_router.dart';
 import '../../../../core/utils/styles/styles.dart';
-import '../../../../injection_container.dart';
-import '../../../home/data/data_sources/remote_data_source.dart';
-import '../../../profile/presentation/widgets/profile_page_widgets/profile_user_item_widget.dart';
-import '../../data/data_sources/login_remote_data_source/auth_remote_data_source.dart';
-import '../../data/repositeries_impl/auth_repo_impl.dart';
-import '../../domain/use_cases_impl/login_with_google_use_case.dart';
 import '../cubit/auth_login_cubit/auth_login_cubit.dart';
 import '../cubit/auth_login_cubit/auth_login_states.dart';
 import '../widgets/text_form_field.dart';
@@ -37,23 +25,23 @@ class _State extends State<LoginPage> {
   bool isPassword = true;
   bool isloading = false;
 
-  Future signInWithGoogle() async {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-    GoogleSignInAuthentication?googleAuth = await googleUser?.authentication;
-
-    // Create a new credential
-    final credential = GoogleAuthProvider.credential(
-
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
-
-    // Once signed in, return the UserCredential
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRouter.onBoarding, (route) => false);
-  }
+  // Future signInWithGoogle() async {
+  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  //
+  //   GoogleSignInAuthentication?googleAuth = await googleUser?.authentication;
+  //
+  //   // Create a new credential
+  //   final credential = GoogleAuthProvider.credential(
+  //
+  //     accessToken: googleAuth?.accessToken,
+  //     idToken: googleAuth?.idToken,
+  //   );
+  //
+  //   // Once signed in, return the UserCredential
+  //   await FirebaseAuth.instance.signInWithCredential(credential);
+  //   Navigator.of(context).pushNamedAndRemoveUntil(
+  //       AppRouter.onBoarding, (route) => false);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -140,8 +128,7 @@ class _State extends State<LoginPage> {
                           return;
                         }
                         try {
-                          await FirebaseAuth.instance.sendPasswordResetEmail(
-                              email: email.text);
+                          await FirebaseAuth.instance.sendPasswordResetEmail(email: email.text);
                           AwesomeDialog(
                             context: context,
                             showCloseIcon: true,
@@ -193,8 +180,7 @@ class _State extends State<LoginPage> {
                                   Navigator.of(context).pushReplacementNamed(
                                       AppRouter.onBoarding);
                                 } else {
-                                  FirebaseAuth.instance.currentUser!
-                                      .sendEmailVerification();
+                                  FirebaseAuth.instance.currentUser!.sendEmailVerification();
                                   AwesomeDialog(
                                     context: context,
                                     showCloseIcon: true,

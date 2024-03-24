@@ -5,12 +5,12 @@ import '../../../domain/entites/user_entity.dart';
 abstract class AuthLocalDataSource
 {
   Future<UserDataModel>postUserData();
-  Future<UserEntity>login();
+  Future<UserDataModel>login();
 }
 class AuthLocalDataSourceImpl extends AuthLocalDataSource
 {
   @override
-  Future<UserEntity> login() {
+  Future<UserDataModel> login() {
     // TODO: implement login
     throw UnimplementedError();
   }

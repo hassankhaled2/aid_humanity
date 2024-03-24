@@ -33,7 +33,7 @@ class AuthRepoImpl extends AuthRepo
 
   @override
   Future<Either<Failure, UserDataModel>> postUserData() {
-    // TODO: implement postUserData
+
     throw UnimplementedError();
   }
 

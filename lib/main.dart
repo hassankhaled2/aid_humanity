@@ -1,32 +1,20 @@
-import 'package:aid_humanity/Features/auth/data/data_sources/login_remote_data_source/auth_remote_data_source.dart';
 import 'package:aid_humanity/Features/auth/data/repositeries_impl/auth_repo_impl.dart';
-import 'package:aid_humanity/Features/auth/domain/entites/user_entity.dart';
 import 'package:aid_humanity/Features/auth/domain/use_cases_impl/login_with_google_use_case.dart';
-import 'package:aid_humanity/Features/auth/domain/use_cases_impl/post_user_data_use_case.dart';
 import 'package:aid_humanity/Features/auth/presentation/cubit/auth_login_cubit/auth_login_cubit.dart';
-import 'package:aid_humanity/Features/auth/presentation/pages/register_page.dart';
-import 'package:aid_humanity/Features/choose%20page/choose_page.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/ai_model_cubit/cubit/classificaiton_cubit.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/details_bloc.dart';
 
 import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
-import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
-import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.dart';
-import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
-import 'package:aid_humanity/Features/spalsh/spalsh.dart';
 import 'package:aid_humanity/bloc_observer.dart';
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
-import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:aid_humanity/injection_container.dart' as di;
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'Features/auth/presentation/pages/login_page.dart';
-import 'core/constants/constants.dart';
-import 'core/network/connection/network_connection.dart';
+import 'Features/auth/presentation/pages/circle_avatar_widget.dart';
+import 'Features/spalsh/spalsh.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 import 'core/widgets/BottomNavigation.dart';
 import 'core/widgets/routes.dart';
@@ -93,7 +81,9 @@ class MyApp extends StatelessWidget {
         routes: routes,
 
         /// see it if worked or not
-        home:  FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?BottomNavigation():SplashScreen(),
+        home:   FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?BottomNavigation():SplashScreen(),
+            //CircleAvatarWidget(),
+        //
         debugShowCheckedModeBanner: false,
         supportedLocales: AppLocalizationsSetup
             .supportedLocales, // this line to provide , which langs to use in our app

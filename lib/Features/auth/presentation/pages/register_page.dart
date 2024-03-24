@@ -1,9 +1,6 @@
-import 'package:aid_humanity/Features/auth/presentation/pages/phone_number_page.dart';
-import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -61,24 +58,40 @@ class _State extends State<RegisterPage> {
   //   // Call the user's CollectionReference to add a new user
   //
   // }
+  String displayName ='';
+  String Email ='';
+  String photoUrl='';
   Future signInWithGoogle() async {
-    // Trigger the authentication flow
+    // final user=FirebaseAuth.instance.currentUser;
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    // Obtain the auth details from the request
-    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+    GoogleSignInAuthentication?googleAuth = await googleUser?.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
+
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
 
     // Once signed in, return the UserCredential
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => OnBoarding(),));
+   final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
 
-    // addCateogry();
+    final user = userCredential.user!;
+    final displayName = user.displayName ?? 'hahadhda';
+    final email = user.email ?? 'hdahdhah';
+    final photoUrl = user.photoURL ?? 'https://images.pexels.com/photos/2893685/pexels-photo-2893685.jpeg?auto=compress&cs=tinysrgb&w=600';
+    await categories.add({
+      "Full Name":displayName,
+      "Email":email,
+      "Photo":photoUrl,
+      // "Phone":phone.text,
+      // "Address":address.text,
+      // to determine which each user add to firestore that depend on  their ID
+      "id":FirebaseAuth.instance.currentUser!.uid
+    });
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRouter.onBoarding, (route) => false);
   }
 
   @override
