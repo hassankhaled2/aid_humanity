@@ -19,13 +19,14 @@ class DetailsRepositoryImpl extends DetailsRepository {
   });
   @override
   Future<Either<Faliure, Unit>> addRequest(RequestEntity requestEntity, List<ItemEntity> items) async {
-    RequestModel requestModel = RequestModel(time: requestEntity.time, address: requestEntity.address, numberOfItems: requestEntity.numberOfItems, userId: requestEntity.userId, status: requestEntity.status.toString(), items: items);
+    RequestModel requestModel = RequestModel(time: requestEntity.time, address: requestEntity.address, numberOfItems: requestEntity.numberOfItems, userId: requestEntity.userId, status: requestEntity.status.toString(), items: items, qrScanned: requestEntity.qrScanned);
     List<ItemModel> itemsModels = items
         .map((itemEntity) => ItemModel(
               type: itemEntity.type,
               category: itemEntity.category,
               gender: itemEntity.gender,
               image: itemEntity.image,
+              quantity: itemEntity.quantity,
             ))
         .toList();
     if (await connctionInfo.isConnected) {

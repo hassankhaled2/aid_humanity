@@ -4,7 +4,9 @@ import 'package:aid_humanity/Features/donation_details/presentaion/pages/donatio
 import 'package:aid_humanity/core/utils/constants.dart';
 
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
+import 'package:aid_humanity/core/utils/theme/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -91,7 +93,7 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
               ),
             ),
           )),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: BlocProvider.of<ThemeCubit>(context).locale.languageCode == 'en' ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.startFloat,
       floatingActionButton: floatingActionPoint(),
     );
   }
@@ -145,6 +147,7 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
             backgroundColor: kSecondaryColor,
             foregroundColor: Colors.white,
             label: "Enter short description",
+            labelStyle: TextStyle(fontSize: context.getDefaultSize() * 2),
             onTap: () {
               Navigator.push(
                 context,
@@ -157,6 +160,7 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
             backgroundColor: kSecondaryColor,
             foregroundColor: Colors.white,
             label: "Choose the items",
+            labelStyle: TextStyle(fontSize: context.getDefaultSize() * 2),
             onTap: () {
               Navigator.push(
                 context,
@@ -169,6 +173,7 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
             backgroundColor: kSecondaryColor,
             foregroundColor: Colors.white,
             label: "Pick an image",
+            labelStyle: TextStyle(fontSize: context.getDefaultSize() * 2),
             onTap: () {
               Navigator.push(
                 context,
