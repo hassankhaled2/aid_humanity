@@ -172,6 +172,7 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                     ),
                     Expanded(
                       child: ListView(
+                        scrollDirection: Axis.vertical,
                         children: [
                           Row(
                             children: [
@@ -192,64 +193,67 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                             ],
                           ),
                           addressText(context, "Items"),
-                          Container(height: 100, child: ListView.builder(scrollDirection: Axis.horizontal, itemCount: widget.requestEntity.numberOfItems, itemBuilder: (_, index) => formTextField(context, widget.requestEntity.items![index].type))),
-                          SizedBox(
-                            width: context.getDefaultSize() * 8,
-                          ),
                           Container(
                             height: 150,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: widget.requestEntity.items!.length,
-                                itemBuilder: (_, index) => Column(
-                                      children: [photoWidget(context, widget.requestEntity.items![index].image), Text("category:"), Text(widget.requestEntity.items![index].category)],
-                                    )),
+                            child: ListView.builder(scrollDirection: Axis.horizontal, itemCount: widget.requestEntity.items!.length, itemBuilder: (_, index) => photoWidget(context, widget.requestEntity.items![index].image, index)),
                           ),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          Container(
+                            height: 100,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: widget.requestEntity.items!.length,
+                              itemBuilder: (_, index) => Column(
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 45,
+                                    ),
+                                    child: Text("category:"),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 2),
+                                    child: Text(widget.requestEntity.items![index].category),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(context.getDefaultSize() * 2),
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  GestureDetector(
-                      onTap: () {
-                        BlocProvider.of<HomeBloc>(context).add(AcceptRequestEvent(requestId: widget.requestEntity.id!, deliveryId: FirebaseAuth.instance.currentUser!.uid, status: "inProgress"));
-                      },
-                      child: BlocConsumer<HomeBloc, HomeState>(
-                        listener: (context, state) {
-                          if (state is AcceptRequsetSuccessState) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Request Accepted Successfuly")));
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const BottomNavigation()), (route) => false);
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.all(context.getDefaultSize() * 2),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          final Uri url = Uri(
+                            scheme: 'tel',
+                            path: "0100 273 6659",
+                          );
+                          if (await canLaunchUrl(url)) {
+                            await launchUrl(url);
+                          } else {
+                            print("cannot lunch this url");
                           }
                         },
-                        builder: (context, state) {
-                          if (state is AcceptRequsetLoadingState) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          return widget.requestEntity.status == "Pending" ? CustomButtonWidget(height: 4, width: 18, title: "Accept", fontSize: 2) : Container();
-                        },
-                      )),
-                  GestureDetector(
-                    onTap: () async {
-                      final Uri url = Uri(
-                        scheme: 'tel',
-                        path: "0100 273 6659",
-                      );
-                      if (await canLaunchUrl(url)) {
-                        await launchUrl(url);
-                      } else {
-                        print("cannot lunch this url");
-                      }
-                    },
-                    child: CustomButtonWidget(height: 4, width: 18, title: "CALL NOW", fontSize: 1.8),
+                        child: CustomButtonWidget(height: 4, width: 18, title: "CALL NOW", fontSize: 1.8),
+                      ),
+                      SizedBox(
+                        width: context.getDefaultSize(),
+                      ),
+                      GestureDetector(onTap: () {}, child: CustomButtonWidget(height: 4, width: 18, title: "ACCEPT", fontSize: 1.8)),
+                    ],
                   ),
-                ]),
-              ),
+                ),
+              )
             ]),
           )
         ],
@@ -299,14 +303,44 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
     );
   }
 
-  Padding photoWidget(BuildContext context, String photo) {
+  Padding photoWidget(BuildContext context, String photo, int index) {
     return Padding(
-      padding: EdgeInsets.all(context.getDefaultSize()),
-      child: Container(
-        height: context.getDefaultSize() * 9,
-        width: context.getDefaultSize() * 9,
-        decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(photo), fit: BoxFit.cover)),
-      ),
-    );
+        padding: EdgeInsets.all(context.getDefaultSize()),
+        child: Container(
+          height: context.getDefaultSize() * 9,
+          width: context.getDefaultSize() * 9,
+          decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(photo), fit: BoxFit.cover)),
+          padding: EdgeInsets.only(top: context.getDefaultSize() * 5, right: context.getDefaultSize(), left: context.getDefaultSize()),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: context.getDefaultSize() * 15,
+                width: context.getDefaultSize() * 18,
+                decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(photo), fit: BoxFit.cover)),
+              ),
+              Positioned(
+                right: 0,
+                top: 0,
+                child: Container(
+                  color: Colors.grey.withOpacity(0.4),
+                  height: context.getDefaultSize() * 12.2,
+                  width: context.getDefaultSize() * 18,
+                  child: Center(
+                    child: Text(
+                      widget.requestEntity.items![index].quantity.toString(),
+                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: context.getDefaultSize() * 3),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 50,
+                top: -25,
+                child: Text(widget.requestEntity.items![index].type),
+              )
+            ],
+          ),
+        ));
   }
 }

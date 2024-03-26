@@ -26,6 +26,7 @@ class DetailsRepositoryImpl extends DetailsRepository {
               category: itemEntity.category,
               gender: itemEntity.gender,
               image: itemEntity.image,
+              quantity: itemEntity.quantity,
             ))
         .toList();
     if (await connctionInfo.isConnected) {

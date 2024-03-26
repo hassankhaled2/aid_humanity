@@ -21,9 +21,15 @@ class HomeRemoteDataSourceImplWithFireBase extends HomeRemoteDataSource {
       QuerySnapshot requestSnapshot = await firebaseFirestore.collection('request').where('status', isEqualTo: 'Pending').get();
 
       for (QueryDocumentSnapshot requestsdoc in requestSnapshot.docs) {
-        var itemsSnapshot = await requestsdoc.reference.collection('items').get();
-        List<ItemModel> itemModels = itemsSnapshot.docs.map((doc) => ItemModel.fromJson(doc.data())).toList();
-        RequestModel requestModel = RequestModel.fromJson(requestsdoc.data() as Map<String, dynamic>, itemModels);
+        var itemsSnapshot =
+            await requestsdoc.reference.collection('items').get();
+        print(itemsSnapshot.docs.first.data());
+        List<ItemModel> itemModels = itemsSnapshot.docs
+            .map((doc) => ItemModel.fromJson(doc.data()))
+            .toList();
+        print("-------------------------------");
+        RequestModel requestModel = RequestModel.fromJson(
+            requestsdoc.data() as Map<String, dynamic>, itemModels);
 
         requests.add(requestModel);
       }

@@ -24,11 +24,13 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
           child: DefaultTabController(
             length: 2,
             child: NestedScrollView(
-              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
                 return <Widget>[
                   SliverAppBar(
                     backgroundColor: Colors.white,
-                    title: const Text('Aid Humanity', style: TextStyle(color: Color(0xFFF8B145))),
+                    title: const Text('Aid Humanity',
+                        style: TextStyle(color: Color(0xFFF8B145))),
                     actions: [
                       IconButton(
                           onPressed: () {},
@@ -106,7 +108,8 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
         childPadding: const EdgeInsets.all(5),
         spaceBetweenChildren: 4,
         //.....
-        buttonSize: const Size.fromRadius(35), //speedDial size which defaults to 56 itself
+        buttonSize: const Size.fromRadius(
+            35), //speedDial size which defaults to 56 itself
         //iconTheme:IconThemeData(size:22),
         /*label:
             extend ? const Text("Open") : null, //the label of the main button
@@ -145,10 +148,12 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
             backgroundColor: kSecondaryColor,
             foregroundColor: Colors.white,
             label: "Enter short description",
+            labelStyle: TextStyle(fontSize: context.getDefaultSize() * 2),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => (const DonationWithTextPage())),
+                MaterialPageRoute(
+                    builder: (context) => (const DonationWithTextPage())),
               );
             },
           ),
@@ -157,10 +162,12 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
             backgroundColor: kSecondaryColor,
             foregroundColor: Colors.white,
             label: "Choose the items",
+            labelStyle: TextStyle(fontSize: context.getDefaultSize() * 2),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => (const ChooseItemsPage())),
+                MaterialPageRoute(
+                    builder: (context) => (const ChooseItemsPage())),
               );
             },
           ),
@@ -169,6 +176,7 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
             backgroundColor: kSecondaryColor,
             foregroundColor: Colors.white,
             label: "Pick an image",
+            labelStyle: TextStyle(fontSize: context.getDefaultSize() * 2),
             onTap: () {
               Navigator.push(
                 context,
