@@ -56,4 +56,19 @@ class HomeRepositoryImpl implements HomeRepository {
       return Left(OfflineFaliure());
     }
   }
+  
+  @override
+  Future<Either<Faliure, List<RequestEntity>>> getDoneRequests(String userId) async{
+       if (await networkInfo.isConnected) {
+      try {
+        return right(await homeRemoteDataSource.getDoneRequests(userId));
+      } on ServerException {
+        return left(ServerFaliure());
+      } on NoDataExecption {
+        return left(NoDataFaliure());
+      }
+    } else {
+      return Left(OfflineFaliure());
+    }
+  }
 }

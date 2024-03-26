@@ -7,6 +7,7 @@ import 'package:aid_humanity/Features/home/data/data_sources/remote_data_source.
 import 'package:aid_humanity/Features/home/data/reposatories_imp/home_repository_impl.dart';
 import 'package:aid_humanity/Features/home/domain/repositories/home_repository.dart';
 import 'package:aid_humanity/Features/home/domain/use_cases/get_all_requests_usecase.dart';
+import 'package:aid_humanity/Features/home/domain/use_cases/get_done_requests_usecase.dart';
 import 'package:aid_humanity/Features/home/domain/use_cases/get_live_requests_usecase.dart';
 import 'package:aid_humanity/Features/home/domain/use_cases/update_request_usercase.dart';
 import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
@@ -23,7 +24,7 @@ Future<void> init() async {
 //! Features-details
 // bloc
   getIt.registerFactory(() => DetailsBloc(getIt()));
-  getIt.registerFactory(() => HomeBloc(getAllRequestsUseCase: getIt(), getLiveRequestsUseCase: getIt(), updateRequestUseCase: getIt()));
+  getIt.registerFactory(() => HomeBloc(getAllRequestsUseCase: getIt(), getLiveRequestsUseCase: getIt(), updateRequestUseCase: getIt(), getDoneRequestsUseCase: getIt()));
   getIt.registerFactory(() => ThemeCubit(getIt()));
 
 //usecases
@@ -32,6 +33,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => GetAllRequestsUseCase(homeRepository: getIt()));
   getIt.registerLazySingleton(() => UpdateRequestUseCase(homeRepository: getIt()));
   getIt.registerLazySingleton(() => GetLiveRequestsUseCase(homeRepository: getIt()));
+  getIt.registerLazySingleton(() => GetDoneRequestsUseCase(homeRepository: getIt()));
 
 // repositories
   getIt.registerLazySingleton<DetailsRepository>(() => DetailsRepositoryImpl(detailsRemoteDataSource: getIt(), connctionInfo: getIt()));

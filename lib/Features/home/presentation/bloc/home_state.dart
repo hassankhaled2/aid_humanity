@@ -21,17 +21,17 @@ class GetAllRequestsFailure extends HomeState {
 
 class GetAllRequestsLoading extends HomeState {}
 
-class GetLiveRequestsSuccess extends HomeState {
+class GetLiveOrDoneRequestsSuccess extends HomeState {
   final List<RequestEntity> requests;
-  const GetLiveRequestsSuccess({required this.requests});
+  const GetLiveOrDoneRequestsSuccess({required this.requests});
 }
 
-class GetLiveRequestsFailure extends HomeState {
+class GetLiveOrDoneRequestsFailure extends HomeState {
   final String message;
-  const GetLiveRequestsFailure({required this.message});
+  const GetLiveOrDoneRequestsFailure({required this.message});
 }
 
-class GetLiveRequestsLoading extends HomeState {}
+class GetLiveOrDoneRequestsLoading extends HomeState {}
 
 class AcceptRequsetSuccessState extends HomeState {}
 

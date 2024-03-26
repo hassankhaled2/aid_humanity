@@ -16,6 +16,12 @@ class GetLiveRequestsEvent extends HomeEvent {
     required this.userId,
   });
 }
+class GetDoneRequestsEvent extends HomeEvent {
+  String userId;
+  GetDoneRequestsEvent({
+    required this.userId,
+  });
+}
 
 class AcceptRequestEvent extends HomeEvent {
   String requestId;

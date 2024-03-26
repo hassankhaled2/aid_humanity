@@ -11,6 +11,7 @@ class RequestEntity extends Equatable {
   final String userId;
   final String status;
   final String? deliveryId;
+  final bool? qrScanned;
 
   const RequestEntity({
     this.id,
@@ -21,6 +22,7 @@ class RequestEntity extends Equatable {
     required this.userId,
     required this.status,
     this.deliveryId,
+    required this.qrScanned,
   });
 
   @override

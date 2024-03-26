@@ -1,8 +1,10 @@
 import 'package:aid_humanity/Features/home/domain/use_cases/get_live_requests_usecase.dart';
 import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
+import 'package:aid_humanity/Features/home/presentation/widgets/history_widgets/history_widget.dart';
 import 'package:aid_humanity/Features/home/presentation/widgets/home_delivery_widgets/card_widget.dart';
 import 'package:aid_humanity/core/constants/strings/faliures_strings.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:aid_humanity/core/utils/theme/app_color/app_color_light.dart';
 import 'package:aid_humanity/core/widgets/faliures_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:live_indicator/live_indicator.dart';
 
 class DeliveryTabButtons extends StatefulWidget {
   const DeliveryTabButtons({super.key});
@@ -34,7 +37,6 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
         });
       }
     });
-    BlocProvider.of<HomeBloc>(context).add(GetAllRequestsEvent());
   }
 
   @override
@@ -84,6 +86,9 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                       if (index == 1) {
                         BlocProvider.of<HomeBloc>(context).add(GetLiveRequestsEvent(userId: FirebaseAuth.instance.currentUser!.uid));
                       }
+                      if (index == 2) {
+                        BlocProvider.of<HomeBloc>(context).add(GetDoneRequestsEvent(userId: FirebaseAuth.instance.currentUser!.uid));
+                      }
                     },
                     labelColor: const Color(0xFFF8B145),
                     unselectedLabelColor: Colors.black,
@@ -91,33 +96,29 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                     indicatorColor: const Color(0xFFF8B145),
                     indicatorSize: TabBarIndicatorSize.label,
                     tabs: [
-                      const Tab(
+                      Tab(
                           child: Text(
-                        'Requests',
+                        context.translate('Requests'),
                       )),
                       Tab(
                           child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("Live"),
+                          Text(context.translate("Live")),
                           const SizedBox(
                             width: 20,
                           ),
                           hasLiveRequests
-                              ? Container(
-                                  width: 10,
-                                  height: 10,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.green,
-                                    shape: BoxShape.circle,
-                                  ),
+                              ? LiveIndicator(
+                                  color: Colors.greenAccent,
+                                  spreadRadius: 10,
                                 )
                               : Container()
                         ],
                       )),
-                      const Tab(
+                      Tab(
                         child: Text(
-                          'History',
+                          context.translate('History'),
                         ),
                       ),
                     ],
@@ -163,7 +164,7 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                 BlocConsumer<HomeBloc, HomeState>(
                     listener: (context, state) {},
                     builder: (context, state) {
-                      if (state is GetLiveRequestsSuccess) {
+                      if (state is GetLiveOrDoneRequestsSuccess) {
                         return ListView.builder(
                           itemCount: state.requests.length,
                           // make scroll in the same position if you are going to another screen and come back
@@ -174,7 +175,7 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                             );
                           },
                         );
-                      } else if (state is GetLiveRequestsFailure) {
+                      } else if (state is GetLiveOrDoneRequestsFailure) {
                         return RefreshIndicator(
                             onRefresh: () async {
                               BlocProvider.of<HomeBloc>(context).add(GetLiveRequestsEvent(userId: FirebaseAuth.instance.currentUser!.uid));
@@ -188,10 +189,35 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                         );
                       }
                     }),
-                ListView.builder(
-                  key: const PageStorageKey<String>('Widget'),
-                  itemBuilder: (context, index) {
-                    return Center(child: const Text("history"));
+                BlocConsumer<HomeBloc, HomeState>(
+                  listener: (context, state) {
+                   
+                  },
+                  builder: (context, state) {
+                    if (state is GetLiveOrDoneRequestsLoading) {
+                      return const Center(
+                          child: CircularProgressIndicator(
+                        color: AppColorsLight.primaryColor,
+                      ));
+                    }
+                    if (state is GetLiveOrDoneRequestsSuccess) {
+                      return ListView.builder(
+                        itemCount: state.requests.length,
+                        key: const PageStorageKey<String>('Widget'),
+                        itemBuilder: (context, index) {
+                          return HistoryWidget(
+                            request: state.requests[index],
+                          );
+                        },
+                      );
+                    }
+                    if (state is GetLiveOrDoneRequestsFailure) {
+                      return FaliureWidget(faliureName: state.message);
+                    }
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      color: AppColorsLight.primaryColor,
+                    ));
                   },
                 ),
               ],

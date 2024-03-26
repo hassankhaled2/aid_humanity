@@ -36,7 +36,7 @@ void main() async {
   await di.init();
   Bloc.observer = MyBlocObserver();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -59,8 +59,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => di.getIt<DetailsBloc>()),
-        BlocProvider(
-            create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
+        BlocProvider(create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
         BlocProvider(
           create: (_) => ClassificaitonCubit(),
         ),
@@ -69,9 +68,7 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
           return MaterialApp(
-            routes: 
-             routes
-            ,
+            routes: routes,
 
             /// see it if worked or not
             home: FirebaseAuth.instance.currentUser == null ? SplashScreen() : BottomNavigation(),

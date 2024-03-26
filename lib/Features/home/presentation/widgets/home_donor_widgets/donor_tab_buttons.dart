@@ -4,7 +4,9 @@ import 'package:aid_humanity/Features/donation_details/presentaion/pages/donatio
 import 'package:aid_humanity/core/utils/constants.dart';
 
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
+import 'package:aid_humanity/core/utils/theme/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -24,13 +26,11 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
           child: DefaultTabController(
             length: 2,
             child: NestedScrollView(
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
+              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                 return <Widget>[
                   SliverAppBar(
                     backgroundColor: Colors.white,
-                    title: const Text('Aid Humanity',
-                        style: TextStyle(color: Color(0xFFF8B145))),
+                    title: const Text('Aid Humanity', style: TextStyle(color: Color(0xFFF8B145))),
                     actions: [
                       IconButton(
                           onPressed: () {},
@@ -93,7 +93,7 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
               ),
             ),
           )),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: BlocProvider.of<ThemeCubit>(context).locale.languageCode == 'en' ? FloatingActionButtonLocation.endFloat : FloatingActionButtonLocation.startFloat,
       floatingActionButton: floatingActionPoint(),
     );
   }
@@ -108,8 +108,7 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
         childPadding: const EdgeInsets.all(5),
         spaceBetweenChildren: 4,
         //.....
-        buttonSize: const Size.fromRadius(
-            35), //speedDial size which defaults to 56 itself
+        buttonSize: const Size.fromRadius(35), //speedDial size which defaults to 56 itself
         //iconTheme:IconThemeData(size:22),
         /*label:
             extend ? const Text("Open") : null, //the label of the main button
@@ -152,8 +151,7 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => (const DonationWithTextPage())),
+                MaterialPageRoute(builder: (context) => (const DonationWithTextPage())),
               );
             },
           ),
@@ -166,8 +164,7 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => (const ChooseItemsPage())),
+                MaterialPageRoute(builder: (context) => (const ChooseItemsPage())),
               );
             },
           ),

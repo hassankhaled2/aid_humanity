@@ -110,7 +110,11 @@ class _DonationFormItemState extends State<DonationFormItem> {
                     address: {"location": locationController.text},
                     numberOfItems: widget.items.length,
                     userId: FirebaseAuth.instance.currentUser!.uid,
-                    status: "Pending"),
+                    status: "Pending",
+                    qrScanned: false
+                    
+                    
+                    ),
                 items: items));
           } else if (state is UploadImagesErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -248,8 +252,12 @@ class _DonationFormItemState extends State<DonationFormItem> {
                                         numberOfItems: widget.items.length,
                                         userId: FirebaseAuth
                                             .instance.currentUser!.uid,
-                                        status: "Pending"),
-                                    items: items));
+                                        status: "Pending",
+                                        qrScanned: false,
+                                        ),
+                                    items: items,
+                                    
+                                    ));
                           } else {
                             BlocProvider.of<DetailsBloc>(context).add(
                                 UploadImagesEvent(images: widget.itemsImages!));
