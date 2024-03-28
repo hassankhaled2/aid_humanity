@@ -10,7 +10,7 @@ class RequestModel extends RequestEntity {
       required super.items,
       required super.userId,
       required super.status,
-      super.id});
+      super.id, required super.qrScanned});
 
 
   factory RequestModel.fromJson(
@@ -22,7 +22,8 @@ class RequestModel extends RequestEntity {
         userId: json['userId'],
         status: json['status'],
         items: items,
-        id: json['id']);
+        id: json['id'],
+        qrScanned: json['qrScanned']);
   }
 
   Map<String, dynamic> toJson(RequestModel requestModel) {
@@ -32,6 +33,8 @@ class RequestModel extends RequestEntity {
       'numberOfItems': requestModel.numberOfItems,
       'userId': requestModel.userId,
       'status': requestModel.status,
+      'qrScanned': requestModel.qrScanned
+      
     };
   }
 }

@@ -24,5 +24,4 @@ const  ItemModel({required super.type, required super.category, required super.g
 
     };
   }
-
 }

@@ -7,5 +7,11 @@
     "help":"المساعدة",
     "logout":"تسجيل الخروج",
     "chat":"الدردشة",
-    "change_language":"تغيير اللغة"
+    "change_language":"تغيير اللغة",
+    "Home":"الرئيسية",
+    "Hunger spot":"أماكن الاحتياج",
+    "Requests":"الطلبات",
+    "Live":"الحالية",
+    "History":"السابقة"
+    
 }

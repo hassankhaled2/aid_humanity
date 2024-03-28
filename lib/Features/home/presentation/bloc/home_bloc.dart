@@ -1,18 +1,29 @@
-import 'package:aid_humanity/core/constants/strings/faliures_strings.dart';
-import 'package:aid_humanity/core/error/faliures.dart';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:aid_humanity/Features/home/domain/use_cases/get_all_requests_usecase.dart';
+import 'package:aid_humanity/Features/home/domain/use_cases/get_done_requests_usecase.dart';
+import 'package:aid_humanity/Features/home/domain/use_cases/get_live_requests_usecase.dart';
+import 'package:aid_humanity/Features/home/domain/use_cases/update_request_usercase.dart';
+import 'package:aid_humanity/core/constants/strings/faliures_strings.dart';
 import 'package:aid_humanity/core/entities/request_entity.dart';
+import 'package:aid_humanity/core/error/faliures.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetAllRequestsUseCase getAllRequestsUseCase;
-  HomeBloc({required this.getAllRequestsUseCase}) : super(HomeInitial()) {
+  final UpdateRequestUseCase updateRequestUseCase;
+  final GetLiveRequestsUseCase getLiveRequestsUseCase;
+  final GetDoneRequestsUseCase getDoneRequestsUseCase;
+  HomeBloc({
+    required this.getAllRequestsUseCase,
+    required this.updateRequestUseCase,
+    required this.getLiveRequestsUseCase,
+    required this.getDoneRequestsUseCase,
+  }) : super(HomeInitial()) {
     on<HomeEvent>((event, emit) async {
       if (event is GetAllRequestsEvent) {
         emit(GetAllRequestsLoading());
@@ -20,6 +31,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         final faliureOrRequests = await getAllRequestsUseCase();
 
         emit(_mapFaliureOrRequestToState(faliureOrRequests));
+      }
+      if (event is AcceptRequestEvent) {
+        emit(AcceptRequsetLoadingState());
+        final faliureOrUnit = await updateRequestUseCase(requestId: event.requestId, userId: event.deliveryId, status: event.status);
+
+        faliureOrUnit.fold((l) => emit(AcceptRequsetErrorState()), (r) => emit(AcceptRequsetSuccessState()));
+      }
+      if (event is GetLiveRequestsEvent) {
+        emit(GetLiveOrDoneRequestsLoading());
+        final faliureOrRequests = await getLiveRequestsUseCase(userId: event.userId);
+        faliureOrRequests.fold((faliure) => emit(GetLiveOrDoneRequestsFailure(message: _mapFaliureToMessage(faliure))), (requests) => emit(GetLiveOrDoneRequestsSuccess(requests: requests)));
+      }
+      if (event is GetDoneRequestsEvent) {
+        emit(GetLiveOrDoneRequestsLoading());
+        final faliureOrRequests = await getDoneRequestsUseCase( event.userId);
+        faliureOrRequests.fold((faliure) => emit(GetLiveOrDoneRequestsFailure(message: _mapFaliureToMessage(faliure))), (requests) => emit(GetLiveOrDoneRequestsSuccess(requests: requests)));
       }
     });
   }
