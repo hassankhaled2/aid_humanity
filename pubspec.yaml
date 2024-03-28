@@ -85,6 +85,7 @@ flutter:
     - assets/logo/logo.png
     - assets/lang/en.json
     - assets/lang/ar.json
+    - assets/pics/circle_avatar.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

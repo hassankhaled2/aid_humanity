@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/ai_model_cubit/cubit/classificaiton_cubit.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/details_bloc.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.dart';
@@ -245,7 +244,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
                                         address: {
                                           "location": locationController.text
                                         },
-                                        numberOfItems: widget.items.length,
+                                        numberOfItems: totalQuantity,
                                         userId: FirebaseAuth
                                             .instance.currentUser!.uid,
                                         status: "Pending"),

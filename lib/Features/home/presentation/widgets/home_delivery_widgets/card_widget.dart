@@ -1,10 +1,8 @@
-
 import 'package:aid_humanity/Features/home/presentation/widgets/view_details_widget.dart';
 import 'package:aid_humanity/core/entities/request_entity.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/widgets/default_elevated_button.dart';
 import 'package:flutter/material.dart';
-
 
 class CardWidget extends StatelessWidget {
   final RequestEntity requestEntity;
@@ -42,12 +40,36 @@ class CardWidget extends StatelessWidget {
                   padding: EdgeInsets.only(
                       left: context.getDefaultSize() * .9,
                       top: context.getDefaultSize() * .8),
-                  child: Text(
-                    "Donor's Name",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: context.getDefaultSize() * 2.1),
-                    overflow: TextOverflow.ellipsis,
+                  child: Row(
+                    children: [
+                      Container(
+                        height: context.getDefaultSize() * 3,
+                        width: context.getDefaultSize() * 20,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            Text(
+                              "Donor's Name",
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 84, 84, 84),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: context.getDefaultSize() * 2.1),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: context.getDefaultSize() * 3,
+                      ),
+                      Text(
+                        "20 min ago",
+                        style: TextStyle(
+                            color: Colors.orange,
+                            height: context.getDefaultSize() * .23,
+                            fontSize: context.getDefaultSize() * 1.5),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
@@ -56,26 +78,12 @@ class CardWidget extends StatelessWidget {
                         bottom: context.getDefaultSize() * .6),
                     child: Column(
                       children: [
-                        Row(
-                          children: [
-                            Container(
-                                height: context.getDefaultSize() * 2.5,
-                                width: context.getDefaultSize() * 20,
-                                child: ListView(children: [
-                                  Text(requestEntity.address["location"])
-                                ])),
-                            SizedBox(
-                              width: context.getDefaultSize() * 3,
-                            ),
-                            Text(
-                              "20 min ago",
-                              style: TextStyle(
-                                  color: Colors.orange,
-                                  height: context.getDefaultSize() * .23,
-                                  fontSize: context.getDefaultSize() * 1.5),
-                            ),
-                          ],
-                        )
+                        Container(
+                            height: context.getDefaultSize() * 2.5,
+                            width: context.getDefaultSize() * 20,
+                            child: ListView(children: [
+                              Text(requestEntity.address["location"])
+                            ]))
                       ],
                     )),
                 Padding(
@@ -85,7 +93,7 @@ class CardWidget extends StatelessWidget {
                   child: Row(
                     children: [
                       SizedBox(
-                        width: context.getDefaultSize() * 12,
+                        width: context.getDefaultSize() * 18.5,
                       ),
                       DefaultElevatedButton(
                         onPressed: () {
@@ -94,10 +102,10 @@ class CardWidget extends StatelessWidget {
                                     requestEntity: requestEntity,
                                   )));
                         },
-                        text: "View Details",
+                        text: "Details",
                         radius: 10,
                         height: context.getDefaultSize() * 2.85,
-                        width: context.getDefaultSize() * 18,
+                        width: context.getDefaultSize() * 12,
                       ),
                     ],
                   ),
