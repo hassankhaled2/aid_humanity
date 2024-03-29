@@ -16,12 +16,13 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final _searchController = TextEditingController();
   String _searchTerm = '';
-  List<RequestEntity> _allRequests = [];
+  List<RequestEntity> _allRequests = []; // Initialize as empty list
   List<RequestEntity> _filteredRequests = [];
+
   @override
   void initState() {
     super.initState();
-        BlocProvider.of<HomeBloc>(context).add(GetAllRequestsEvent());
+    BlocProvider.of<HomeBloc>(context).add(GetAllRequestsEvent());
   }
 
   @override
@@ -33,14 +34,20 @@ class _SearchPageState extends State<SearchPage> {
   List<RequestEntity> _searchRequests(
       List<RequestEntity> allRequests, String searchTerm) {
     final searchTextLower = searchTerm.toLowerCase();
+    print(allRequests);
+    print("----------------------------------------------------");
     return allRequests
         .where((request) =>
-            request.address[0].toLowerCase().contains(searchTextLower) ||
-            request.numberOfItems
-                .toString()
-                .toLowerCase()
-                .contains(searchTextLower) ||
-            request.time.toString().toLowerCase().contains(searchTextLower))
+            (request.address?.isNotEmpty ?? false) &&
+                request.address["location"]
+                    .toString()
+                    .toLowerCase()
+                    .contains(searchTextLower) ||
+            (request.numberOfItems?.toString()?.isNotEmpty ?? false) &&
+                request.numberOfItems
+                    .toString()
+                    .toLowerCase()
+                    .contains(searchTextLower))
         .toList();
   }
 
@@ -56,7 +63,21 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
       ),
-      body: _buildSearchResults(),
+      body: BlocBuilder<HomeBloc, HomeState>(
+        builder: (context, state) {
+          if (state is GetAllRequestsLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is GetAllRequestsSuccess) {
+            _allRequests = state.requests;
+          }
+
+          // Conditional rendering for UI
+          return _allRequests.isNotEmpty
+              ? _buildSearchResults()
+              : const Center(child: Text('No results found'));
+        },
+      ),
     );
   }
 
@@ -67,9 +88,7 @@ class _SearchPageState extends State<SearchPage> {
       itemCount: _filteredRequests.length,
       key: const PageStorageKey<String>('CardDeliverWidget'),
       itemBuilder: (context, index) {
-        return CardWidget(
-          requestEntity: _filteredRequests[index],
-        );
+        return CardWidget(requestEntity: _filteredRequests[index]);
       },
     );
   }

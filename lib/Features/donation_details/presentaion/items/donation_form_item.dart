@@ -107,7 +107,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
                 requestEntity: RequestEntity(
                     time: date,
                     address: {"location": locationController.text},
-                    numberOfItems: widget.items.length,
+                    numberOfItems: totalQuantity,
                     userId: FirebaseAuth.instance.currentUser!.uid,
                     status: "Pending",
                     qrScanned: false
