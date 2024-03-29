@@ -13,8 +13,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Features/auth/presentation/pages/circle_avatar_widget.dart';
 import 'Features/auth/presentation/pages/register_page.dart';
+import 'Features/donation_details/presentaion/pages/choose_items_page.dart';
+import 'Features/home/presentation/pages/choice_page.dart';
+import 'Features/home/presentation/widgets/choise_Item.dart';
 import 'Features/spalsh/spalsh.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 import 'core/widgets/BottomNavigationDonor.dart';
@@ -36,6 +40,8 @@ void main() async {
   );
   await di.init();
   Bloc.observer = MyBlocObserver();
+
+
 
   runApp(MyApp());
   // Hive.registerAdapter(UserEntityAdapter());
@@ -83,9 +89,10 @@ class MyApp extends StatelessWidget {
 
         /// see it if worked or not
         // home:FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?BottomNavigationDonor():SplashScreen(),
-// home:CircleAvatarWidget() ,
+       // home:CircleAvatarWidget() ,
         //
-        home:FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser!.emailVerified ?BottomNavigationDonor():SplashScreen()    ,
+        home:ChoicePage(),
+       // FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser!.emailVerified ?BottomNavigationDonor():SplashScreen()    ,
         debugShowCheckedModeBanner: false,
         supportedLocales: AppLocalizationsSetup
             .supportedLocales, // this line to provide , which langs to use in our app
