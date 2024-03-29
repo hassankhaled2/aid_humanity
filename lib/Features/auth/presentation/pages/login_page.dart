@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../core/utils/app_router/app_router.dart';
 import '../../../../core/utils/styles/styles.dart';
 import '../cubit/auth_login_cubit/auth_login_cubit.dart';
@@ -25,23 +26,23 @@ class _State extends State<LoginPage> {
   bool isPassword = true;
   bool isloading = false;
 
-  // Future signInWithGoogle() async {
-  //   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-  //
-  //   GoogleSignInAuthentication?googleAuth = await googleUser?.authentication;
-  //
-  //   // Create a new credential
-  //   final credential = GoogleAuthProvider.credential(
-  //
-  //     accessToken: googleAuth?.accessToken,
-  //     idToken: googleAuth?.idToken,
-  //   );
-  //
-  //   // Once signed in, return the UserCredential
-  //   await FirebaseAuth.instance.signInWithCredential(credential);
-  //   Navigator.of(context).pushNamedAndRemoveUntil(
-  //       AppRouter.onBoarding, (route) => false);
-  // }
+  Future signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    GoogleSignInAuthentication?googleAuth = await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRouter.onBoarding, (route) => false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +179,7 @@ class _State extends State<LoginPage> {
                                 );
                                 if (creditional.user!.emailVerified) {
                                   Navigator.of(context).pushReplacementNamed(
-                                      AppRouter.onBoarding);
+                                      AppRouter.circleAvatarProfile);
                                 } else {
                                   FirebaseAuth.instance.currentUser!.sendEmailVerification();
                                   AwesomeDialog(
@@ -251,74 +252,72 @@ class _State extends State<LoginPage> {
                       ]
                   ),
                   SizedBox(height: 30,),
-                  // Center(
-                  // child: ElevatedButton.icon(
-                  //   style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
-                  //   onPressed: ()
-                  //   async{
-                  //     // signInWithGoogle();
-                  //    // await AuthRemoteDataSourceImpl().login();
-                  //     await AuthLoginCubit(CallLoginWithGoogleUseCase(getIt.get<AuthRepoImpl>()));
-                  //    //  await  AuthRepoImpl(
-                  //    //      authRemoteDataSource:AuthRemoteDataSourceImpl(), networkInfo: ConnectionInfoImpl(internetConnectionChecker: InternetConnectionChecker())).authRemoteDataSource.login();
-                  //    //  await UserDataModel(displayNameGoogle: displayNameGoogle, email: email, photoUrl: photoUrl, idToken: idToken, accessToken: accessToken, userId: userId);
-                  //     Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.onBoarding, (route) => false);
-                  //   }, icon:Icon(FontAwesomeIcons.google,color:Colors.white,), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
-                  // ),
-                  ///todo
-                  BlocListener<AuthLoginCubit, AuthLoginState>(
-                    listener: (context, state) {
-                      if(state is AuthLoginSuccess)
-                      {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            AppRouter.onBoarding, (route) => false);
-                      }
+                  Center(
+                  child: ElevatedButton.icon(
+                    style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
+                    onPressed: ()
+                    async{
+                      signInWithGoogle();
+                     // await AuthRemoteDataSourceImpl().login();
 
-                    },
-                    child: BlocBuilder<AuthLoginCubit, AuthLoginState>(
-                      builder: (context, state) {
-                        if (state is AuthLoginLoading) {
-                          return Center(child: CircularProgressIndicator(
-                            color: Colors.black,));
-                        } else if (state is AuthLoginFailure) {
-                          return Text(state.errorMessage);
-                        } else {
-                          return Center(
-                            child: ElevatedButton.icon(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStatePropertyAll(
-                                      Colors.black)),
-                              onPressed: () {
-                                BlocProvider.of<AuthLoginCubit>(context)
-                                    .fetchAuthData();
-                                // await CallLoginWithGoogleUseCase(AuthRepoImpl(authRemoteDataSource:AuthRemoteDataSourceImpl(), networkInfo: ConnectionInfoImpl(internetConnectionChecker: InternetConnectionChecker())));
-
-                              },
-
-                              icon: Icon(
-                                FontAwesomeIcons.google, color: Colors.white,),
-                              label: Text('Continue with Google',
-                                style: TextStyle(color: Colors.white),),),
-                          );
-
-                          // return Center(
-                          //   child: ElevatedButton.icon(
-                          //     style: ButtonStyle(
-                          //         backgroundColor: MaterialStatePropertyAll(
-                          //             Colors.black)),
-                          //     onPressed: () async{
-                          //       await AuthLoginCubit(CallLoginWithGoogleUseCase(getIt.get<AuthRepoImpl>())).fetchAuthData();
-                          //       Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.onBoarding, (route) => false);
-                          //     },
-                          //
-                          //     icon: Icon(FontAwesomeIcons.google, color: Colors.white,),
-                          //     label: Text('Continue with Google',
-                          //       style: TextStyle(color: Colors.white),),),
-                          // );
-                        }
-                      },
-                    ),
+                     //  await  AuthRepoImpl(
+                     //      authRemoteDataSource:AuthRemoteDataSourceImpl(), networkInfo: ConnectionInfoImpl(internetConnectionChecker: InternetConnectionChecker())).authRemoteDataSource.login();
+                     //  await UserDataModel(displayNameGoogle: displayNameGoogle, email: email, photoUrl: photoUrl, idToken: idToken, accessToken: accessToken, userId: userId);
+                      Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.circleAvatarProfile, (route) => false);
+                    }, icon:Icon(FontAwesomeIcons.google,color:Colors.white,), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
                   ),
+                  ///todo
+                  // BlocListener<AuthLoginCubit, AuthLoginState>(
+                  //   listener: (context, state) {
+                  //     if(state is AuthLoginSuccess)
+                  //     {
+                  //       Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.circleAvatarProfile, (route) => false);
+                  //     }
+                  //
+                  //   },
+                  //   child: BlocBuilder<AuthLoginCubit, AuthLoginState>(
+                  //     builder: (context, state) {
+                  //       if (state is AuthLoginLoading) {
+                  //         return Center(child: CircularProgressIndicator(
+                  //           color: Colors.black,));
+                  //       } else if (state is AuthLoginFailure) {
+                  //         return Text(state.errorMessage);
+                  //       } else {
+                  //         return Center(
+                  //           child: ElevatedButton.icon(
+                  //             style: ButtonStyle(
+                  //                 backgroundColor: MaterialStatePropertyAll(
+                  //                     Colors.black)),
+                  //             onPressed: () {
+                  //               BlocProvider.of<AuthLoginCubit>(context).fetchAuthData();
+                  //               // await CallLoginWithGoogleUseCase(AuthRepoImpl(authRemoteDataSource:AuthRemoteDataSourceImpl(), networkInfo: ConnectionInfoImpl(internetConnectionChecker: InternetConnectionChecker())));
+                  //
+                  //             },
+                  //
+                  //             icon: Icon(
+                  //               FontAwesomeIcons.google, color: Colors.white,),
+                  //             label: Text('Continue with Google',
+                  //               style: TextStyle(color: Colors.white),),),
+                  //         );
+                  //
+                  //         // return Center(
+                  //         //   child: ElevatedButton.icon(
+                  //         //     style: ButtonStyle(
+                  //         //         backgroundColor: MaterialStatePropertyAll(
+                  //         //             Colors.black)),
+                  //         //     onPressed: () async{
+                  //         //       await AuthLoginCubit(CallLoginWithGoogleUseCase(getIt.get<AuthRepoImpl>())).fetchAuthData();
+                  //         //       Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.onBoarding, (route) => false);
+                  //         //     },
+                  //         //
+                  //         //     icon: Icon(FontAwesomeIcons.google, color: Colors.white,),
+                  //         //     label: Text('Continue with Google',
+                  //         //       style: TextStyle(color: Colors.white),),),
+                  //         // );
+                  //       }
+                  //     },
+                  //   ),
+                  // ),
                   // SizedBox(height: 10,),
                   // Center(
                   //   child: ElevatedButton.icon(

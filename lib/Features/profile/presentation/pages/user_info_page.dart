@@ -8,7 +8,7 @@ class UserInfoPage extends StatelessWidget {
   final String phone;
   final String address;
   // final String email;
-  final String  photoUrl;
+  final String photoUrl;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

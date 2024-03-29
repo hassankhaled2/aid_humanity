@@ -37,7 +37,7 @@ class _UserSliverAppBarState extends State<UserSliverAppBar> {
    final reteurnimage= await ImagePicker().pickImage(source: ImageSource.gallery);
     select=File(reteurnimage!.path);
     var imageName=basename(reteurnimage.path);
-    var refStorage =FirebaseStorage.instance.ref(imageName);
+    var refStorage =FirebaseStorage.instance.ref("UsersProfile/$imageName");
      refStorage.putFile(select!);
      url=await refStorage.getDownloadURL();
 

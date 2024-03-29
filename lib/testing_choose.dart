@@ -31,14 +31,14 @@ import 'package:flutter/material.dart';
 //   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => BottomNavigationDonor()));
 // }
 ///---------
-class ChoiceItem extends StatefulWidget {
-  const ChoiceItem({super.key});
+class ChoiceTesting extends StatefulWidget {
+  const ChoiceTesting({super.key});
 
   @override
-  State<ChoiceItem> createState() => _ChoiceItemState();
+  State<ChoiceTesting> createState() => _ChoiceTestingState();
 }
 
-class _ChoiceItemState extends State<ChoiceItem> {
+class _ChoiceTestingState extends State<ChoiceTesting> {
   bool pressedDon = false;
   bool pressedDel = false;
   @override
@@ -99,7 +99,7 @@ class _ChoiceItemState extends State<ChoiceItem> {
                               "Donor",
                               style: TextStyle(
                                   color:
-                                      pressedDon ? Colors.white : kPrimaryColor,
+                                  pressedDon ? Colors.white : kPrimaryColor,
                                   fontSize: context.getDefaultSize() * 2,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -145,7 +145,7 @@ class _ChoiceItemState extends State<ChoiceItem> {
                               "Delivery",
                               style: TextStyle(
                                   color:
-                                      pressedDel ? Colors.white : kPrimaryColor,
+                                  pressedDel ? Colors.white : kPrimaryColor,
                                   fontSize: context.getDefaultSize() * 2,
                                   fontWeight: FontWeight.bold),
                             ),

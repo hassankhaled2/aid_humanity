@@ -10,7 +10,7 @@ class UserPageWidget extends StatelessWidget {
   final String email;
   final String phone;
   final String address;
-  final String  photoUrl;
+  final String photoUrl;
   @override
   Widget build(BuildContext context) {
     return Column(

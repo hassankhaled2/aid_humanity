@@ -6,14 +6,14 @@ import 'package:aid_humanity/core/entities/item_entity.dart';
 import 'package:aid_humanity/core/entities/request_entity.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
-import 'package:aid_humanity/core/utils/theme/app_color/app_color_light.dart';
-import 'package:aid_humanity/core/widgets/BottomNavigation.dart';
-import 'package:aid_humanity/core/widgets/custom_button_widget.dart';
+import 'package:aid_humanity/core/utils/theme/app_color/app_color_light.dart';import 'package:aid_humanity/core/widgets/custom_button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+
+import '../../../../core/widgets/BottomNavigationDonor.dart';
 
 class DonationFormItem extends StatefulWidget {
   const DonationFormItem({
@@ -153,7 +153,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Request Submitted successfully")),
                   );
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const BottomNavigation()), (route) => false);
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const BottomNavigationDonor()), (route) => false);
                 }
                 if (state is AddRequestErrorState) {
                   if (state.message == "check your internet con``nection") {

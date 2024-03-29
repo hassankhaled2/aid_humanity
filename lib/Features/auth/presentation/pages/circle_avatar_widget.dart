@@ -1,13 +1,16 @@
 import 'dart:io';
 
+import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
+import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+
 class CircleAvatarWidget extends StatefulWidget {
-  const CircleAvatarWidget({super.key});
+  const CircleAvatarWidget({super.key,});
 
   @override
   State<CircleAvatarWidget> createState() => _CircleAvatarWidgetState();
@@ -15,14 +18,15 @@ class CircleAvatarWidget extends StatefulWidget {
 
 class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
   File?select;
-  String? url;
+  String ?url;
   SelectAndUploadImage()async {
 
 
     final reteurnimage= await ImagePicker().pickImage(source: ImageSource.gallery);
     select=File(reteurnimage!.path);
     var imageName=basename(reteurnimage.path);
-    var refStorage =FirebaseStorage.instance.ref(imageName);
+    // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
+    var refStorage =FirebaseStorage.instance.ref("usersImages").child(imageName);
     refStorage.putFile(select!);
     url=await refStorage.getDownloadURL();
 
@@ -35,43 +39,70 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Stack(
-          clipBehavior: Clip.none, // Clip overflowing widgets
-          children: [
-            CircleAvatar(
+      body: Column(
+        // crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Add Your Image'),
+          Center(
+            child: Stack(
+              clipBehavior: Clip.none, // Clip overflowing widgets
+              children: [
+                CircleAvatar(
 
-              radius: 50.0,
-              child: url == null
-                  ? Text('')
-                  : ClipOval(child: Image.network(url!, fit: BoxFit.fill)),
-            ),
-            Positioned(
-              right: context.getDefaultSize() * 0.2, // Adjust positioning as needed
-              bottom:context.getDefaultSize() * 0, // Adjust positioning as needed
-              child: Container(
-                height: context.getDefaultSize() * 3.5,
-                width: context.getDefaultSize() * 3.5,
-                decoration: BoxDecoration(
-                  color: kPrimaryColor, // Change color as desired
-                  shape: BoxShape.circle,
+                  radius:context.getDefaultSize() * 7 ,
+                  child: url == null
+                      ? Text('Loading....')
+                      : ClipOval(child: Image.network(url!, fit: BoxFit.fill)),
                 ),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.add,
-                    size: context.getDefaultSize() * 2,
-                    color: Colors.white,
+                Positioned(
+                  right: context.getDefaultSize() * 0.2, // Adjust positioning as needed
+                  bottom:context.getDefaultSize() * 0, // Adjust positioning as needed
+                  child: Container(
+                    height: context.getDefaultSize() * 3.5,
+                    width: context.getDefaultSize() * 3.5,
+                    decoration: BoxDecoration(
+                      color: kPrimaryColor, // Change color as desired
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.add,
+                        size: context.getDefaultSize() * 2,
+                        color: Colors.white,
+                      ),
+                      onPressed:()
+                      {
+                        SelectAndUploadImage();
+                        // ProfilePage(k: url!);
+
+                      },
+                    ),
                   ),
-                  onPressed:()
-                  {
-                    SelectAndUploadImage();
-                  },
                 ),
-              ),
+                // ElevatedButton(onPressed: ()
+                // {
+                //   Navigator.of(context).push(MaterialPageRoute(builder: (context)
+                //   {
+                //     return ProfilePage(k: url!,);
+                //   }));
+                // }, child:Text("nh")
+                // )
+             // ProfilePage(k:url!),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+          ElevatedButton(onPressed: ()
+          {
+///ProfilePage(k:url!)
+            Navigator.of(context).push(MaterialPageRoute(builder:(context)
+            {
+              return OnBoarding();
+            }));
+          }, child: Text("Submit")),
+
+        ],
+      )
     );
   }
 }

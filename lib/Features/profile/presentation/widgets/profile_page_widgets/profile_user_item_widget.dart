@@ -5,12 +5,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../pages/user_info_page.dart';
 // اللى برا
 class UserItemWidget extends StatefulWidget {
-  const UserItemWidget({super.key,});
-
+  const UserItemWidget({super.key, required this.url,});
+  final String ?url;
 
 
   @override
@@ -20,17 +21,41 @@ class UserItemWidget extends StatefulWidget {
 class _UserItemWidgetState extends State<UserItemWidget> {
   List<QueryDocumentSnapshot>data=[];
   bool isloading=true;
-
+ var fullName ;
+ var phone;
+  var email ;
+  var address;
+  bool isSignin=false;
    String imageUrl='fgfg';
   @override
   void initState()  {
     super.initState();
-    // Retrieve image URL on initialization
+
      getImage();
+    // getPref();
   }
+//   getPref()async
+//   {
+// SharedPreferences preferences =await SharedPreferences.getInstance();
+// fullName =preferences.getString("fullName");
+// phone =preferences.getString("phone");
+// email =preferences.getString("email");
+// address =preferences.getString("address");
+// print(fullName);
+// if(fullName!=null)
+// {
+//   setState(() {
+//     fullName =preferences.getString("fullName");
+//     phone =preferences.getString("phone");
+//     email =preferences.getString("email");
+//     address =preferences.getString("address");
+//     isSignin=true;
+//   });
+// }
+//   }
 
   Future<void> getImage() async {
-     final imageRef = FirebaseStorage.instance.ref().child('1000127182.jpg');
+    var imageRef =FirebaseStorage.instance.ref("usersImages").child("1000127182.jpg");
     final url = await imageRef.getDownloadURL();
     setState(() {
       imageUrl = url;
@@ -62,10 +87,10 @@ class _UserItemWidgetState extends State<UserItemWidget> {
         final Address =user["Address"];
         final Phone =user["Phone"];
 
-      return  InkWell(
+       return  InkWell(
           onTap:()
           {
-            Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserInfoPage(fullName:fullName, email: Email, phone: Phone, address: Address, photoUrl:imageUrl, )));
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserInfoPage(fullName:fullName, email: Email, phone: Phone, address: Address, photoUrl:widget.url!, )));
 
           },
           child: SizedBox(
@@ -84,7 +109,7 @@ class _UserItemWidgetState extends State<UserItemWidget> {
                       children: [
                         CircleAvatar(
                           backgroundImage: NetworkImage(
-                              imageUrl
+                              widget.url!
                           ),
                           radius: context.getDefaultSize() * 2,
                         ),
@@ -96,7 +121,7 @@ class _UserItemWidgetState extends State<UserItemWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
+                                 Text(
                                     fullName,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -104,6 +129,14 @@ class _UserItemWidgetState extends State<UserItemWidget> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
+                                  // isSignin?Text(
+                                  //   fullName,
+                                  //   style: TextStyle(
+                                  //     fontWeight: FontWeight.bold,
+                                  //     fontSize: context.getDefaultSize() * 1.8,
+                                  //     overflow: TextOverflow.ellipsis,
+                                  //   ),
+                                  // ):Text(''),
                                   SizedBox(
                                     height: context.getDefaultSize() * 0.3,
                                   ),

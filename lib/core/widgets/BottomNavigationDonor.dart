@@ -7,37 +7,25 @@ import 'package:flutter/material.dart';
 
 
 
-class BottomNavigation extends StatefulWidget {
-  const BottomNavigation({Key? key}) : super(key: key);
+class BottomNavigationDonor extends StatefulWidget {
+  const BottomNavigationDonor({Key? key}) : super(key: key);
 
   @override
-  State<BottomNavigation> createState() => _BottomNavigationState();
+  State<BottomNavigationDonor> createState() => _BottomNavigationDonorState();
 }
 
-class _BottomNavigationState extends State<BottomNavigation> {
+class _BottomNavigationDonorState extends State<BottomNavigationDonor> {
   int currentIndex = 0;
-  String displayName = "";
-  String email = "";
-  String photoUrl = "";
 
-  List<Widget> screens = [];
 
-  @override
-  void initState() {
-    super.initState();
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      displayName = user.displayName ?? "Hassan";
-      email = user.email ?? "";
-      photoUrl = user.photoURL ?? "https://img.freepik.com/free-vector/man-delivery-package-white-background_1308-46613.jpg?w=740&t=st=1710189458~exp=1710190058~hmac=8976eab32f98feb54f4ae609dfe8eba12acb1a536083a2428ac3b32abb49a967";
-    }
-    screens.addAll([
-      const HomeDeliveryPage(),
-       HomeDonorPage(),
-      Container(),
-      ProfilePage(displayName: displayName, photoUrl: photoUrl, email: email),
-    ]);
-  }
+  List<Widget> screens =
+  [
+  // const HomeDeliveryPage(),
+  const HomeDonorPage(),
+  // Container(),
+  const ProfilePage(k: "",)
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,8 +61,8 @@ class _BottomNavigationState extends State<BottomNavigation> {
               icon: Icon(Icons.home_outlined),
               label: 'Home',
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.location_on_outlined), label: 'Hunger Spot'),
-            BottomNavigationBarItem(icon: Icon(Icons.chat_outlined), label: 'Chat'),
+            // BottomNavigationBarItem(icon: Icon(Icons.location_on_outlined), label: 'Hunger Spot'),
+            // BottomNavigationBarItem(icon: Icon(Icons.chat_outlined), label: 'Chat'),
             BottomNavigationBarItem(icon: Icon(Icons.person_outline_rounded), label: 'Profile'),
           ]),
     );

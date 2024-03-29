@@ -1,26 +1,23 @@
-import 'package:aid_humanity/Features/profile/presentation/pages/user_info_page.dart';
+
 import 'package:aid_humanity/Features/profile/presentation/widgets/language_page_widgets/language_dialog_widget.dart';
 import 'package:aid_humanity/Features/profile/presentation/widgets/profile_page_widgets/profile_item_widget.dart';
 import 'package:aid_humanity/Features/profile/presentation/widgets/profile_page_widgets/profile_user_item_widget.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/extensions/translation_extension.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+
 import '../../../../../core/utils/app_router/app_router.dart';
 
 class ProfileWidget extends StatefulWidget {
-  const ProfileWidget({super.key, required this.displayName, required this.email, required this.photoUrl});
-  final String displayName;
-  final String email;
-  final String  photoUrl;
+  const ProfileWidget({super.key, required this.k,});
+ final String? k;
 
   @override
   State<ProfileWidget> createState() => _ProfileWidgetState();
 }
-
 
 class _ProfileWidgetState extends State<ProfileWidget> {
   @override
@@ -28,7 +25,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     return SingleChildScrollView(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min,
           children: [
-            UserItemWidget(),
+            UserItemWidget(url:widget.k ),
             Padding(
           padding: EdgeInsets.symmetric(horizontal: context.getDefaultSize() * 2),
           child: Column(children: [

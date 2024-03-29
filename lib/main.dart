@@ -14,9 +14,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'Features/auth/presentation/pages/circle_avatar_widget.dart';
+import 'Features/auth/presentation/pages/register_page.dart';
 import 'Features/spalsh/spalsh.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
-import 'core/widgets/BottomNavigation.dart';
+import 'core/widgets/BottomNavigationDonor.dart';
 import 'core/widgets/routes.dart';
 import 'injection_container.dart';
 
@@ -81,9 +82,10 @@ class MyApp extends StatelessWidget {
         routes: routes,
 
         /// see it if worked or not
-        home:   FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?BottomNavigation():SplashScreen(),
-            //CircleAvatarWidget(),
+        // home:FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?BottomNavigationDonor():SplashScreen(),
+// home:CircleAvatarWidget() ,
         //
+        home:FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser!.emailVerified ?BottomNavigationDonor():SplashScreen()    ,
         debugShowCheckedModeBanner: false,
         supportedLocales: AppLocalizationsSetup
             .supportedLocales, // this line to provide , which langs to use in our app

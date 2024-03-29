@@ -1,15 +1,26 @@
+import 'dart:io';
+
+import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/constants.dart';
+import '../../../../core/constants/test.dart';
 import '../../../../core/utils/styles/styles.dart';
+import '../../../profile/presentation/pages/profile_page.dart';
 import '../widgets/text_form_field.dart';
+import 'circle_avatar_widget.dart';
+import 'extra_data_google.dart';
 import 'login_page.dart';
-
+import 'package:path/path.dart';
 
 
 
@@ -31,7 +42,36 @@ class _State extends State<RegisterPage> {
   bool isloading =true;
   bool isPassword =true;
   CollectionReference categories = FirebaseFirestore.instance.collection('UsersAuth');
+  File?select;
+  String? url;
+  // SavePref(String fullName,String phone,String email,String address)async
+  // {
+  //   SharedPreferences sharedPreference=await SharedPreferences.getInstance();
+  //   sharedPreference.setString("fullName", fullName);
+  //   sharedPreference.setString("phone" ,phone,);
+  //   sharedPreference.setString("email", email);
+  //   sharedPreference.setString("address", address);
+  //   print("================================================:${sharedPreference.getString("fullName")}");
+  //   print(sharedPreference.getString("phone"));
+  //   print(sharedPreference.getString("email"));
+  //   print(sharedPreference.getString("address"));
+  // }
 
+  SelectAndUploadImage()async {
+
+
+    final reteurnimage= await ImagePicker().pickImage(source: ImageSource.gallery);
+    select=File(reteurnimage!.path);
+    var imageName=basename(reteurnimage.path);
+    // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
+    var refStorage =FirebaseStorage.instance.ref("usersImages").child(imageName);
+    refStorage.putFile(select!);
+    url=await refStorage.getDownloadURL();
+
+    setState(() {
+
+    });
+  }
   // addUsersData() async{
   //   if(formState.currentState!.validate()) {
   //     try {
@@ -61,7 +101,7 @@ class _State extends State<RegisterPage> {
   String displayName ='';
   String Email ='';
   String photoUrl='';
-  Future signInWithGoogle() async {
+  Future signInWithGoogle(BuildContext context) async {
     // final user=FirebaseAuth.instance.currentUser;
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -73,25 +113,16 @@ class _State extends State<RegisterPage> {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-
     // Once signed in, return the UserCredential
    final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-
+    final id = userCredential.user!.uid;
     final user = userCredential.user!;
     final displayName = user.displayName ?? 'hahadhda';
     final email = user.email ?? 'hdahdhah';
-    final photoUrl = user.photoURL ?? 'https://images.pexels.com/photos/2893685/pexels-photo-2893685.jpeg?auto=compress&cs=tinysrgb&w=600';
-    await categories.add({
-      "Full Name":displayName,
-      "Email":email,
-      "Photo":photoUrl,
-      // "Phone":phone.text,
-      // "Address":address.text,
-      // to determine which each user add to firestore that depend on  their ID
-      "id":FirebaseAuth.instance.currentUser!.uid
-    });
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRouter.onBoarding, (route) => false);
+   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)
+   {
+     return  ExtaDataGoogle(displayName: displayName, Email:email , id: id);
+   }), (route) => false);
   }
 
   @override
@@ -103,13 +134,61 @@ class _State extends State<RegisterPage> {
         child: ListView(
           children:
           [
+            // Center(
+            //   child: Stack(
+            //     clipBehavior: Clip.none, // Clip overflowing widgets
+            //     children: [
+            //       CircleAvatar(
+            //
+            //         radius: 50.0,
+            //         child: url == null
+            //             ? Text('')
+            //             : ClipOval(child: Image.network(url!, fit: BoxFit.fill)),
+            //       ),
+            //       Positioned(
+            //         right: context.getDefaultSize() * 0.2, // Adjust positioning as needed
+            //         bottom:context.getDefaultSize() * 0, // Adjust positioning as needed
+            //         child: Container(
+            //           height: context.getDefaultSize() * 3.5,
+            //           width: context.getDefaultSize() * 3.5,
+            //           decoration: BoxDecoration(
+            //             color: kPrimaryColor, // Change color as desired
+            //             shape: BoxShape.circle,
+            //           ),
+            //           child: IconButton(
+            //             icon: Icon(
+            //               Icons.add,
+            //               size: context.getDefaultSize() * 2,
+            //               color: Colors.white,
+            //             ),
+            //             onPressed:()
+            //             {
+            //               SelectAndUploadImage();
+            //
+            //
+            //             },
+            //           ),
+            //         ),
+            //       ),
+            //       // ElevatedButton(onPressed: ()
+            //       // {
+            //       //   Navigator.of(context).push(MaterialPageRoute(builder: (context)
+            //       //   {
+            //       //     return ProfilePage(k: url!,);
+            //       //   }));
+            //       // }, child:Text("nh")
+            //       // )
+            //     ],
+            //   ),
+            // ),
             Form(
               key: formState,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:
                 [
-                  const Padding(
+
+                   Padding(
                     padding: EdgeInsets.only(left: 5),
                     child: Text('Sign Up',style: Styles.textStyle25,),
                   ),
@@ -344,7 +423,7 @@ class _State extends State<RegisterPage> {
                       style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
                       onPressed: ()
                       {
-                        signInWithGoogle();
+                        signInWithGoogle(context);
                       }, icon:Icon(FontAwesomeIcons.google), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
                   ),
                   const SizedBox(height: 18,),
@@ -365,13 +444,15 @@ class _State extends State<RegisterPage> {
                       const Text('Are you have account?'),
                       TextButton(onPressed: ()
                        {
-
+                         // SavePref(fullName.text, phone.text, email.text, address.text);
+                         // print(fullName.text);
                         //pushReplacementNamed --> علشان ميعملش back button
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) =>LoginPage(),
-
                         )
                         );
                         }, child:Text('Sign in',style: TextStyle(color: Colors.orange))),
+
+
 
 
                     ],

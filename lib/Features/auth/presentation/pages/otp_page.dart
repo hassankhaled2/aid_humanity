@@ -1,9 +1,9 @@
 
-
-import 'package:aid_humanity/core/widgets/BottomNavigation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+
+import '../../../../core/widgets/BottomNavigationDonor.dart';
 
 
 class OtpPage extends StatefulWidget {
@@ -122,7 +122,7 @@ class _OtpPageState extends State<OtpPage> {
           await auth.signInWithCredential(credential);
  if (auth.currentUser?.uid!=null)
  {
-   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>BottomNavigation()));
+   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>BottomNavigationDonor()));
  }
         }, child:Text('Verify')),
     ),
