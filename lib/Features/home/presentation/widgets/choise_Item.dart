@@ -1,3 +1,4 @@
+import 'package:aid_humanity/Features/auth/presentation/pages/register_page.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.dart';
 import 'package:aid_humanity/core/constants/constants.dart';
@@ -6,6 +7,8 @@ import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:aid_humanity/core/widgets/BottomNavigationDelivery.dart';
 import 'package:aid_humanity/core/widgets/BottomNavigationDonor.dart';
 import 'package:aid_humanity/core/widgets/custom_button_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,8 +37,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 // }
 ///---------
 class ChoiceItem extends StatefulWidget {
-  const ChoiceItem({super.key});
-
+  const ChoiceItem({super.key, this.id,});
+ final String?id;
   @override
   State<ChoiceItem> createState() => _ChoiceItemState();
 }
@@ -43,6 +46,9 @@ class ChoiceItem extends StatefulWidget {
 class _ChoiceItemState extends State<ChoiceItem> {
   bool pressedDon = false;
   bool pressedDel = false;
+  CollectionReference categories = FirebaseFirestore.instance.collection('UsersAuth');
+
+  List<QueryDocumentSnapshot>data=[];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,20 +176,59 @@ class _ChoiceItemState extends State<ChoiceItem> {
             ),
             GestureDetector(
               onTap: () async {
-                SharedPreferences sharedPreferences =
-                    await SharedPreferences.getInstance();
+
+                SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                String? doc = sharedPreferences.getString("doc");
+                print("====================================================================$doc");
+
                 if (pressedDel == true) {
                   setState(() {
+
+                     categories.doc(doc).get().then((docSnapshot) {
+                      if (docSnapshot.exists) {
+                        Map<String, dynamic> existingData = docSnapshot.data() as Map<String, dynamic>;
+                        print("========================================$existingData");
+
+
+                        categories.doc(doc).update({
+                          "user": "Delivery",
+                          "id": FirebaseAuth.instance.currentUser!.uid,
+                        });
+                      } else {
+                        print("Document does not exist!");
+                      }
+                    });
+
+
                     sharedPreferences.setString("userType", "Delivery");
+
                   });
+
                   print(sharedPreferences.get("userType"));
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       AppRouter.bottomNavigationDelivery, (route) => false);
-                } else {
+
+              } else {
                   setState(() {
+                    categories.doc(doc).get().then((docSnapshot) {
+                      if (docSnapshot.exists) {
+
+                        Map<String, dynamic> existingData = docSnapshot.data() as Map<String, dynamic>;
+                        print("========================================$existingData");
+
+
+                        categories.doc(doc).update({
+                          "user": "Donor",
+                          "id": FirebaseAuth.instance.currentUser!.uid,
+                        });
+                      } else {
+                        print("Document does not exist!");
+                      }
+                    });
                     sharedPreferences.setString("userType", "Donor");
                   });
                  print(sharedPreferences.get("userType"));
+
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       AppRouter.bottomNavigationDonor, (route) => false);
                 }

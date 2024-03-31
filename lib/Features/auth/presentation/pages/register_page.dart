@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aid_humanity/Features/home/presentation/pages/choice_page.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -12,9 +13,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/constants/test.dart';
 import '../../../../core/utils/styles/styles.dart';
+import '../../../home/presentation/widgets/choise_Item.dart';
 import '../../../profile/presentation/pages/profile_page.dart';
 import '../widgets/text_form_field.dart';
 import 'circle_avatar_widget.dart';
@@ -42,6 +45,7 @@ class _State extends State<RegisterPage> {
   bool isloading =true;
   bool isPassword =true;
   CollectionReference categories = FirebaseFirestore.instance.collection('UsersAuth');
+
   File?select;
   String? url;
   // SavePref(String fullName,String phone,String email,String address)async
@@ -354,14 +358,33 @@ class _State extends State<RegisterPage> {
           email: email.text,
           password: password.text,
         );
+
+       final d= FirebaseAuth.instance.currentUser!.uid;
+        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        sharedPreferences.setString("userId", d);
+        String? userId = sharedPreferences.getString("userId");
+       final  f=categories.doc();
+       String?doc;
+
+         // sharedPreferences.setString("categories",categories as String ) ;
+      // final c= sharedPreferences.getString("categories");
+      //  CollectionReference<Object?> Cat = c as CollectionReference<Object?>;
        DocumentReference add=await categories.add({
          "Full Name":fullName.text,
          "Email":email.text,
          "Phone":phone.text,
          "Address":address.text,
+         "user":"",
          // to determine which each user add to firestore that depend on  their ID
-         "id":FirebaseAuth.instance.currentUser!.uid
+         "id": userId
        });
+       doc = add.id;
+       print(doc);
+       // Save docId in SharedPreferences (optional):
+       sharedPreferences.setString("doc", doc);
+       // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+       // sharedPreferences.setString("userId", d);
+       // ChoiceItem(g: d,);
        // addUsersData();
       await FirebaseAuth.instance.currentUser!.sendEmailVerification();
        Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
@@ -427,16 +450,6 @@ class _State extends State<RegisterPage> {
                       }, icon:Icon(FontAwesomeIcons.google), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
                   ),
                   const SizedBox(height: 18,),
-                  // Center(
-                  //   child: ElevatedButton.icon(
-                  //
-                  //     style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
-                  //     onPressed: ()
-                  //     {
-                  //       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>PhoneNumberPage()));
-                  //     }, icon:Icon(FontAwesomeIcons.phone), label:Text('Continue with  Phone',style: TextStyle(color: Colors.white),),),
-                  // ),
-                  // const SizedBox(height: 20,),
                   Row(
                     mainAxisAlignment:MainAxisAlignment.center,
                     children:
@@ -444,8 +457,7 @@ class _State extends State<RegisterPage> {
                       const Text('Are you have account?'),
                       TextButton(onPressed: ()
                        {
-                         // SavePref(fullName.text, phone.text, email.text, address.text);
-                         // print(fullName.text);
+
                         //pushReplacementNamed --> علشان ميعملش back button
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) =>LoginPage(),
                         )
@@ -466,26 +478,4 @@ class _State extends State<RegisterPage> {
     );
   }
 }
-// SizedBox(height: 10,),
-// Center(
-//   child: InkWell(
-//     onTap: ()
-//     {
-//
-//     },
-//     child: Ink(
-//       color: Color(0xFF397AF3),
-//       child: Padding(
-//         padding: EdgeInsets.all(6),
-//         child: Wrap(
-//           crossAxisAlignment: WrapCrossAlignment.center,
-//           children: [
-//             // Image.asset(AssetsData.googleLogo), // <-- Use 'Image.asset(...)' here
-//             SizedBox(width: 12),
-//             Text('Sign in with Google'),
-//           ],
-//         ),
-//       ),
-//     ),
-//   ),
-// )
+

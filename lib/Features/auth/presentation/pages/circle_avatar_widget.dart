@@ -39,70 +39,70 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        // crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Add Your Image'),
-          Center(
-            child: Stack(
-              clipBehavior: Clip.none, // Clip overflowing widgets
-              children: [
-                CircleAvatar(
+        body: Column(
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Add Your Image'),
+            Center(
+              child: Stack(
+                clipBehavior: Clip.none, // Clip overflowing widgets
+                children: [
+                  CircleAvatar(
 
-                  radius:context.getDefaultSize() * 7 ,
-                  child: url == null
-                      ? Text('Loading....')
-                      : ClipOval(child: Image.network(url!, fit: BoxFit.fill)),
-                ),
-                Positioned(
-                  right: context.getDefaultSize() * 0.2, // Adjust positioning as needed
-                  bottom:context.getDefaultSize() * 0, // Adjust positioning as needed
-                  child: Container(
-                    height: context.getDefaultSize() * 3.5,
-                    width: context.getDefaultSize() * 3.5,
-                    decoration: BoxDecoration(
-                      color: kPrimaryColor, // Change color as desired
-                      shape: BoxShape.circle,
-                    ),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.add,
-                        size: context.getDefaultSize() * 2,
-                        color: Colors.white,
+                    radius:context.getDefaultSize() * 7 ,
+                    child: url == null
+                        ? Text('Loading....')
+                        : ClipOval(child: Image.network(url!, fit: BoxFit.fill)),
+                  ),
+                  Positioned(
+                    right: context.getDefaultSize() * 0.2, // Adjust positioning as needed
+                    bottom:context.getDefaultSize() * 0, // Adjust positioning as needed
+                    child: Container(
+                      height: context.getDefaultSize() * 3.5,
+                      width: context.getDefaultSize() * 3.5,
+                      decoration: BoxDecoration(
+                        color: kPrimaryColor, // Change color as desired
+                        shape: BoxShape.circle,
                       ),
-                      onPressed:()
-                      {
-                        SelectAndUploadImage();
-                        // ProfilePage(k: url!);
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.add,
+                          size: context.getDefaultSize() * 2,
+                          color: Colors.white,
+                        ),
+                        onPressed:()
+                        {
+                          SelectAndUploadImage();
+                          // ProfilePage(k: url!);
 
-                      },
+                        },
+                      ),
                     ),
                   ),
-                ),
-                // ElevatedButton(onPressed: ()
-                // {
-                //   Navigator.of(context).push(MaterialPageRoute(builder: (context)
-                //   {
-                //     return ProfilePage(k: url!,);
-                //   }));
-                // }, child:Text("nh")
-                // )
-             // ProfilePage(k:url!),
-              ],
+                  // ElevatedButton(onPressed: ()
+                  // {
+                  //   Navigator.of(context).push(MaterialPageRoute(builder: (context)
+                  //   {
+                  //     return ProfilePage(k: url!,);
+                  //   }));
+                  // }, child:Text("nh")
+                  // )
+                  // ProfilePage(k:url!),
+                ],
+              ),
             ),
-          ),
-          ElevatedButton(onPressed: ()
-          {
-///ProfilePage(k:url!)
-            Navigator.of(context).push(MaterialPageRoute(builder:(context)
+            ElevatedButton(onPressed: ()
             {
-              return OnBoarding();
-            }));
-          }, child: Text("Submit")),
+              ///ProfilePage(k:url!)
+              Navigator.of(context).push(MaterialPageRoute(builder:(context)
+              {
+                return OnBoarding();
+              }));
+            }, child: Text("Submit")),
 
-        ],
-      )
+          ],
+        )
     );
   }
 }

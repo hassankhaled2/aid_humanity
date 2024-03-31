@@ -12,9 +12,11 @@ class BoardingModels {
   final String image;
   final String title;
   final String body;
+
   final MaterialButton? welcomeButton;
 
-  BoardingModels({
+  BoardingModels( {
+
     required this.image,
     required this.title,
     required this.body,

@@ -66,6 +66,9 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             }),
             ProfileItemWidget(icon: Icons.logout, text: context.translate("logout"), isModeWidget: false, iconColor: Colors.red, onTap: ()
             async {
+              String keyToRemove = "userType";
+              SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+              sharedPreferences.remove(keyToRemove);
               GoogleSignIn googleSign =GoogleSignIn();
                  googleSign.disconnect();
                FirebaseAuth.instance.signOut();
