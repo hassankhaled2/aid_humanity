@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:aid_humanity/Features/auth/presentation/pages/choose_page_google.dart';
+import 'package:aid_humanity/Features/auth/presentation/widgets/circle_avatar_google.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/utils/styles/styles.dart';
 import '../widgets/text_form_field.dart';
 import 'package:path/path.dart';
@@ -196,6 +199,8 @@ class _State extends State<ExtaDataGoogle> {
                           async {
                             if(formState.currentState!.validate()) {
                               try {
+                                SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                String?docgoogle;
                                 DocumentReference add=await categories.add({
                                   "Full Name":fullName.text,
                                   "Email":email.text,
@@ -204,8 +209,14 @@ class _State extends State<ExtaDataGoogle> {
                                   // to determine which each user add to firestore that depend on  their ID
                                   "id":widget.id
                                 });
+                                docgoogle = add.id;
+                                sharedPreferences.setString("docGoogle", docgoogle);
                                 // addUsersData();
-                                Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.onBoarding, (route) => false);
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context)
+                                {
+                                  return CircleAvatarGoogle();
+                                }));
+                                // Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.circleAvatarProfile, (route) => false);
                                 // if(creditional.user!.emailVerified)
                                 // {
                                 // Navigator.of(context).pushReplacementNamed(bottomNavigation);

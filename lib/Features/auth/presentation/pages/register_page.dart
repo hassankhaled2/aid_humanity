@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:aid_humanity/Features/home/presentation/pages/choice_page.dart';
-import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,14 +11,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../core/constants/constants.dart';
-import '../../../../core/constants/test.dart';
 import '../../../../core/utils/styles/styles.dart';
-import '../../../home/presentation/widgets/choise_Item.dart';
-import '../../../profile/presentation/pages/profile_page.dart';
 import '../widgets/text_form_field.dart';
-import 'circle_avatar_widget.dart';
 import 'extra_data_google.dart';
 import 'login_page.dart';
 import 'package:path/path.dart';
@@ -374,8 +366,6 @@ class _State extends State<RegisterPage> {
          "Email":email.text,
          "Phone":phone.text,
          "Address":address.text,
-         "user":"",
-         // to determine which each user add to firestore that depend on  their ID
          "id": userId
        });
        doc = add.id;

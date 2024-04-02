@@ -31,14 +31,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 //   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => BottomNavigationDonor()));
 // }
 ///---------
-class ChoiceItem extends StatefulWidget {
-  const ChoiceItem({super.key, this.id,});
- final String?id;
+class ChoiceItemGoogle extends StatefulWidget {
+  const ChoiceItemGoogle({super.key, this.id,});
+  final String?id;
   @override
-  State<ChoiceItem> createState() => _ChoiceItemState();
+  State<ChoiceItemGoogle> createState() => _ChoiceItemGoogleState();
 }
 
-class _ChoiceItemState extends State<ChoiceItem> {
+class _ChoiceItemGoogleState extends State<ChoiceItemGoogle> {
   bool pressedDon = false;
   bool pressedDel = false;
   CollectionReference categories = FirebaseFirestore.instance.collection('UsersAuth');
@@ -96,7 +96,7 @@ class _ChoiceItemState extends State<ChoiceItem> {
                               Icon(
                                 Icons.volunteer_activism,
                                 color:
-                                    pressedDon ? Colors.white : kPrimaryColor,
+                                pressedDon ? Colors.white : kPrimaryColor,
                                 size: context.getDefaultSize() * 6,
                               ),
                               SizedBox(
@@ -144,7 +144,7 @@ class _ChoiceItemState extends State<ChoiceItem> {
                               Icon(
                                 Icons.delivery_dining,
                                 color:
-                                    pressedDel ? Colors.white : kPrimaryColor,
+                                pressedDel ? Colors.white : kPrimaryColor,
                                 size: context.getDefaultSize() * 6,
                               ),
                               SizedBox(
@@ -173,19 +173,19 @@ class _ChoiceItemState extends State<ChoiceItem> {
               onTap: () async {
 
                 SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                String? doc = sharedPreferences.getString("doc");
-                print("====================================================================$doc");
+                String? docGoogle = sharedPreferences.getString("docGoogle");
+                print("====================================================================$docGoogle");
 
                 if (pressedDel == true) {
                   setState(() {
 
-                     categories.doc(doc).get().then((docSnapshot) {
+                    categories.doc(docGoogle).get().then((docSnapshot) {
                       if (docSnapshot.exists) {
                         Map<String, dynamic> existingData = docSnapshot.data() as Map<String, dynamic>;
                         print("========================================$existingData");
 
 
-                        categories.doc(doc).update({
+                        categories.doc(docGoogle).update({
                           "userType": "Delivery",
                           "id": FirebaseAuth.instance.currentUser!.uid,
                         });
@@ -203,16 +203,16 @@ class _ChoiceItemState extends State<ChoiceItem> {
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       AppRouter.bottomNavigationDelivery, (route) => false);
 
-              } else {
+                } else {
                   setState(() {
-                    categories.doc(doc).get().then((docSnapshot) {
+                    categories.doc(docGoogle).get().then((docSnapshot) {
                       if (docSnapshot.exists) {
 
                         Map<String, dynamic> existingData = docSnapshot.data() as Map<String, dynamic>;
                         print("========================================$existingData");
 
 
-                        categories.doc(doc).update({
+                        categories.doc(docGoogle).update({
                           "userType": "Donor",
                           "id": FirebaseAuth.instance.currentUser!.uid,
                         });
@@ -222,7 +222,7 @@ class _ChoiceItemState extends State<ChoiceItem> {
                     });
                     sharedPreferences.setString("userType", "Donor");
                   });
-                 print(sharedPreferences.get("userType"));
+                  print(sharedPreferences.get("userType"));
 
                   Navigator.of(context).pushNamedAndRemoveUntil(
                       AppRouter.bottomNavigationDonor, (route) => false);

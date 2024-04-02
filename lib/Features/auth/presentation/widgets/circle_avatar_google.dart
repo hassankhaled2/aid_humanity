@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:aid_humanity/Features/auth/presentation/pages/choose_page_google.dart';
+import 'package:aid_humanity/Features/auth/presentation/widgets/choose_item_google.dart';
 import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
 import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
@@ -8,15 +10,16 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class CircleAvatarWidget extends StatefulWidget {
-  const CircleAvatarWidget({super.key,});
+class CircleAvatarGoogle extends StatefulWidget {
+  const CircleAvatarGoogle({super.key,});
 
   @override
-  State<CircleAvatarWidget> createState() => _CircleAvatarWidgetState();
+  State<CircleAvatarGoogle> createState() => _CircleAvatarGoogleState();
 }
 
-class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
+class _CircleAvatarGoogleState extends State<CircleAvatarGoogle> {
   File?select;
   String ?url;
   SelectAndUploadImage()async {
@@ -28,8 +31,10 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
     // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
     var refStorage =FirebaseStorage.instance.ref("usersImages").child(imageName);
     refStorage.putFile(select!);
-    url=await refStorage.getDownloadURL();
 
+    url=await refStorage.getDownloadURL();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("userImage",url!);
     setState(() {
 
     });
@@ -52,7 +57,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
 
                     radius:context.getDefaultSize() * 7 ,
                     child: url == null
-                        ? Text('Loading....')
+                        ? Text('')
                         : ClipOval(child: Image.network(url!, fit: BoxFit.fill)),
                   ),
                   Positioned(
@@ -92,15 +97,24 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
                 ],
               ),
             ),
-            ElevatedButton(onPressed: ()
-            {
-              ///ProfilePage(k:url!)
-              Navigator.of(context).push(MaterialPageRoute(builder:(context)
-              {
-                return OnBoarding();
-              }));
-            }, child: Text("Submit")),
-
+            ElevatedButton(
+              onPressed: () {
+                if (select != null) { // Check if an image is selected
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ChoicePageGoogle()),
+                  );
+                } else {
+                  // Handle the case where no image is selected (optional)
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      duration: Duration(seconds: 4),
+                      content: Text('Please select an image to Submit'),
+                    ),
+                  );
+                }
+              },
+              child: Text("Submit"),
+            ),
           ],
         )
     );

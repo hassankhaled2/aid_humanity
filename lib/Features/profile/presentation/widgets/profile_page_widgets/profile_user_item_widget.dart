@@ -10,8 +10,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../pages/user_info_page.dart';
 // اللى برا
 class UserItemWidget extends StatefulWidget {
-  const UserItemWidget({super.key, required this.url,});
-  final String ?url;
+  const UserItemWidget({super.key,});
+
 
 
   @override
@@ -21,12 +21,12 @@ class UserItemWidget extends StatefulWidget {
 class _UserItemWidgetState extends State<UserItemWidget> {
   List<QueryDocumentSnapshot>data=[];
   bool isloading=true;
- var fullName ;
- var phone;
+  var fullName ;
+  var phone;
   var email ;
   var address;
   bool isSignin=false;
-   String imageUrl='fgfg';
+
   @override
   void initState()  {
     super.initState();
@@ -34,33 +34,16 @@ class _UserItemWidgetState extends State<UserItemWidget> {
      getImage();
     // getPref();
   }
-//   getPref()async
-//   {
-// SharedPreferences preferences =await SharedPreferences.getInstance();
-// fullName =preferences.getString("fullName");
-// phone =preferences.getString("phone");
-// email =preferences.getString("email");
-// address =preferences.getString("address");
-// print(fullName);
-// if(fullName!=null)
-// {
-//   setState(() {
-//     fullName =preferences.getString("fullName");
-//     phone =preferences.getString("phone");
-//     email =preferences.getString("email");
-//     address =preferences.getString("address");
-//     isSignin=true;
-//   });
-// }
-//   }
 
+String ?image;
   Future<void> getImage() async {
-    var imageRef =FirebaseStorage.instance.ref("usersImages").child("1000127182.jpg");
-    final url = await imageRef.getDownloadURL();
-    setState(() {
-      imageUrl = url;
-    });
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    image=sharedPreferences.getString("userImage");
+    // setState(() {
+    //   imageUrl = url;
+    // });
   }
+
   @override
   Widget build(BuildContext context) {
 
@@ -79,6 +62,7 @@ class _UserItemWidgetState extends State<UserItemWidget> {
         if (docs.isEmpty) {
           return const Text("No user data found"); ///  handle this
         }
+
         // Accessing single QueryDocumentSnapshot and then using .data() getting its map.
         ///asking
         final user = docs[0].data();
@@ -90,7 +74,7 @@ class _UserItemWidgetState extends State<UserItemWidget> {
        return  InkWell(
           onTap:()
           {
-            Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserInfoPage(fullName:fullName, email: Email, phone: Phone, address: Address, photoUrl:widget.url!, )));
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserInfoPage(fullName:fullName, email: Email, phone: Phone, address: Address, photoUrl:image!, )));
 
           },
           child: SizedBox(
@@ -109,7 +93,7 @@ class _UserItemWidgetState extends State<UserItemWidget> {
                       children: [
                         CircleAvatar(
                           backgroundImage: NetworkImage(
-                              widget.url!
+                              image!
                           ),
                           radius: context.getDefaultSize() * 2,
                         ),

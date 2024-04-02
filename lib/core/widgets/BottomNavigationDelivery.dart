@@ -23,7 +23,7 @@ class _BottomNavigationDeliveryState extends State<BottomNavigationDelivery> {
     const HomeDeliveryPage(),
     // const HomeDonorPage(),
     // Container(),
-    const ProfilePage(k: "",)
+    const ProfilePage()
   ];
 
   @override

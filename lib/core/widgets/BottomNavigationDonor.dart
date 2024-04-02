@@ -20,10 +20,8 @@ class _BottomNavigationDonorState extends State<BottomNavigationDonor> {
 
   List<Widget> screens =
   [
-  // const HomeDeliveryPage(),
   const HomeDonorPage(),
-  // Container(),
-  const ProfilePage(k: "",)
+  const ProfilePage()
   ];
 
   @override

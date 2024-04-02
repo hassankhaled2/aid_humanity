@@ -9,6 +9,7 @@ import '../../../../core/utils/styles/styles.dart';
 import '../cubit/auth_login_cubit/auth_login_cubit.dart';
 import '../cubit/auth_login_cubit/auth_login_states.dart';
 import '../widgets/text_form_field.dart';
+import 'extra_data_google.dart';
 import 'register_page.dart';
 
 
@@ -26,7 +27,8 @@ class _State extends State<LoginPage> {
   bool isPassword = true;
   bool isloading = false;
 
-  Future signInWithGoogle() async {
+  Future signInWithGoogle(BuildContext context) async {
+    // final user=FirebaseAuth.instance.currentUser;
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     GoogleSignInAuthentication?googleAuth = await googleUser?.authentication;
@@ -37,11 +39,16 @@ class _State extends State<LoginPage> {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-
     // Once signed in, return the UserCredential
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRouter.onBoarding, (route) => false);
+    final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+    final id = userCredential.user!.uid;
+    final user = userCredential.user!;
+    final displayName = user.displayName ?? 'hahadhda';
+    final email = user.email ?? 'hdahdhah';
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)
+    {
+      return  ExtaDataGoogle(displayName: displayName, Email:email , id: id);
+    }), (route) => false);
   }
 
   @override
@@ -257,13 +264,13 @@ class _State extends State<LoginPage> {
                     style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
                     onPressed: ()
                     async{
-                      signInWithGoogle();
+                      signInWithGoogle(context);
                      // await AuthRemoteDataSourceImpl().login();
 
                      //  await  AuthRepoImpl(
                      //      authRemoteDataSource:AuthRemoteDataSourceImpl(), networkInfo: ConnectionInfoImpl(internetConnectionChecker: InternetConnectionChecker())).authRemoteDataSource.login();
                      //  await UserDataModel(displayNameGoogle: displayNameGoogle, email: email, photoUrl: photoUrl, idToken: idToken, accessToken: accessToken, userId: userId);
-                      Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.circleAvatarProfile, (route) => false);
+                     //  Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.circleAvatarProfile, (route) => false);
                     }, icon:Icon(FontAwesomeIcons.google,color:Colors.white,), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
                   ),
                   ///todo

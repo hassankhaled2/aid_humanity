@@ -14,8 +14,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/utils/app_router/app_router.dart';
 
 class ProfileWidget extends StatefulWidget {
-  const ProfileWidget({super.key, required this.k,});
- final String? k;
+  const ProfileWidget({super.key,});
+
 
   @override
   State<ProfileWidget> createState() => _ProfileWidgetState();
@@ -27,7 +27,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     return SingleChildScrollView(
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min,
           children: [
-            UserItemWidget(url:widget.k ),
+            UserItemWidget(),
             Padding(
           padding: EdgeInsets.symmetric(horizontal: context.getDefaultSize() * 2),
           child: Column(children: [
@@ -60,8 +60,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             ProfileItemWidget(icon: Icons.help, text: context.translate("help"), isModeWidget: false, onTap: () {}),
             ProfileItemWidget(icon: Icons.info_outline, text: context.translate("about"), isModeWidget: false, onTap: ()
             async{
-              SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-              sharedPreferences.clear();
+        /// remove it later
               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ChoiceItem()));
             }),
             ProfileItemWidget(icon: Icons.logout, text: context.translate("logout"), isModeWidget: false, iconColor: Colors.red, onTap: ()
@@ -69,8 +68,10 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               String keyToRemove = "userType";
               SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
               sharedPreferences.remove(keyToRemove);
+              // await FirebaseAuth.instance.currentUser!.delete();
               GoogleSignIn googleSign =GoogleSignIn();
                  googleSign.disconnect();
+
                FirebaseAuth.instance.signOut();
            Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
            //    Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.choicePage, (route) => false);

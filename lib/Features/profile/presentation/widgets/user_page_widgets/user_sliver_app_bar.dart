@@ -8,6 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class UserSliverAppBar extends StatefulWidget {
@@ -31,22 +32,29 @@ class _UserSliverAppBarState extends State<UserSliverAppBar> {
   // String displayName='';
  String? url;
 
-  SelectAndUploadImage()async {
+  // SelectAndUploadImage()async {
+  //
+  //
+  //  final reteurnimage= await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   select=File(reteurnimage!.path);
+  //   var imageName=basename(reteurnimage.path);
+  //   var refStorage =FirebaseStorage.instance.ref("UsersProfile/$imageName");
+  //    refStorage.putFile(select!);
+  //    url=await refStorage.getDownloadURL();
+  //
+  //  setState(() {
+  //
+  //  });
+  // }
 
-
-   final reteurnimage= await ImagePicker().pickImage(source: ImageSource.gallery);
-    select=File(reteurnimage!.path);
-    var imageName=basename(reteurnimage.path);
-    var refStorage =FirebaseStorage.instance.ref("UsersProfile/$imageName");
-     refStorage.putFile(select!);
-     url=await refStorage.getDownloadURL();
-
-   setState(() {
-
-   });
-  }
-
-
+ String ?image;
+ Future<void> getImage() async {
+   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+   image=sharedPreferences.getString("userImage");
+   // setState(() {
+   //   imageUrl = url;
+   // });
+ }
   // final UserItemWidget  r;
   @override
   Widget build(BuildContext context) {
@@ -62,7 +70,7 @@ class _UserSliverAppBarState extends State<UserSliverAppBar> {
         IconButton(onPressed: ()
         {
           // selectImage();
-          SelectAndUploadImage();
+          // SelectAndUploadImage();
         }, icon: const Icon(Icons.camera_alt_rounded)),
       ],
       flexibleSpace: FlexibleSpaceBar(
@@ -76,7 +84,8 @@ class _UserSliverAppBarState extends State<UserSliverAppBar> {
             borderRadius: BorderRadius.only(
               bottomRight: Radius.circular(context.getDefaultSize() * 3),
             ),
-            child: url==null?  Image.network(widget.photoUrl):Image.network(url!,fit: BoxFit.fill,)
+            child: Image.network(widget.photoUrl)
+            //url==null?  Image.network(widget.photoUrl):Image.network(url!,fit: BoxFit.fill,)
       ),
       ),
     );
