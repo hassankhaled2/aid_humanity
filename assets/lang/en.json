@@ -7,5 +7,10 @@
     "help":"Help",
     "logout":"Logout",
     "chat":"Chat",
-    "change_language":"Change Language"
+    "change_language":"Change Language",
+    "Home":"Home",
+    "Hunger spot":"Hunger spots",
+    "Requests":"Requests",
+    "Live":"Live",
+    "History":"History"
 }

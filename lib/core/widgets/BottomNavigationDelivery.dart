@@ -3,6 +3,9 @@ import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.da
 import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../Features/home/presentation/bloc/home_bloc.dart';
 
 
 
@@ -25,7 +28,13 @@ class _BottomNavigationDeliveryState extends State<BottomNavigationDelivery> {
     // Container(),
     const ProfilePage()
   ];
+@override
+  void initState() {
+  BlocProvider.of<HomeBloc>(context).add(GetAllRequestsEvent());
 
+  // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

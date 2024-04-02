@@ -1,22 +1,24 @@
-import 'package:aid_humanity/Features/auth/data/repositeries_impl/auth_repo_impl.dart';
-import 'package:aid_humanity/Features/auth/domain/use_cases_impl/login_with_google_use_case.dart';
-import 'package:aid_humanity/Features/auth/presentation/cubit/auth_login_cubit/auth_login_cubit.dart';
+import 'package:aid_humanity/Features/auth/presentation/pages/register_page.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/ai_model_cubit/cubit/classificaiton_cubit.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/details_bloc.dart';
-
 import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
+import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
+import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.dart';
+import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
+import 'package:aid_humanity/Features/spalsh/spalsh.dart';
 import 'package:aid_humanity/bloc_observer.dart';
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
+import 'package:aid_humanity/core/utils/app_router/app_router.dart';
+import 'package:aid_humanity/core/utils/theme/cubit/theme_cubit.dart';
 import 'package:aid_humanity/injection_container.dart' as di;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'Features/auth/presentation/pages/login_page.dart';
 import 'Features/home/presentation/pages/choice_page.dart';
-import 'Features/spalsh/spalsh.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 import 'core/widgets/routes.dart';
-import 'injection_container.dart';
 
 void main() async {
   //the WidgetFlutterBinding is used to interact with the Flutter engine
@@ -31,19 +33,10 @@ void main() async {
       projectId: "aid-humanity-2221d",
     ),
   );
-
-
-
   await di.init();
-
-
   Bloc.observer = MyBlocObserver();
 
-
-
-  runApp(MyApp());
-  // Hive.registerAdapter(UserEntityAdapter());
-  // Hive.openBox(KFearured);
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -66,40 +59,38 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => di.getIt<DetailsBloc>()),
+        BlocProvider(create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
         BlocProvider(
-            create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
-        BlocProvider(create: (_) => ClassificaitonCubit()),
-        BlocProvider(
-            create: (context)
-        {
-          return AuthLoginCubit(CallLoginWithGoogleUseCase(getIt.get<AuthRepoImpl>()));
-        }
-
+          create: (_) => ClassificaitonCubit(),
         ),
-
-
+        BlocProvider(create: (_) => di.getIt<ThemeCubit>()..getCurrentLocale())
         // BlocProvider(
-        // create: (context) => ImageCubit()),
-
-        // BlocProvider.value(
-        //     value: AuthLoginCubit(CallLoginWithGoogleUseCase(getIt.get<AuthRepoImpl>())),
+        //     create: (context)
+        //     {
+        //       return AuthLoginCubit(CallLoginWithGoogleUseCase(getIt.get<AuthRepoImpl>()));
+        //     }
         //
-        // )
+        // ),
+
       ],
-      child: MaterialApp(
-        routes: routes,
-        home: FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?ChoicePage():SplashScreen(),
-        //CircleAvatarWidget(),
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, state) {
+          return MaterialApp(
+            routes: routes,
 
-
-        debugShowCheckedModeBanner: false,
-        supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provide , which langs to use in our app
-        localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
-        localeResolutionCallback: (deviceLocale, supportedLocales) {
-          return AppLocalizationsSetup.localeResolutionCallback(
-              deviceLocale!, supportedLocales);
+            /// see it if worked or not
+            home: FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?ChoicePage():SplashScreen(),
+          //CircleAvatarWidget(),
+            debugShowCheckedModeBanner: false,
+            locale: BlocProvider.of<ThemeCubit>(context).locale,
+            supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provide , which langs to use in our app
+            localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
+            localeResolutionCallback: (deviceLocale, supportedLocales) {
+              return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
+            },
+            theme: getThemeDataLight, //const HomeView(),
+          );
         },
-        theme: getThemeDataLight, //const HomeView(),
       ),
     );
   }

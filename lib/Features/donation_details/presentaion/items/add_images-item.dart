@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
+
 class AddImagesItem extends StatefulWidget {
   const AddImagesItem({super.key});
 
@@ -94,13 +95,23 @@ class _AddImagesItemState extends State<AddImagesItem> {
             height: 20.0,
           ),
           BlocConsumer<ClassificaitonCubit, ClassificaitonState>(
-            listener: (context, state) {
+            listener: (context, state)  {
               if (state is ClassificaitonSuccessState) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DonationFormPage(items: state.result, itemsImages: state.itemsImages,isKnn: false,)));
+               
+
+                Navigator.push(
+                    // ignore: use_build_context_synchronously
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DonationFormPage(
+                              items: state.result,
+                              itemsImages: state.itemsImages,
+                              isKnn: false,
+                            )));
               }
             },
             builder: (context, state) {
-              if (state is ClassificaitonLoadingState) {
+              if (state is ClassificaitonLoadingState || state is ModelLoadingState || state is ModelLoadedState) {
                 return Padding(
                     padding: EdgeInsets.all(context.getDefaultSize() * 1.5),
                     child: const CircularProgressIndicator(
@@ -141,4 +152,6 @@ class _AddImagesItemState extends State<AddImagesItem> {
       )),
     );
   }
+
+ 
 }
