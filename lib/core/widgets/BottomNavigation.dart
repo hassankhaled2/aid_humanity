@@ -1,4 +1,5 @@
 
+import 'package:aid_humanity/Features/auth/presentation/pages/login_page.dart';
 import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_delivery_page.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.dart';
@@ -37,7 +38,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
     screens.addAll([
       const HomeDeliveryPage(),
       const HomeDonorPage(),
-      const SearchPage(),
+     Container(),
       ProfilePage(displayName: displayName, photoUrl: photoUrl, email: email),
     ]);
   }

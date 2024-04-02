@@ -1,5 +1,6 @@
 import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
 import 'package:aid_humanity/Features/home/presentation/widgets/home_delivery_widgets/card_widget.dart';
+import 'package:aid_humanity/core/constants/constants.dart';
 
 import 'package:aid_humanity/core/entities/request_entity.dart';
 
@@ -58,7 +59,19 @@ class _SearchPageState extends State<SearchPage> {
         title: TextField(
           controller: _searchController,
           onChanged: (value) => setState(() => _searchTerm = value),
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
+            border: UnderlineInputBorder(
+                borderSide: BorderSide(
+              color: kPrimaryColor,
+            )),
+            enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+              color: kPrimaryColor,
+            )),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+              color: kPrimaryColor,
+            )),
             hintText: 'Search requests...',
           ),
         ),
