@@ -97,19 +97,22 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (select != null) { // Check if an image is selected
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => OnBoarding()),
-                  );
-                } else {
-                  // Handle the case where no image is selected (optional)
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      duration: Duration(seconds: 4),
-                      content: Text('Please select an image to Submit'),
-                    ),
-                  );
-                }
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => OnBoarding()),
+                );
+                // if (select != null) { // Check if an image is selected
+                //   Navigator.of(context).push(
+                //     MaterialPageRoute(builder: (context) => OnBoarding()),
+                //   );
+                // } else {
+                //   // Handle the case where no image is selected (optional)
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     SnackBar(
+                //       duration: Duration(seconds: 4),
+                //       content: Text('Please select an image to Submit'),
+                //     ),
+                //   );
+                // }
               },
               child: Text("Submit"),
             ),

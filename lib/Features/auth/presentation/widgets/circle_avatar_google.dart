@@ -99,19 +99,22 @@ class _CircleAvatarGoogleState extends State<CircleAvatarGoogle> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (select != null) { // Check if an image is selected
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ChoicePageGoogle()),
-                  );
-                } else {
-                  // Handle the case where no image is selected (optional)
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      duration: Duration(seconds: 4),
-                      content: Text('Please select an image to Submit'),
-                    ),
-                  );
-                }
+                Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => ChoicePageGoogle()),
+                      );
+                // if (select != null) { // Check if an image is selected
+                //   Navigator.of(context).push(
+                //     MaterialPageRoute(builder: (context) => ChoicePageGoogle()),
+                //   );
+                // } else {
+                //   // Handle the case where no image is selected (optional)
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     SnackBar(
+                //       duration: Duration(seconds: 4),
+                //       content: Text('Please select an image to Submit'),
+                //     ),
+                //   );
+                // }
               },
               child: Text("Submit"),
             ),

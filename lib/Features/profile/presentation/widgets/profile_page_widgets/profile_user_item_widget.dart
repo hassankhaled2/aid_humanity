@@ -2,6 +2,7 @@ import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/theme/app_color/app_color_light.dart';
 import 'package:aid_humanity/core/widgets/custom_divider_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +75,7 @@ String ?image;
        return  InkWell(
           onTap:()
           {
-            Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserInfoPage(fullName:fullName, email: Email, phone: Phone, address: Address, photoUrl:image!, )));
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserInfoPage(fullName:fullName, email: Email, phone: Phone, address: Address, photoUrl:image!= null?image!:"assets/pics/circle_avatar.jpg", )));
 
           },
           child: SizedBox(
@@ -91,11 +92,18 @@ String ?image;
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              image!
+                        ClipOval(
+                          child: FancyShimmerImage(
+                            //when image is null go to errorWidget to display another image
+                            imageUrl: image!= null?image!:"",
+                            shimmerDuration: Duration(seconds: 2), // Adjust the shimmer duration as needed
+                            boxFit: BoxFit.fill, // Adjust the box fit as needed
+                            errorWidget: Image.asset("assets/pics/circle_avatar.jpg"), // Placeholder widget to display when the image fails to load
+                            width: context.getDefaultSize() * 4,
+                            height: context.getDefaultSize() * 4,
+                            shimmerBaseColor: Colors.grey, // Adjust the shimmer base color as needed
+                            shimmerHighlightColor: Colors.white, // Adjust the shimmer highlight color as needed
                           ),
-                          radius: context.getDefaultSize() * 2,
                         ),
                         SizedBox(
                           width: context.getDefaultSize() * 1.2,

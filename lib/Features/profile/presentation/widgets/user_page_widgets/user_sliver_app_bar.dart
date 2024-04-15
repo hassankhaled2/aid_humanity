@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/theme/app_color/app_color_light.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserSliverAppBar extends StatefulWidget {
   const UserSliverAppBar({super.key, required this.FullName, required this.photoUrl,});
   final String FullName ;
-  final String  photoUrl;
+  final String  ?photoUrl;
   @override
   State<UserSliverAppBar> createState() => _UserSliverAppBarState();
 }
@@ -84,7 +85,16 @@ class _UserSliverAppBarState extends State<UserSliverAppBar> {
             borderRadius: BorderRadius.only(
               bottomRight: Radius.circular(context.getDefaultSize() * 3),
             ),
-            child: Image.network(widget.photoUrl)
+          child: FancyShimmerImage(
+            imageUrl: widget.photoUrl!= null? widget.photoUrl!:"",
+            shimmerDuration: Duration(seconds: 2), // Adjust the shimmer duration as needed
+            boxFit: BoxFit.fill, // Adjust the box fit as needed
+            errorWidget: Image.asset("assets/pics/circle_avatar.jpg"), // Placeholder widget to display when the image fails to load
+            width: context.getDefaultSize() * 4,
+            height: context.getDefaultSize() * 4,
+            shimmerBaseColor: Colors.grey, // Adjust the shimmer base color as needed
+            shimmerHighlightColor: Colors.white, // Adjust the shimmer highlight color as needed
+          ),
             //url==null?  Image.network(widget.photoUrl):Image.network(url!,fit: BoxFit.fill,)
       ),
       ),
