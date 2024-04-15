@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             routes: routes,
 
-            /// see it if worked or not
+
             home: FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?ChoicePage():SplashScreen(),
           //CircleAvatarWidget(),
             debugShowCheckedModeBanner: false,

@@ -9,6 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,7 +42,75 @@ class _State extends State<ExtaDataGoogle> {
   CollectionReference categories = FirebaseFirestore.instance.collection('UsersAuth');
   File?select;
   String? url;
+  String? _currentAddress;
+  Position? _currentPosition;
+  // SavePref(String fullName,String phone,String email,String address)async
+  // {
+  //   SharedPreferences sharedPreference=await SharedPreferences.getInstance();
+  //   sharedPreference.setString("fullName", fullName);
+  //   sharedPreference.setString("phone" ,phone,);
+  //   sharedPreference.setString("email", email);
+  //   sharedPreference.setString("address", address);
+  //   print("================================================:${sharedPreference.getString("fullName")}");
+  //   print(sharedPreference.getString("phone"));
+  //   print(sharedPreference.getString("email"));
+  //   print(sharedPreference.getString("address"));
+  // }
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _getCurrentPosition() async {
+    final hasPermission = await _handleLocationPermission();
+
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high,)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+      _getAddressFromLatLng(_currentPosition!);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    await placemarkFromCoordinates(
+        _currentPosition!.latitude, _currentPosition!.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        _currentAddress = '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+        address.text=_currentAddress??"";
+      });
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
   SelectAndUploadImage()async {
 
 
@@ -59,6 +129,7 @@ class _State extends State<ExtaDataGoogle> {
 @override
   void initState() {
     super.initState();
+    _getCurrentPosition();
     // TODO: implement initState
     fullName.text=widget.displayName;
     email.text=widget.Email;
@@ -206,6 +277,8 @@ class _State extends State<ExtaDataGoogle> {
                                   "Email":email.text,
                                   "Phone":phone.text,
                                   "Address":address.text,
+                                  "LAT":_currentPosition?.latitude??'',
+                                  "LNG":_currentPosition?.longitude??'',
                                   // to determine which each user add to firestore that depend on  their ID
                                   "id":widget.id
                                 });

@@ -8,6 +8,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,6 +42,8 @@ class _State extends State<RegisterPage> {
 
   File?select;
   String? url;
+  String? _currentAddress;
+  Position? _currentPosition;
   // SavePref(String fullName,String phone,String email,String address)async
   // {
   //   SharedPreferences sharedPreference=await SharedPreferences.getInstance();
@@ -52,7 +56,68 @@ class _State extends State<RegisterPage> {
   //   print(sharedPreference.getString("email"));
   //   print(sharedPreference.getString("address"));
   // }
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _getCurrentPosition() async {
+    final hasPermission = await _handleLocationPermission();
+
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high,)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+      _getAddressFromLatLng(_currentPosition!);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    await placemarkFromCoordinates(
+        _currentPosition!.latitude, _currentPosition!.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        _currentAddress = '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+        address.text=_currentAddress??"";
+      });
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentPosition();
+
+
+  }
   SelectAndUploadImage()async {
 
 
@@ -276,7 +341,7 @@ class _State extends State<RegisterPage> {
                       maxLines: 4,
                       obscureText: false,
                       hinttext:"Enter your Address" ,
-                      mycontroller:address ,
+                      mycontroller:address,
                       validator: (val)
                       {
                         if(val=="")
@@ -366,7 +431,9 @@ class _State extends State<RegisterPage> {
          "Email":email.text,
          "Phone":phone.text,
          "Address":address.text,
-         "id": userId
+         "LAT":_currentPosition?.latitude??'',
+         "LNG":_currentPosition?.longitude??'',
+          "id": userId
        });
        doc = add.id;
        print(doc);
