@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -118,21 +119,21 @@ class _State extends State<RegisterPage> {
 
 
   }
-  SelectAndUploadImage()async {
-
-
-    final reteurnimage= await ImagePicker().pickImage(source: ImageSource.gallery);
-    select=File(reteurnimage!.path);
-    var imageName=basename(reteurnimage.path);
-    // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
-    var refStorage =FirebaseStorage.instance.ref("usersImages").child(imageName);
-    refStorage.putFile(select!);
-    url=await refStorage.getDownloadURL();
-
-    setState(() {
-
-    });
-  }
+  // SelectAndUploadImage()async {
+  //
+  //
+  //   final reteurnimage= await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   select=File(reteurnimage!.path);
+  //   var imageName=basename(reteurnimage.path);
+  //   // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
+  //   var refStorage =FirebaseStorage.instance.ref("usersImages").child(imageName);
+  //   refStorage.putFile(select!);
+  //   url=await refStorage.getDownloadURL();
+  //
+  //   setState(() {
+  //
+  //   });
+  // }
   // addUsersData() async{
   //   if(formState.currentState!.validate()) {
   //     try {
@@ -159,9 +160,7 @@ class _State extends State<RegisterPage> {
   //   // Call the user's CollectionReference to add a new user
   //
   // }
-  String displayName ='';
-  String Email ='';
-  String photoUrl='';
+
   Future signInWithGoogle(BuildContext context) async {
     // final user=FirebaseAuth.instance.currentUser;
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -191,57 +190,10 @@ class _State extends State<RegisterPage> {
     return Scaffold
       (
       body: Padding(
-        padding: const EdgeInsets.only(top: 95,left: 20,right: 20),
+        padding: EdgeInsets.all(context.getDefaultSize()*2),
         child: ListView(
           children:
           [
-            // Center(
-            //   child: Stack(
-            //     clipBehavior: Clip.none, // Clip overflowing widgets
-            //     children: [
-            //       CircleAvatar(
-            //
-            //         radius: 50.0,
-            //         child: url == null
-            //             ? Text('')
-            //             : ClipOval(child: Image.network(url!, fit: BoxFit.fill)),
-            //       ),
-            //       Positioned(
-            //         right: context.getDefaultSize() * 0.2, // Adjust positioning as needed
-            //         bottom:context.getDefaultSize() * 0, // Adjust positioning as needed
-            //         child: Container(
-            //           height: context.getDefaultSize() * 3.5,
-            //           width: context.getDefaultSize() * 3.5,
-            //           decoration: BoxDecoration(
-            //             color: kPrimaryColor, // Change color as desired
-            //             shape: BoxShape.circle,
-            //           ),
-            //           child: IconButton(
-            //             icon: Icon(
-            //               Icons.add,
-            //               size: context.getDefaultSize() * 2,
-            //               color: Colors.white,
-            //             ),
-            //             onPressed:()
-            //             {
-            //               SelectAndUploadImage();
-            //
-            //
-            //             },
-            //           ),
-            //         ),
-            //       ),
-            //       // ElevatedButton(onPressed: ()
-            //       // {
-            //       //   Navigator.of(context).push(MaterialPageRoute(builder: (context)
-            //       //   {
-            //       //     return ProfilePage(k: url!,);
-            //       //   }));
-            //       // }, child:Text("nh")
-            //       // )
-            //     ],
-            //   ),
-            // ),
             Form(
               key: formState,
               child: Column(
@@ -249,156 +201,114 @@ class _State extends State<RegisterPage> {
                 children:
                 [
 
-                   Padding(
-                    padding: EdgeInsets.only(left: 5),
-                    child: Text('Sign Up',style: Styles.textStyle25,),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.only(top: 40,),
-                    child: CustomTextForm(
-                      obscureText: false,
+                  SizedBox(height: context.getDefaultSize()*8,),
+                  const Text('Sign Up',style: Styles.textStyle25,),
+                  SizedBox(height: context.getDefaultSize()*6,),
+                  CustomTextForm(
+                    obscureText: false,
 
 
-                      hinttext:"Full Name" ,
-                      mycontroller:fullName ,
-                      validator: (val)
+                    hinttext:"Full Name" ,
+                    mycontroller:fullName ,
+                    validator: (val)
+                    {
+                      if(val=="")
                       {
-                        if(val=="")
-                        {
-                          return'can not to be empty';
-                        }
-                        return null;
-                      },
-
-                    ),
+                        return'can not to be empty';
+                      }
+                      return null;
+                    },
 
                   ),
+                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  CustomTextForm(
+                    keyboardType: TextInputType.phone,
+                    // inputFormatters: [
+                    //   FilteringTextInputFormatter.digitsOnly
 
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child:CustomTextForm(
-                      keyboardType: TextInputType.phone,
-                      // inputFormatters: [
-                      //   FilteringTextInputFormatter.digitsOnly
+                    // prefixIcon: CountryCodePicker(
+                    //   onChanged: (CountryCode countryCode) {},
+                    //   initialSelection: 'EG',
+                    //   showFlag: true,
+                    //   favorite: const ['+20', 'EG'],
+                    //   showCountryOnly: false,
+                    //   showOnlyCountryWhenClosed: false,
+                    //   alignLeft: false,
+                    //   showDropDownButton: true,
+                    //   padding: EdgeInsets.zero,
+                    // ),                      // inputFormatters:
+                    // [
+                    //   FilteringTextInputFormatter.allow(RegExp(r'^\-?(\d+\.?\d{0,2})?')),
+                    // ],
+                    obscureText: false,
 
-                      // prefixIcon: CountryCodePicker(
-                      //   onChanged: (CountryCode countryCode) {},
-                      //   initialSelection: 'EG',
-                      //   showFlag: true,
-                      //   favorite: const ['+20', 'EG'],
-                      //   showCountryOnly: false,
-                      //   showOnlyCountryWhenClosed: false,
-                      //   alignLeft: false,
-                      //   showDropDownButton: true,
-                      //   padding: EdgeInsets.zero,
-                      // ),                      // inputFormatters:
-                      // [
-                      //   FilteringTextInputFormatter.allow(RegExp(r'^\-?(\d+\.?\d{0,2})?')),
-                      // ],
-                      obscureText: false,
-
-                      hinttext:"+20XXXXXXXXXX" ,
-                      mycontroller:phone ,
-                      validator: (val)
+                    hinttext:"+20XXXXXXXXXX" ,
+                    mycontroller:phone ,
+                    validator: (val)
+                    {
+                      if(val=="")
                       {
-                        if(val=="")
-                        {
-                          return'can not to be empty';
-                        }
-                        return null;
-                      },
+                        return'can not to be empty';
+                      }
+                      return null;
+                    },
 
-                    ),
-//             child: IntlPhoneField(
-//               autofocus: true,
-//               focusNode:FocusNode(),
-//               // searchText:b ,
-//               // initialCountryCode: b,
-//                initialCountryCode: "IN",
-//                 controller:phone ,
-// onCountryChanged: (value)
-// {
-//   print("hhhhhhhhhhhhhhhhhhhhhh""${value.code}");
-// },
-//  onChanged: (value)
-//  {
-//
-//    print("Countryhghghghghghghghghghghghg""${value.countryCode}");
-//  },
-//               decoration: InputDecoration(
-//
-//                 hintText: 'Phone Number',
-//                 border: OutlineInputBorder(
-//                   borderSide: BorderSide(),
-//                 ),
-//               ),
-//             ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 15),
-                    child: CustomTextForm(
-                      maxLines: 4,
-                      obscureText: false,
-                      hinttext:"Enter your Address" ,
-                      mycontroller:address,
-                      validator: (val)
+                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  CustomTextForm(
+                    maxLines: 4,
+                    obscureText: false,
+                    hinttext:"Enter your Address" ,
+                    mycontroller:address,
+                    validator: (val)
+                    {
+                      if(val=="")
                       {
-                        if(val=="")
-                        {
-                          return'can not to be empty';
-                        }
-                        return null;
-                      },
-
-                    ),
+                        return'can not to be empty';
+                      }
+                      return null;
+                    },
 
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 15,),
-                    child: CustomTextForm(
-                      obscureText: false,
-                      hinttext:"Email" ,
-                      mycontroller:email ,
-                      validator: (val)
+                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  CustomTextForm(
+                    obscureText: false,
+                    hinttext:"Email" ,
+                    mycontroller:email ,
+                    validator: (val)
+                    {
+                      if(val=="")
                       {
-                        if(val=="")
-                        {
-                          return'can not to be empty';
-                        }
-                        return null;
-                      },
-
-                    ),
+                        return'can not to be empty';
+                      }
+                      return null;
+                    },
 
                   ),
-
-                  Padding(
-                      padding: const EdgeInsets.only(top: 15,),
-                      child: CustomTextForm(
-                        obscureText:isPassword,
-                        suffix: isPassword?Icons.visibility:Icons.visibility_off,
-                        suffixpressed:  ()
-                        {
-                          setState(() {
-                            isPassword=!isPassword;
-                          });
-                        },
-                        hinttext: "Password",
-                        mycontroller: password,
-                        validator: (val)
-                        {
-                          if(val=="")
-                          {
-                            return'can not to be empty';
-                          }
-                          return null;
-                        },
+                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  CustomTextForm(
+                    obscureText:isPassword,
+                    suffix: isPassword?Icons.visibility:Icons.visibility_off,
+                    suffixpressed:  ()
+                    {
+                      setState(() {
+                        isPassword=!isPassword;
+                      });
+                    },
+                    hinttext: "Password",
+                    mycontroller: password,
+                    validator: (val)
+                    {
+                      if(val=="")
+                      {
+                        return'can not to be empty';
+                      }
+                      return null;
+                    },
 
 
-                      )
                   ),
-                  const SizedBox(height: 50,),
+                  SizedBox(height: context.getDefaultSize()*4,),
                   Center(
                     child: Container(
                       height: 35,
@@ -483,7 +393,7 @@ class _State extends State<RegisterPage> {
                         ('Sign Up')),
                     ),
                   ),
-                  SizedBox(height: 35,),
+                  SizedBox(height: context.getDefaultSize()*4,),
                   const Row(
                       children: <Widget>[
                         Expanded(
@@ -497,7 +407,7 @@ class _State extends State<RegisterPage> {
                         ),
                       ]
                   ),
-                  const SizedBox(height: 15,),
+                  SizedBox(height: context.getDefaultSize()*1.6,),
                   Center(
                     child: ElevatedButton.icon(
                       style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
@@ -506,7 +416,7 @@ class _State extends State<RegisterPage> {
                         signInWithGoogle(context);
                       }, icon:Icon(FontAwesomeIcons.google), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
                   ),
-                  const SizedBox(height: 18,),
+                  SizedBox(height: context.getDefaultSize()*4,),
                   Row(
                     mainAxisAlignment:MainAxisAlignment.center,
                     children:
@@ -514,9 +424,7 @@ class _State extends State<RegisterPage> {
                       const Text('Are you have account?'),
                       TextButton(onPressed: ()
                        {
-
-                        //pushReplacementNamed --> علشان ميعملش back button
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>LoginPage(),
+                        Navigator.of(context).pop(MaterialPageRoute(builder: (context) =>LoginPage(),
                         )
                         );
                         }, child:Text('Sign in',style: TextStyle(color: Colors.orange))),
