@@ -4,6 +4,7 @@ import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
 import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -28,7 +29,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
     var imageName=basename(reteurnimage.path);
     // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
     var refStorage =FirebaseStorage.instance.ref("usersImages").child(imageName);
-    refStorage.putFile(select!);
+    await refStorage.putFile(select!);
 
     url=await refStorage.getDownloadURL();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -49,14 +50,24 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
             Text('Add Your Image'),
             Center(
               child: Stack(
-                clipBehavior: Clip.none, // Clip overflowing widgets
+                // clipBehavior: Clip.none, // Clip overflowing widgets
                 children: [
                   CircleAvatar(
 
                     radius:context.getDefaultSize() * 7 ,
                     child: url == null
                         ? Text('')
-                        : ClipOval(child: Image.network(url!, fit: BoxFit.fill)),
+                        :    ClipOval(
+                      child: FancyShimmerImage(
+                        imageUrl: url!,
+                        shimmerDuration: Duration(seconds: 2),
+                        boxFit: BoxFit.fill,
+                        width: context.getDefaultSize() * 20,
+                        height: context.getDefaultSize() * 20,
+                        shimmerBaseColor: Colors.grey,
+                        shimmerHighlightColor: Colors.white,
+                      ),
+                    ),
                   ),
                   Positioned(
                     right: context.getDefaultSize() * 0.2, // Adjust positioning as needed
@@ -114,7 +125,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
                 //   );
                 // }
               },
-              child: Text("Submit"),
+              child: Text("Skip"),
             ),
           ],
         )

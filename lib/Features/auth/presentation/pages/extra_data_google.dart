@@ -104,7 +104,7 @@ class _State extends State<ExtaDataGoogle> {
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
-        _currentAddress = '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+        _currentAddress = '${place.street},${place.subAdministrativeArea},${place.administrativeArea},${place.country}';
         address.text=_currentAddress??"";
       });
     }).catchError((e) {

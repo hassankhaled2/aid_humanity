@@ -100,8 +100,7 @@ class _State extends State<LoginPage> {
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
-        _currentAddress =
-        '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+        _currentAddress = '${place.street},${place.subAdministrativeArea},${place.administrativeArea},${place.country}';
       });
     }).catchError((e) {
       debugPrint(e);

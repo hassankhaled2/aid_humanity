@@ -16,6 +16,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'Features/auth/presentation/pages/login_page.dart';
+import 'Features/auth/presentation/widgets/circle_avatar_widget.dart';
 import 'Features/home/presentation/pages/choice_page.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 import 'core/widgets/routes.dart';
@@ -79,7 +80,9 @@ class MyApp extends StatelessWidget {
             routes: routes,
 
 
-            home: FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?ChoicePage():SplashScreen(),
+            home:FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?ChoicePage():SplashScreen(),
+            // CircleAvatarWidget(),
+
           //CircleAvatarWidget(),
             debugShowCheckedModeBanner: false,
             locale: BlocProvider.of<ThemeCubit>(context).locale,

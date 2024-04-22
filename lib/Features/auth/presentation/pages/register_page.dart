@@ -1,18 +1,15 @@
 import 'dart:io';
-
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/utils/styles/styles.dart';
 import '../widgets/text_form_field.dart';
@@ -105,7 +102,7 @@ class _State extends State<RegisterPage> {
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
-        _currentAddress = '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+        _currentAddress = '${place.street},${place.subAdministrativeArea},${place.administrativeArea},${place.country}';
         address.text=_currentAddress??"";
       });
     }).catchError((e) {
@@ -310,7 +307,7 @@ class _State extends State<RegisterPage> {
                   ),
                   SizedBox(height: context.getDefaultSize()*4,),
                   Center(
-                    child: Container(
+                    child:Container(
                       height: 35,
                       width: 210,
                       child: ElevatedButton(
