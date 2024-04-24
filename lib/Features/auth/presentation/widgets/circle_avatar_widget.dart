@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
-import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';

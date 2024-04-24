@@ -69,13 +69,16 @@ String ?image;
         final user = docs[0].data();
         final fullName =user["Full Name"];
         final Email =user["Email"];
-        final Address =user["Address"];
+        final street =user["street"];
+        final region =user["region"];
+        final country =user["country"];
+        final city =user["city"];
         final Phone =user["Phone"];
 
        return  InkWell(
           onTap:()
           {
-            Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserInfoPage(fullName:fullName, email: Email, phone: Phone, address: Address, photoUrl:image!= null?image!:"assets/pics/circle_avatar.jpg", )));
+            Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserInfoPage(fullName:fullName, email: Email, phone: Phone, street: street, photoUrl:image!= null?image!:"assets/pics/circle_avatar.jpg", region:region, city: city ,country: country, )));
 
           },
           child: SizedBox(

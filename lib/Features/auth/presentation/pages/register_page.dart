@@ -32,7 +32,13 @@ class _State extends State<RegisterPage> {
   TextEditingController phone = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController address = TextEditingController();
+  TextEditingController currentStreet = TextEditingController();
+
+  TextEditingController street = TextEditingController();
+  TextEditingController region = TextEditingController();
+  TextEditingController city = TextEditingController();
+  TextEditingController country = TextEditingController();
+
   GlobalKey<FormState>formState=GlobalKey();
   bool isloading =true;
   bool isPassword =true;
@@ -40,7 +46,12 @@ class _State extends State<RegisterPage> {
 
   File?select;
   String? url;
-  String? _currentAddress;
+
+  String? _currentStreet;
+  String? _region;
+  String? _city;
+  String? _country;
+
   Position? _currentPosition;
   // SavePref(String fullName,String phone,String email,String address)async
   // {
@@ -102,8 +113,15 @@ class _State extends State<RegisterPage> {
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
-        _currentAddress = '${place.street},${place.subAdministrativeArea},${place.administrativeArea},${place.country}';
-        address.text=_currentAddress??"";
+        _currentStreet = '${place.street}';
+        _region ='${place.subAdministrativeArea}';
+        _city='${place.administrativeArea}';
+        _country='${place.country}';
+
+        street.text=_currentStreet??"";
+        region.text=_region??'';
+        city.text=_city??'';
+        country.text=_country??'';
       });
     }).catchError((e) {
       debugPrint(e);
@@ -203,8 +221,6 @@ class _State extends State<RegisterPage> {
                   SizedBox(height: context.getDefaultSize()*6,),
                   CustomTextForm(
                     obscureText: false,
-
-
                     hinttext:"Full Name" ,
                     mycontroller:fullName ,
                     validator: (val)
@@ -252,20 +268,89 @@ class _State extends State<RegisterPage> {
 
                   ),
                   SizedBox(height: context.getDefaultSize()*1.6,),
-                  CustomTextForm(
-                    maxLines: 4,
-                    obscureText: false,
-                    hinttext:"Enter your Address" ,
-                    mycontroller:address,
-                    validator: (val)
-                    {
-                      if(val=="")
-                      {
-                        return'can not to be empty';
-                      }
-                      return null;
-                    },
+                  Row(
+                    children: [
+                      SizedBox(
+                        width:context.getDefaultSize()*18 ,
+                        child: CustomTextForm(
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:"noStreet+Name" ,
+                          mycontroller:street,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return'can not to be empty';
+                            }
+                            return null;
+                          },
 
+                        ),
+                      ),
+                      SizedBox(width: context.getDefaultSize()*1,),
+                      SizedBox(
+                        width:context.getDefaultSize()*18 ,
+                        child: CustomTextForm(
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:"region" ,
+                          mycontroller:region,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return'can not to be empty';
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: context.getDefaultSize()*1,),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width:context.getDefaultSize()*25,
+                        child: CustomTextForm(
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:"City" ,
+                          mycontroller:city,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return'can not to be empty';
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+                      SizedBox(width: context.getDefaultSize()*1,),
+                      SizedBox(
+                        width:context.getDefaultSize()*11 ,
+                        child: CustomTextForm(
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:"country" ,
+                          mycontroller:country,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return'can not to be empty';
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+
+                    ],
                   ),
                   SizedBox(height: context.getDefaultSize()*1.6,),
                   CustomTextForm(
@@ -337,10 +422,13 @@ class _State extends State<RegisterPage> {
          "Full Name":fullName.text,
          "Email":email.text,
          "Phone":phone.text,
-         "Address":address.text,
+         "street":street.text,
+         "city":city.text,
+         "region":region.text,
+         "country":country.text,
          "LAT":_currentPosition?.latitude??'',
          "LNG":_currentPosition?.longitude??'',
-          "id": userId
+         "id": userId
        });
        doc = add.id;
        print(doc);

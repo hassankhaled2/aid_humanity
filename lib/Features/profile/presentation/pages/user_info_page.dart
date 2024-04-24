@@ -2,11 +2,15 @@ import 'package:aid_humanity/Features/profile/presentation/widgets/user_page_wid
 import 'package:flutter/material.dart';
 
 class UserInfoPage extends StatelessWidget {
-  const UserInfoPage({super.key, required this.fullName, required this.email, required this.phone, required this.address, required this.photoUrl,});
+  const UserInfoPage({super.key, required this.fullName, required this.email, required this.phone, required this.street, required this.photoUrl, required this.region, required this.city, required this.country,});
   final String fullName;
   final String email;
   final String phone;
-  final String address;
+  final String street;
+  final String region;
+  final String city;
+  final String country;
+
   // final String email;
   final String photoUrl;
   @override
@@ -17,6 +21,6 @@ class UserInfoPage extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return  UserPageWidget(fullName:fullName ,email:email ,address:address ,phone: phone, photoUrl: photoUrl, );
+    return  UserPageWidget(fullName:fullName ,email:email ,street:street ,phone: phone, photoUrl: photoUrl, region:region , city: city, country: country, );
   }
 }
