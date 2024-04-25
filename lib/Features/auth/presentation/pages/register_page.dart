@@ -403,11 +403,11 @@ class _State extends State<RegisterPage> {
                           async {
           if(formState.currentState!.validate()) {
       try {
-       final creditional= await FirebaseAuth.instance.createUserWithEmailAndPassword(
+
+        final creditional= await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email.text,
           password: password.text,
         );
-
        final d= FirebaseAuth.instance.currentUser!.uid;
         SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
         sharedPreferences.setString("userId", d);
@@ -438,8 +438,14 @@ class _State extends State<RegisterPage> {
        // sharedPreferences.setString("userId", d);
        // ChoiceItem(g: d,);
        // addUsersData();
+
       await FirebaseAuth.instance.currentUser!.sendEmailVerification();
        Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          elevation: 1,
+          duration: Duration(seconds: 4),
+          content: Text('Please Go to Your Gmail & Verify Your Email'),
+        ));
     // if(creditional.user!.emailVerified)
     // {
     // Navigator.of(context).pushReplacementNamed(bottomNavigation);

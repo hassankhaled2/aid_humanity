@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
             routes: routes,
 
 
-            home:FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?ChoicePage():SplashScreen(),
+            home:FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser!.emailVerified?ChoicePage():SplashScreen(),
             // CircleAvatarWidget(),
 
           //CircleAvatarWidget(),
