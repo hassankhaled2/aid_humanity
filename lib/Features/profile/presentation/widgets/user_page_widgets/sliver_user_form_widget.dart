@@ -180,7 +180,7 @@ import 'package:flutter/material.dart';
 import '../profile_page_widgets/profile_user_item_widget.dart';
 /// handle google sign in details with google sign up
 class SliverUSerFormWidget extends StatefulWidget {
-  SliverUSerFormWidget({super.key, required this.fullName, required this.email, required this.phone, required this.street, required this.region, required this.city, required this.country,});
+  SliverUSerFormWidget({super.key, required this.fullName, required this.email, required this.phone, required this.street, required this.region, required this.city, required this.country, required this.flatNumber, required this.floorNumber,});
   final String fullName;
   final String email;
   final String phone;
@@ -188,7 +188,8 @@ class SliverUSerFormWidget extends StatefulWidget {
   final String region;
   final String city;
   final String country;
-
+  final String flatNumber;
+  final String floorNumber;
   @override
   State<SliverUSerFormWidget> createState() => _SliverUSerFormWidgetState();
 }
@@ -329,7 +330,47 @@ class _SliverUSerFormWidgetState extends State<SliverUSerFormWidget> {
                 prefixIcon: Icons.location_on_outlined,
                 keyboardType: TextInputType.text,
                 labelText: null,
-              )
+              ),
+              SizedBox(
+                height: context.getDefaultSize() *1.3,
+              ),
+              Text(
+                "floorNumber",
+                style: TextStyle(fontSize: context.getDefaultSize() * 2, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: context.getDefaultSize() * 0.3,
+              ),
+              TextFromWidget(
+                maxLines: 1,
+                controller: TextEditingController(text:widget.floorNumber),
+                obscureText: false,
+                prefixIcon: Icons.location_on_outlined,
+                keyboardType: TextInputType.text,
+                labelText: null,
+              ),
+              SizedBox(
+                height: context.getDefaultSize() * 1.5,
+              ),
+              Text(
+                "flatNumber",
+                style: TextStyle(fontSize: context.getDefaultSize() * 2, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: context.getDefaultSize() *1.3,
+              ),
+              TextFromWidget(
+                maxLines: 1,
+                controller: TextEditingController(text:widget.flatNumber),
+                obscureText: false,
+                prefixIcon: Icons.location_on_outlined,
+                keyboardType: TextInputType.text,
+                labelText: null,
+              ),
+              SizedBox(
+                height: context.getDefaultSize() * 1.5,
+              ),
+
             ],
           )
         ],

@@ -3,14 +3,19 @@ import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/constants.dart';
+import '../../../../core/constants/test.dart';
 import '../../../../core/utils/styles/styles.dart';
 import '../widgets/text_form_field.dart';
 import 'extra_data_google.dart';
@@ -38,7 +43,8 @@ class _State extends State<RegisterPage> {
   TextEditingController region = TextEditingController();
   TextEditingController city = TextEditingController();
   TextEditingController country = TextEditingController();
-
+  TextEditingController floorNumber = TextEditingController();
+  TextEditingController flatNumber = TextEditingController();
   GlobalKey<FormState>formState=GlobalKey();
   bool isloading =true;
   bool isPassword =true;
@@ -53,6 +59,24 @@ class _State extends State<RegisterPage> {
   String? _country;
 
   Position? _currentPosition;
+
+  SelectAndUploadImage()async {
+
+
+    final reteurnimage= await ImagePicker().pickImage(source: ImageSource.gallery);
+    select=File(reteurnimage!.path);
+    var imageName=basename(reteurnimage.path);
+    // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
+    var refStorage =FirebaseStorage.instance.ref("usersImages").child(imageName);
+    refStorage.putFile(select!);
+
+    url=await refStorage.getDownloadURL();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("userImage",url!);
+    setState(() {
+
+    });
+  }
   // SavePref(String fullName,String phone,String email,String address)async
   // {
   //   SharedPreferences sharedPreference=await SharedPreferences.getInstance();
@@ -134,6 +158,7 @@ class _State extends State<RegisterPage> {
 
 
   }
+
   // SelectAndUploadImage()async {
   //
   //
@@ -216,9 +241,68 @@ class _State extends State<RegisterPage> {
                 children:
                 [
 
-                  SizedBox(height: context.getDefaultSize()*8,),
+                  SizedBox(height: context.getDefaultSize()*1,),
                   const Text('Sign Up',style: Styles.textStyle25,),
-                  SizedBox(height: context.getDefaultSize()*6,),
+                  SizedBox(height: context.getDefaultSize()*1.5,),
+                  Center(
+                    child: Stack(
+                      clipBehavior: Clip.none, // Clip overflowing widgets
+                      children: [
+                        CircleAvatar(
+
+                          radius:context.getDefaultSize() * 6 ,
+                          child: url == null
+                              ? Text('')
+                              : ClipOval(
+                            child: FancyShimmerImage(
+                              imageUrl: url!,
+                              shimmerDuration: Duration(seconds: 2),
+                              boxFit: BoxFit.fill,
+                              width: context.getDefaultSize() * 20,
+                              height: context.getDefaultSize() * 20,
+                              shimmerBaseColor: Colors.grey,
+                              shimmerHighlightColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: context.getDefaultSize() * 0.2, // Adjust positioning as needed
+                          bottom:context.getDefaultSize() * 0, // Adjust positioning as needed
+                          child: Container(
+                            height: context.getDefaultSize() * 3.5,
+                            width: context.getDefaultSize() * 3.5,
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor, // Change color as desired
+                              shape: BoxShape.circle,
+                            ),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.add,
+                                size: context.getDefaultSize() * 2,
+                                color: Colors.white,
+                              ),
+                              onPressed:()
+                              {
+                                SelectAndUploadImage();
+                                // ProfilePage(k: url!);
+
+                              },
+                            ),
+                          ),
+                        ),
+                        // ElevatedButton(onPressed: ()
+                        // {
+                        //   Navigator.of(context).push(MaterialPageRoute(builder: (context)
+                        //   {
+                        //     return ProfilePage(k: url!,);
+                        //   }));
+                        // }, child:Text("nh")
+                        // )
+                        // ProfilePage(k:url!),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: context.getDefaultSize()*4,),
                   CustomTextForm(
                     obscureText: false,
                     hinttext:"Full Name" ,
@@ -273,9 +357,10 @@ class _State extends State<RegisterPage> {
                       SizedBox(
                         width:context.getDefaultSize()*18 ,
                         child: CustomTextForm(
+                          // isDeny: true,
                           maxLines: 1,
                           obscureText: false,
-                          hinttext:"noStreet+Name" ,
+                          hinttext:"No.StreetName" ,
                           mycontroller:street,
                           validator: (val)
                           {
@@ -352,6 +437,58 @@ class _State extends State<RegisterPage> {
 
                     ],
                   ),
+                  SizedBox(height: context.getDefaultSize()*1,),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width:context.getDefaultSize()*12 ,
+                        child: CustomTextForm(
+                          inputFormatters:
+                          [
+                            LengthLimitingTextInputFormatter(4),
+                          ],
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:"FloorNo." ,
+                          mycontroller:floorNumber,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return'can not to be empty';
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+                      SizedBox(width: context.getDefaultSize()*1,),
+                      SizedBox(
+                        width:context.getDefaultSize()*11,
+                        child: CustomTextForm(
+                          inputFormatters:
+                          [
+                            LengthLimitingTextInputFormatter(4),
+                          ],
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:"FlatNo." ,
+                          mycontroller:flatNumber,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return'can not to be empty';
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+                    ],
+                  ),
                   SizedBox(height: context.getDefaultSize()*1.6,),
                   CustomTextForm(
                     obscureText: false,
@@ -419,13 +556,15 @@ class _State extends State<RegisterPage> {
       // final c= sharedPreferences.getString("categories");
       //  CollectionReference<Object?> Cat = c as CollectionReference<Object?>;
        DocumentReference add=await categories.add({
-         "Full Name":fullName.text,
+         "fullName":fullName.text,
          "Email":email.text,
          "Phone":phone.text,
          "street":street.text,
          "city":city.text,
          "region":region.text,
          "country":country.text,
+         "flatNumber":flatNumber.text,
+         "floorNumber":floorNumber.text,
          "LAT":_currentPosition?.latitude??'',
          "LNG":_currentPosition?.longitude??'',
          "id": userId

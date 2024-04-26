@@ -5,7 +5,7 @@ import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:flutter/material.dart';
 
 class UserPageWidget extends StatelessWidget {
-  const UserPageWidget({super.key, required this.fullName, required this.email, required this.phone, required this.street, required this.photoUrl, required this.region, required this.city, required this.country,});
+  const UserPageWidget({super.key, required this.fullName, required this.email, required this.phone, required this.street, required this.photoUrl, required this.region, required this.city, required this.country, required this.flatNumber, required this.floorNumber,});
   final String fullName;
   final String email;
   final String phone;
@@ -13,9 +13,9 @@ class UserPageWidget extends StatelessWidget {
   final String region;
   final String city;
   final String country;
-
   final String photoUrl;
-
+  final String flatNumber;
+  final String floorNumber;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,7 +26,7 @@ class UserPageWidget extends StatelessWidget {
             slivers: [
 
               UserSliverAppBar(FullName:fullName, photoUrl: photoUrl, ),
-              SliverPadding(padding: EdgeInsets.all(8.0), sliver: SliverUSerFormWidget(fullName: fullName,phone: phone,email: email,street: street, region: region, city: city, country: country,))
+              SliverPadding(padding: EdgeInsets.all(8.0), sliver: SliverUSerFormWidget(fullName: fullName,phone: phone,email: email,street: street, region: region, city: city, country: country, flatNumber:flatNumber,floorNumber: floorNumber,))
             ],
           ),
         ),

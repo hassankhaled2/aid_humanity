@@ -2,9 +2,12 @@ import 'dart:io';
 
 import 'package:aid_humanity/Features/auth/presentation/pages/choose_page_google.dart';
 import 'package:aid_humanity/Features/auth/presentation/widgets/circle_avatar_google.dart';
+import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
+import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +17,7 @@ import 'package:geolocator/geolocator.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/constants.dart';
 import '../../../../core/utils/styles/styles.dart';
 import '../widgets/text_form_field.dart';
 import 'package:path/path.dart';
@@ -36,6 +40,12 @@ class _State extends State<ExtaDataGoogle> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController address = TextEditingController();
+  TextEditingController region = TextEditingController();
+  TextEditingController city = TextEditingController();
+  TextEditingController country = TextEditingController();
+  TextEditingController street = TextEditingController();
+  TextEditingController floorNumber = TextEditingController();
+  TextEditingController flatNumber = TextEditingController();
   GlobalKey<FormState>formState=GlobalKey();
   bool isloading =true;
   bool isPassword =true;
@@ -140,7 +150,7 @@ class _State extends State<ExtaDataGoogle> {
     return Scaffold
       (
       body: Padding(
-        padding: const EdgeInsets.only(top: 95,left: 20,right: 20),
+        padding: const EdgeInsets.only(top: 10,left: 20,right: 20),
         child: ListView(
           children:
           [
@@ -150,114 +160,293 @@ class _State extends State<ExtaDataGoogle> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:
                 [
+                  const Text('Continue your Information',style: Styles.textStyle25,),
+                  SizedBox(height: context.getDefaultSize()*4,),
+                  Center(
+                    child: Stack(
+                      clipBehavior: Clip.none, // Clip overflowing widgets
+                      children: [
+                        CircleAvatar(
 
-                  Padding(
-                    padding: EdgeInsets.only(left: 5),
-                    child: Text('Contiune Your Data',style: Styles.textStyle25,),
-                  ),
+                          radius:context.getDefaultSize() * 6 ,
+                          child: url == null
+                              ? Text('')
+                              : ClipOval(
+                            child: FancyShimmerImage(
+                              imageUrl: url!,
+                              shimmerDuration: Duration(seconds: 2),
+                              boxFit: BoxFit.fill,
+                              width: context.getDefaultSize() * 20,
+                              height: context.getDefaultSize() * 20,
+                              shimmerBaseColor: Colors.grey,
+                              shimmerHighlightColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: context.getDefaultSize() * 0.2, // Adjust positioning as needed
+                          bottom:context.getDefaultSize() * 0, // Adjust positioning as needed
+                          child: Container(
+                            height: context.getDefaultSize() * 3.5,
+                            width: context.getDefaultSize() * 3.5,
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor, // Change color as desired
+                              shape: BoxShape.circle,
+                            ),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.add,
+                                size: context.getDefaultSize() * 2,
+                                color: Colors.white,
+                              ),
+                              onPressed:()
+                              {
+                                SelectAndUploadImage();
+                                // ProfilePage(k: url!);
 
-                  Padding(
-                    padding: EdgeInsets.only(top: 40,),
-                    child: CustomTextForm(
-                      obscureText: false,
-                      mycontroller:fullName ,
-                      validator: (val)
-                      {
-                        if(val=="")
-                        {
-                          return'can not to be empty';
-                        }
-                        return null;
-                      }, hinttext: 'Full Name',
-
+                              },
+                            ),
+                          ),
+                        ),
+                        // ElevatedButton(onPressed: ()
+                        // {
+                        //   Navigator.of(context).push(MaterialPageRoute(builder: (context)
+                        //   {
+                        //     return ProfilePage(k: url!,);
+                        //   }));
+                        // }, child:Text("nh")
+                        // )
+                        // ProfilePage(k:url!),
+                      ],
                     ),
-
                   ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child:CustomTextForm(
-                      keyboardType: TextInputType.phone,
-                      obscureText: false,
-
-                      hinttext:"+20XXXXXXXXXX" ,
-                      mycontroller:phone ,
-                      validator: (val)
+                  SizedBox(height: context.getDefaultSize()*4,),
+                  CustomTextForm(
+                    obscureText: false,
+                    hinttext:"Full Name" ,
+                    mycontroller:fullName ,
+                    validator: (val)
+                    {
+                      if(val=="")
                       {
-                        if(val=="")
-                        {
-                          return'can not to be empty';
-                        }
-                        return null;
-                      },
+                        return'can not to be empty';
+                      }
+                      return null;
+                    },
 
-                    ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 15),
-                    child: CustomTextForm(
+                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  CustomTextForm(
+                    keyboardType: TextInputType.phone,
+                    // inputFormatters: [
+                    //   FilteringTextInputFormatter.digitsOnly
 
-                      maxLines: 4,
-                      obscureText: false,
-                      hinttext:"Enter your Address" ,
-                      mycontroller:address ,
-                      validator: (val)
+                    // prefixIcon: CountryCodePicker(
+                    //   onChanged: (CountryCode countryCode) {},
+                    //   initialSelection: 'EG',
+                    //   showFlag: true,
+                    //   favorite: const ['+20', 'EG'],
+                    //   showCountryOnly: false,
+                    //   showOnlyCountryWhenClosed: false,
+                    //   alignLeft: false,
+                    //   showDropDownButton: true,
+                    //   padding: EdgeInsets.zero,
+                    // ),                      // inputFormatters:
+                    // [
+                    //   FilteringTextInputFormatter.allow(RegExp(r'^\-?(\d+\.?\d{0,2})?')),
+                    // ],
+                    obscureText: false,
+
+                    hinttext:"+20XXXXXXXXXX" ,
+                    mycontroller:phone ,
+                    validator: (val)
+                    {
+                      if(val=="")
                       {
-                        if(val=="")
-                        {
-                          return'can not to be empty';
-                        }
-                        return null;
-                      },
-
-                    ),
+                        return'can not to be empty';
+                      }
+                      return null;
+                    },
 
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 15,),
-                    child: CustomTextForm(
-                      obscureText: false,
-                      hinttext:"Email" ,
-                      mycontroller:email ,
-                      validator: (val)
-                      {
-                        if(val=="")
-                        {
-                          return'can not to be empty';
-                        }
-                        return null;
-                      },
-
-                    ),
-
-                  ),
-
-                  Padding(
-                      padding: const EdgeInsets.only(top: 15,),
-                      child: CustomTextForm(
-                        obscureText:isPassword,
-                        suffix: isPassword?Icons.visibility:Icons.visibility_off,
-                        suffixpressed:  ()
-                        {
-                          setState(() {
-                            isPassword=!isPassword;
-                          });
-                        },
-                        hinttext: "Password",
-                        mycontroller: password,
-                        validator: (val)
-                        {
-                          if(val=="")
+                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width:context.getDefaultSize()*18 ,
+                        child: CustomTextForm(
+                          // isDeny: true,
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:"No.StreetName" ,
+                          mycontroller:street,
+                          validator: (val)
                           {
-                            return'can not to be empty';
-                          }
-                          return null;
-                        },
+                            if(val=="")
+                            {
+                              return'can not to be empty';
+                            }
+                            return null;
+                          },
 
+                        ),
+                      ),
+                      SizedBox(width: context.getDefaultSize()*1,),
+                      SizedBox(
+                        width:context.getDefaultSize()*18 ,
+                        child: CustomTextForm(
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:"region" ,
+                          mycontroller:region,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return'can not to be empty';
+                            }
+                            return null;
+                          },
 
-                      )
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 50,),
+                  SizedBox(height: context.getDefaultSize()*1,),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width:context.getDefaultSize()*25,
+                        child: CustomTextForm(
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:"City" ,
+                          mycontroller:city,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return'can not to be empty';
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+                      SizedBox(width: context.getDefaultSize()*1,),
+                      SizedBox(
+                        width:context.getDefaultSize()*11 ,
+                        child: CustomTextForm(
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:"country" ,
+                          mycontroller:country,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return'can not to be empty';
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+
+                    ],
+                  ),
+                  SizedBox(height: context.getDefaultSize()*1,),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width:context.getDefaultSize()*12 ,
+                        child: CustomTextForm(
+                          inputFormatters:
+                          [
+                            LengthLimitingTextInputFormatter(4),
+                          ],
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:"FloorNo." ,
+                          mycontroller:floorNumber,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return'can not to be empty';
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+                      SizedBox(width: context.getDefaultSize()*1,),
+                      SizedBox(
+                        width:context.getDefaultSize()*11,
+                        child: CustomTextForm(
+                          inputFormatters:
+                          [
+                            LengthLimitingTextInputFormatter(4),
+                          ],
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:"FlatNo." ,
+                          mycontroller:flatNumber,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return'can not to be empty';
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  CustomTextForm(
+                    obscureText: false,
+                    hinttext:"Email" ,
+                    mycontroller:email ,
+                    validator: (val)
+                    {
+                      if(val=="")
+                      {
+                        return'can not to be empty';
+                      }
+                      return null;
+                    },
+
+                  ),
+                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  CustomTextForm(
+                    obscureText:isPassword,
+                    suffix: isPassword?Icons.visibility:Icons.visibility_off,
+                    suffixpressed:  ()
+                    {
+                      setState(() {
+                        isPassword=!isPassword;
+                      });
+                    },
+                    hinttext: "Password",
+                    mycontroller: password,
+                    validator: (val)
+                    {
+                      if(val=="")
+                      {
+                        return'can not to be empty';
+                      }
+                      return null;
+                    },
+
+
+                  ),
+                  SizedBox(height: context.getDefaultSize()*4,),
+
                   Center(
                     child: Container(
                       height: 35,
@@ -287,7 +476,7 @@ class _State extends State<ExtaDataGoogle> {
                                 // addUsersData();
                                 Navigator.of(context).push(MaterialPageRoute(builder: (context)
                                 {
-                                  return CircleAvatarGoogle();
+                                  return OnBoarding();
                                 }));
                                 // Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.circleAvatarProfile, (route) => false);
                                 // if(creditional.user!.emailVerified)
@@ -328,6 +517,7 @@ class _State extends State<ExtaDataGoogle> {
                         ('Submit')),
                     ),
                   ),
+                  SizedBox(height: context.getDefaultSize()*8,),
                 ],
               ),
             ),

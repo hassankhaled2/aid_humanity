@@ -241,7 +241,7 @@ class _State extends State<LoginPage> {
                                 );
                                 if (creditional.user!.emailVerified) {
                                   Navigator.of(context).pushReplacementNamed(
-                                      AppRouter.circleAvatarProfile);
+                                      AppRouter.onBoarding);
                                 } else {
                                   FirebaseAuth.instance.currentUser!.sendEmailVerification();
                                   AwesomeDialog(
