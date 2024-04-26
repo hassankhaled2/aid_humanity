@@ -5,6 +5,7 @@ import 'package:aid_humanity/Features/auth/presentation/widgets/choose_item_goog
 import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
 import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _CircleAvatarGoogleState extends State<CircleAvatarGoogle> {
           // crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Add Your Image'),
+            Text(context.translate('Add Your Image')),
             Center(
               child: Stack(
                 clipBehavior: Clip.none, // Clip overflowing widgets
@@ -108,12 +109,12 @@ class _CircleAvatarGoogleState extends State<CircleAvatarGoogle> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       duration: Duration(seconds: 4),
-                      content: Text('Please select an image to Submit'),
+                      content: Text(context.translate('Please select an image to Submit')),
                     ),
                   );
                 }
               },
-              child: Text("Submit"),
+              child: Text(context.translate("Submit")),
             ),
           ],
         )

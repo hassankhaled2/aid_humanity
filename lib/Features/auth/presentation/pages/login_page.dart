@@ -1,17 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../core/utils/app_router/app_router.dart';
 import '../../../../core/utils/styles/styles.dart';
-import '../cubit/auth_login_cubit/auth_login_cubit.dart';
-import '../cubit/auth_login_cubit/auth_login_states.dart';
 import '../widgets/text_form_field.dart';
 import 'extra_data_google.dart';
 import 'register_page.dart';
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -23,256 +23,289 @@ class LoginPage extends StatefulWidget {
 class _State extends State<LoginPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  GlobalKey<FormState>formState = GlobalKey();
+  GlobalKey<FormState> formState = GlobalKey();
   bool isPassword = true;
-  bool isloading = false;
+  bool isLoading = false;
 
   Future signInWithGoogle(BuildContext context) async {
     // final user=FirebaseAuth.instance.currentUser;
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    GoogleSignInAuthentication?googleAuth = await googleUser?.authentication;
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
-
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
     // Once signed in, return the UserCredential
-    final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+    final userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
     final id = userCredential.user!.uid;
     final user = userCredential.user!;
     final displayName = user.displayName ?? 'hahadhda';
     final email = user.email ?? 'hdahdhah';
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)
-    {
-      return  ExtaDataGoogle(displayName: displayName, Email:email , id: id);
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) {
+      return ExtaDataGoogle(displayName: displayName, Email: email, id: id);
     }), (route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold
-      (
+    return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(top: 150, left: 20, right: 20),
+        padding: EdgeInsets.only(
+          top: context.getDefaultSize() * 14,
+          left: context.getDefaultSize() * 2,
+          right: context.getDefaultSize() * 2,
+        ),
         child: ListView(
-          children:
-          [
+          children: [
             Form(
               key: formState,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children:
-                [
-                  Text('Welcome', style: Styles.textStyle25,),
-                  Text('Back!', style: Styles.textStyle25),
-                  SizedBox(height: 10,),
+                children: [
+                  Text(
+                    context.translate("Welcome"),
+                    style: Styles.textStyle25,
+                  ),
+                  Text(context.translate('Back!'), style: Styles.textStyle25),
+                  SizedBox(
+                    height: context.getDefaultSize() / 2,
+                  ),
                   Row(
-                    children:
-                    [
-                      Text('Sign in ', style: Styles.textStyle17.copyWith(
-                          color: Colors.orange),),
-                      Text('to your account', style: TextStyle(fontSize: 15))
+                    children: [
+                      Text(
+                        context.translate('Sign in '),
+                        style:
+                            Styles.textStyle17.copyWith(color: Colors.orange),
+                      ),
+                      Text(context.translate('to your account'),
+                          style: TextStyle(
+                              fontSize: context.getDefaultSize() * 1.6,
+                              fontWeight: FontWeight.bold))
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 40,),
+                    padding: EdgeInsets.only(
+                      top: context.getDefaultSize() * 6,
+                    ),
                     child: CustomTextForm(
                       obscureText: false,
-                      hinttext: "Email",
+                      hinttext: context.translate("Email"),
                       mycontroller: email,
                       validator: (val) {
                         if (val == "") {
-                          return 'can not to be empty';
+                          return context.translate('can not to be empty');
                         }
                         return null;
                       },
-
                     ),
-
                   ),
 
                   Padding(
-                      padding: EdgeInsets.only(top: 15),
+                      padding:
+                          EdgeInsets.only(top: context.getDefaultSize() * 1.5),
                       child: CustomTextForm(
                         obscureText: isPassword,
-                        suffix: isPassword ? Icons.visibility : Icons
-                            .visibility_off,
+                        suffix: isPassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
                         suffixpressed: () {
                           setState(() {
                             //if available make it not & vice versa
                             isPassword = !isPassword;
                           });
                         },
-                        hinttext: "Password",
+                        hinttext:context.translate( "Password"),
                         mycontroller: password,
                         validator: (val) {
                           if (val == "") {
-                            return 'can not to be empty';
+                            return context.translate('can not to be empty');
                           }
                           return null;
                         },
-
-
-                      )
-                  ),
+                      )),
                   Padding(
-                    padding: const EdgeInsets.only(left: 195, top: 10),
-                    child: Row(children:
-                    [
-                      TextButton(onPressed: () async {
-                        if (email.text == '') {
-                          AwesomeDialog(
-                            context: context,
-                            showCloseIcon: true,
-                            dialogType: DialogType.warning,
-                            animType: AnimType.rightSlide,
-                            title: 'Error',
-                            desc:
-                            'please enter your email after that enter forget password',
-                          ).show();
-                          return;
-                        }
-                        try {
-                          await FirebaseAuth.instance.sendPasswordResetEmail(email: email.text);
-                          AwesomeDialog(
-                            context: context,
-                            showCloseIcon: true,
-                            dialogType: DialogType.success,
-                            animType: AnimType.rightSlide,
-                            title: 'Error',
-                            desc:
-                            'please go to your gmail and make verify to your email',
-                          ).show();
-                        } catch (e) {
-                          AwesomeDialog(
-                            context: context,
-                            showCloseIcon: true,
-                            dialogType: DialogType.warning,
-                            animType: AnimType.rightSlide,
-                            title: 'Error',
-                            desc:
-                            'there is something wrong in your account',
-                          ).show();
-                          //  print(e);
-                        }
-                      }, child: Text('Forget Passsword?', style: TextStyle(
-                          color: Colors.black),))
-                    ],),
+                    padding: EdgeInsets.only(
+                        left: context.getDefaultSize() * 20,
+                        top: context.getDefaultSize()),
+                    child: Row(
+                      children: [
+                        TextButton(
+                            onPressed: () async {
+                              if (email.text == '') {
+                                AwesomeDialog(
+                                  context: context,
+                                  showCloseIcon: true,
+                                  dialogType: DialogType.warning,
+                                  animType: AnimType.rightSlide,
+                                  title: context.translate('Error'),
+                                  desc:
+                                      context.translate('please enter your email after that enter forget password'),
+                                ).show();
+                                return;
+                              }
+                              try {
+                                await FirebaseAuth.instance
+                                    .sendPasswordResetEmail(email: email.text);
+                                AwesomeDialog(
+                                  context: context,
+                                  showCloseIcon: true,
+                                  dialogType: DialogType.success,
+                                  animType: AnimType.rightSlide,
+                                  title: context.translate('Error'),
+                                  desc:
+                                      context.translate('please go to your gmail and make verify to your email'),
+                                ).show();
+                              } catch (e) {
+                                AwesomeDialog(
+                                  context: context,
+                                  showCloseIcon: true,
+                                  dialogType: DialogType.warning,
+                                  animType: AnimType.rightSlide,
+                                  title: context.translate('Error'),
+                                  desc:
+                                      context.translate('there is something wrong in your account'),
+                                ).show();
+                                //  print(e);
+                              }
+                            },
+                            child:Text(
+                              context.translate('Forget Password?'),
+                              style: TextStyle(color: Colors.black),
+                            ))
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 30,),
+                  SizedBox(
+                    height: context.getDefaultSize() * 3,
+                  ),
                   Center(
                     child: Container(
-                      height: 35,
-                      width: 210,
+                      height: context.getDefaultSize() * 4.3,
+                      width: context.getDefaultSize() * 24,
                       child: ElevatedButton(
                           style: ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(Colors
-                                  .black), shape: MaterialStatePropertyAll(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)))),
+                              backgroundColor:
+                                  const MaterialStatePropertyAll(Colors.black),
+                              shape: MaterialStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          context.getDefaultSize() * 2)))),
                           onPressed: () async {
                             if (formState.currentState!.validate()) {
                               try {
-                                isloading = true;
+                                isLoading = true;
                                 setState(() {});
                                 final creditional = await FirebaseAuth.instance
                                     .signInWithEmailAndPassword(
                                   email: email.text,
                                   password: password.text,
-
                                 );
                                 if (creditional.user!.emailVerified) {
                                   Navigator.of(context).pushReplacementNamed(
                                       AppRouter.circleAvatarProfile);
                                 } else {
-                                  FirebaseAuth.instance.currentUser!.sendEmailVerification();
+                                  FirebaseAuth.instance.currentUser!
+                                      .sendEmailVerification();
                                   AwesomeDialog(
                                     context: context,
                                     showCloseIcon: true,
                                     dialogType: DialogType.warning,
                                     animType: AnimType.rightSlide,
-                                    title: 'Error',
+                                    title: context.translate('Error'),
                                     desc:
-                                    'please go to your gmail and make verify to your email',
+                                        context.translate('please go to your gmail and make verify to your email'),
                                   ).show();
                                 }
-                                isloading = false;
+                                isLoading = false;
                                 setState(() {});
                               } on FirebaseAuthException catch (e) {
-                                isloading = false;
-                                setState(() {
-
-                                });
+                                isLoading = false;
+                                setState(() {});
 
                                 ///Error in this line code
                                 if (e.code == e.code) {
                                   print(
-                                      'there is a something wrong in password or email.');
+                                      context.translate('there is a something wrong in password or email.'));
                                   AwesomeDialog(
                                     context: context,
                                     dialogType: DialogType.error,
                                     animType: AnimType.rightSlide,
-                                    title: 'Error',
-                                    desc: 'there is a something wrong in password or email.',
-                                    buttonsTextStyle: const TextStyle(
-                                        color: Colors.black),
+                                    title: context.translate('Error'),
+                                    desc:
+                                        context.translate('there is a something wrong in password or email.'),
+                                    buttonsTextStyle:
+                                        const TextStyle(color: Colors.black),
                                     showCloseIcon: true,
-
                                   ).show();
                                 } else {
                                   // Navigator.of(context).push(MaterialPageRoute(builder: (context) =>BottomNavigation()));
                                 }
                               }
                             }
-                          }, child: Text
-                        ('Sign In', style: TextStyle(color: Colors.white),)),
+                          },
+                          child:  Text(
+                            context.translate('Sign In'),
+                            style: TextStyle(color: Colors.white),
+                          )),
                     ),
                   ),
-                  SizedBox(height: 30,),
+                  SizedBox(
+                    height: context.getDefaultSize() * 2,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children:
-                    [
-                      Text('Don\'t have account ?'),
-                      TextButton(onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => RegisterPage(),));
-                      }, child: Text('Sign up', style: TextStyle(color: Colors
-                          .orange),))
-
+                    children: [
+                    Text(context.translate('Don\'t have account ?')),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const RegisterPage(),
+                            ));
+                          },
+                          child:  Text(
+                            context.translate('Sign up'),
+                            style: TextStyle(color: Colors.orange),
+                          ))
                     ],
                   ),
-                  const Row(
-                      children: <Widget>[
-                        Expanded(
-                            child: Divider()
-                        ),
-
-                        Text("OR"),
-
-                        Expanded(
-                            child: Divider()
-                        ),
-                      ]
+                 Row(children: <Widget>[
+                    Expanded(child: Divider()),
+                    Text(context.translate("OR")),
+                    Expanded(child: Divider()),
+                  ]),
+                  SizedBox(
+                    height: context.getDefaultSize() * 4,
                   ),
-                  SizedBox(height: 30,),
                   Center(
-                  child: ElevatedButton.icon(
-                    style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
-                    onPressed: ()
-                    async{
-                      signInWithGoogle(context);
-                     // await AuthRemoteDataSourceImpl().login();
+                    child: ElevatedButton.icon(
+                      style: const ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Colors.black)),
+                      onPressed: () async {
+                        signInWithGoogle(context);
+                        // await AuthRemoteDataSourceImpl().login();
 
-                     //  await  AuthRepoImpl(
-                     //      authRemoteDataSource:AuthRemoteDataSourceImpl(), networkInfo: ConnectionInfoImpl(internetConnectionChecker: InternetConnectionChecker())).authRemoteDataSource.login();
-                     //  await UserDataModel(displayNameGoogle: displayNameGoogle, email: email, photoUrl: photoUrl, idToken: idToken, accessToken: accessToken, userId: userId);
-                     //  Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.circleAvatarProfile, (route) => false);
-                    }, icon:Icon(FontAwesomeIcons.google,color:Colors.white,), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
+                        //  await  AuthRepoImpl(
+                        //      authRemoteDataSource:AuthRemoteDataSourceImpl(), networkInfo: ConnectionInfoImpl(internetConnectionChecker: InternetConnectionChecker())).authRemoteDataSource.login();
+                        //  await UserDataModel(displayNameGoogle: displayNameGoogle, email: email, photoUrl: photoUrl, idToken: idToken, accessToken: accessToken, userId: userId);
+                        //  Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.circleAvatarProfile, (route) => false);
+                      },
+                      icon: const Icon(
+                        FontAwesomeIcons.google,
+                        color: Colors.white,
+                      ),
+                      label: Text(
+                        context.translate('Continue with Google'),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
                   ),
+
                   ///todo
                   // BlocListener<AuthLoginCubit, AuthLoginState>(
                   //   listener: (context, state) {
@@ -363,8 +396,6 @@ class _State extends State<LoginPage> {
                   //     ),
                   //   ),
                   // )
-
-
                 ],
               ),
             ),

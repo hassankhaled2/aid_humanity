@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -186,7 +187,7 @@ class _State extends State<RegisterPage> {
 
                    Padding(
                     padding: EdgeInsets.only(left: 5),
-                    child: Text('Sign Up',style: Styles.textStyle25,),
+                    child: Text(context.translate('Sign Up'),style: Styles.textStyle25,),
                   ),
 
                   Padding(
@@ -195,13 +196,13 @@ class _State extends State<RegisterPage> {
                       obscureText: false,
 
 
-                      hinttext:"Full Name" ,
+                      hinttext:context.translate("Full Name") ,
                       mycontroller:fullName ,
                       validator: (val)
                       {
                         if(val=="")
                         {
-                          return'can not to be empty';
+                          return context.translate('can not to be empty');
                         }
                         return null;
                       },
@@ -239,7 +240,7 @@ class _State extends State<RegisterPage> {
                       {
                         if(val=="")
                         {
-                          return'can not to be empty';
+                          return context.translate('can not to be empty');
                         }
                         return null;
                       },
@@ -275,13 +276,13 @@ class _State extends State<RegisterPage> {
                     child: CustomTextForm(
                       maxLines: 4,
                       obscureText: false,
-                      hinttext:"Enter your Address" ,
+                      hinttext:context.translate("Enter your Address") ,
                       mycontroller:address ,
                       validator: (val)
                       {
                         if(val=="")
                         {
-                          return'can not to be empty';
+                          return context.translate('can not to be empty');
                         }
                         return null;
                       },
@@ -293,13 +294,13 @@ class _State extends State<RegisterPage> {
                     padding: EdgeInsets.only(top: 15,),
                     child: CustomTextForm(
                       obscureText: false,
-                      hinttext:"Email" ,
+                      hinttext:context.translate("Email") ,
                       mycontroller:email ,
                       validator: (val)
                       {
                         if(val=="")
                         {
-                          return'can not to be empty';
+                          return context.translate('can not to be empty');
                         }
                         return null;
                       },
@@ -319,13 +320,13 @@ class _State extends State<RegisterPage> {
                             isPassword=!isPassword;
                           });
                         },
-                        hinttext: "Password",
+                        hinttext: context.translate("Password"),
                         mycontroller: password,
                         validator: (val)
                         {
                           if(val=="")
                           {
-                            return'can not to be empty';
+                            return context.translate('can not to be empty');
                           }
                           return null;
                         },
@@ -400,30 +401,30 @@ class _State extends State<RegisterPage> {
             context: context,
             dialogType: DialogType.error,
             animType: AnimType.rightSlide,
-            title: 'Error',
-            desc: 'try another email or password',
+            title: context.translate('Error'),
+            desc:context.translate( 'Try another email or password'),
             buttonsTextStyle: const TextStyle(color: Colors.black),
             showCloseIcon: true,
 
           ).show();
-          print('The account already exists for that email.');
+          print(context.translate('The account already exists for that email.'));
         }
       } catch (e) {
         print(e);
       }
     }
                           }, child:Text
-                        ('Sign Up')),
+                        (context.translate('Sign Up'))),
                     ),
                   ),
                   SizedBox(height: 35,),
-                  const Row(
+                  Row(
                       children: <Widget>[
                         Expanded(
                             child: Divider()
                         ),
 
-                        Text("OR"),
+                        Text(context.translate("OR")),
 
                         Expanded(
                             child: Divider()
@@ -437,14 +438,14 @@ class _State extends State<RegisterPage> {
                       onPressed: ()
                       {
                         signInWithGoogle(context);
-                      }, icon:Icon(FontAwesomeIcons.google), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
+                      }, icon:Icon(FontAwesomeIcons.google), label:Text(context.translate('Continue with Google'),style: TextStyle(color: Colors.white),),),
                   ),
                   const SizedBox(height: 18,),
                   Row(
                     mainAxisAlignment:MainAxisAlignment.center,
                     children:
                     [
-                      const Text('Are you have account?'),
+                     Text(context.translate('Are you have account?')),
                       TextButton(onPressed: ()
                        {
 
@@ -452,7 +453,7 @@ class _State extends State<RegisterPage> {
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) =>LoginPage(),
                         )
                         );
-                        }, child:Text('Sign in',style: TextStyle(color: Colors.orange))),
+                        }, child:Text(context.translate('Sign in'),style: TextStyle(color: Colors.orange))),
 
 
 

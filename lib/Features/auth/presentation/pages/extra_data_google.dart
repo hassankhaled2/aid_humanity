@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:aid_humanity/Features/auth/presentation/pages/choose_page_google.dart';
 import 'package:aid_humanity/Features/auth/presentation/widgets/circle_avatar_google.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,10 +17,13 @@ import '../../../../core/utils/styles/styles.dart';
 import '../widgets/text_form_field.dart';
 import 'package:path/path.dart';
 
-
-
 class ExtaDataGoogle extends StatefulWidget {
-  const ExtaDataGoogle({Key? key, required this.displayName, required this.Email, required this.id}) : super(key: key);
+  const ExtaDataGoogle(
+      {Key? key,
+      required this.displayName,
+      required this.Email,
+      required this.id})
+      : super(key: key);
   final String displayName;
   final String Email;
   final String id;
@@ -34,186 +38,175 @@ class _State extends State<ExtaDataGoogle> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController address = TextEditingController();
-  GlobalKey<FormState>formState=GlobalKey();
-  bool isloading =true;
-  bool isPassword =true;
-  CollectionReference categories = FirebaseFirestore.instance.collection('UsersAuth');
-  File?select;
+  GlobalKey<FormState> formState = GlobalKey();
+  bool isloading = true;
+  bool isPassword = true;
+  CollectionReference categories =
+      FirebaseFirestore.instance.collection('UsersAuth');
+  File? select;
   String? url;
 
-  SelectAndUploadImage()async {
-
-
-    final reteurnimage= await ImagePicker().pickImage(source: ImageSource.gallery);
-    select=File(reteurnimage!.path);
-    var imageName=basename(reteurnimage.path);
+  SelectAndUploadImage() async {
+    final reteurnimage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    select = File(reteurnimage!.path);
+    var imageName = basename(reteurnimage.path);
     // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
-    var refStorage =FirebaseStorage.instance.ref("usersImages").child(imageName);
+    var refStorage =
+        FirebaseStorage.instance.ref("usersImages").child(imageName);
     refStorage.putFile(select!);
-    url=await refStorage.getDownloadURL();
+    url = await refStorage.getDownloadURL();
 
-    setState(() {
-
-    });
+    setState(() {});
   }
-@override
+
+  @override
   void initState() {
     super.initState();
     // TODO: implement initState
-    fullName.text=widget.displayName;
-    email.text=widget.Email;
+    fullName.text = widget.displayName;
+    email.text = widget.Email;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold
-      (
+    return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(top: 95,left: 20,right: 20),
+        padding: const EdgeInsets.only(top: 95, left: 20, right: 20),
         child: ListView(
-          children:
-          [
+          children: [
             Form(
               key: formState,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children:
-                [
-
+                children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 5),
-                    child: Text('Contiune Your Data',style: Styles.textStyle25,),
+                    padding: const EdgeInsets.only(left: 5),
+                    child: Text(
+                      context.translate("Continue your data"),
+                      style: Styles.textStyle25,
+                    ),
                   ),
-
                   Padding(
-                    padding: EdgeInsets.only(top: 40,),
+                    padding: const EdgeInsets.only(
+                      top: 40,
+                    ),
                     child: CustomTextForm(
                       obscureText: false,
-                      mycontroller:fullName ,
-                      validator: (val)
-                      {
-                        if(val=="")
-                        {
-                          return'can not to be empty';
-                        }
-                        return null;
-                      }, hinttext: 'Full Name',
-
-                    ),
-
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child:CustomTextForm(
-                      keyboardType: TextInputType.phone,
-                      obscureText: false,
-
-                      hinttext:"+20XXXXXXXXXX" ,
-                      mycontroller:phone ,
-                      validator: (val)
-                      {
-                        if(val=="")
-                        {
-                          return'can not to be empty';
+                      mycontroller: fullName,
+                      validator: (val) {
+                        if (val == "") {
+                          return 'can not to be empty';
                         }
                         return null;
                       },
-
+                      hinttext: 'Full Name',
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: CustomTextForm(
+                      keyboardType: TextInputType.phone,
+                      obscureText: false,
+                      hinttext: "+20XXXXXXXXXX",
+                      mycontroller: phone,
+                      validator: (val) {
+                        if (val == "") {
+                          return 'can not to be empty';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 15),
                     child: CustomTextForm(
-
                       maxLines: 4,
                       obscureText: false,
-                      hinttext:"Enter your Address" ,
-                      mycontroller:address ,
-                      validator: (val)
-                      {
-                        if(val=="")
-                        {
-                          return'can not to be empty';
+                      hinttext: context.translate("Enter your address"),
+                      mycontroller: address,
+                      validator: (val) {
+                        if (val == "") {
+                          return 'can not to be empty';
                         }
                         return null;
                       },
-
                     ),
-
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 15,),
+                    padding: EdgeInsets.only(
+                      top: 15,
+                    ),
                     child: CustomTextForm(
                       obscureText: false,
-                      hinttext:"Email" ,
-                      mycontroller:email ,
-                      validator: (val)
-                      {
-                        if(val=="")
-                        {
-                          return'can not to be empty';
+                      hinttext: context.translate("Email"),
+                      mycontroller: email,
+                      validator: (val) {
+                        if (val == "") {
+                          return context.translate("'can not be empty");
                         }
                         return null;
                       },
-
                     ),
-
                   ),
-
                   Padding(
-                      padding: const EdgeInsets.only(top: 15,),
+                      padding: const EdgeInsets.only(
+                        top: 15,
+                      ),
                       child: CustomTextForm(
-                        obscureText:isPassword,
-                        suffix: isPassword?Icons.visibility:Icons.visibility_off,
-                        suffixpressed:  ()
-                        {
+                        obscureText: isPassword,
+                        suffix: isPassword
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        suffixpressed: () {
                           setState(() {
-                            isPassword=!isPassword;
+                            isPassword = !isPassword;
                           });
                         },
-                        hinttext: "Password",
+                        hinttext: context.translate("Password"),
                         mycontroller: password,
-                        validator: (val)
-                        {
-                          if(val=="")
-                          {
-                            return'can not to be empty';
+                        validator: (val) {
+                          if (val == "") {
+                            return context.translate("can not be empty");
                           }
                           return null;
                         },
-
-
-                      )
+                      )),
+                  const SizedBox(
+                    height: 50,
                   ),
-                  const SizedBox(height: 50,),
                   Center(
                     child: Container(
                       height: 35,
                       width: 210,
                       child: ElevatedButton(
-                          style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black),shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)))),
-
-                          onPressed: ()
-
-                          async {
-                            if(formState.currentState!.validate()) {
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.black),
+                              shape: MaterialStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20)))),
+                          onPressed: () async {
+                            if (formState.currentState!.validate()) {
                               try {
-                                SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                                String?docgoogle;
-                                DocumentReference add=await categories.add({
-                                  "Full Name":fullName.text,
-                                  "Email":email.text,
-                                  "Phone":phone.text,
-                                  "Address":address.text,
+                                SharedPreferences sharedPreferences =
+                                    await SharedPreferences.getInstance();
+                                String? docgoogle;
+                                DocumentReference add = await categories.add({
+                                  "Full Name": fullName.text,
+                                  "Email": email.text,
+                                  "Phone": phone.text,
+                                  "Address": address.text,
                                   // to determine which each user add to firestore that depend on  their ID
-                                  "id":widget.id
+                                  "id": widget.id
                                 });
                                 docgoogle = add.id;
-                                sharedPreferences.setString("docGoogle", docgoogle);
+                                sharedPreferences.setString(
+                                    "docGoogle", docgoogle);
                                 // addUsersData();
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context)
-                                {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(builder: (context) {
                                   return CircleAvatarGoogle();
                                 }));
                                 // Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.circleAvatarProfile, (route) => false);
@@ -232,27 +225,27 @@ class _State extends State<ExtaDataGoogle> {
                                 //   ).show();
                                 // }
                                 // GoRouter.of(context).push(AppRouter.KBottomNavigation);
-
                               } on FirebaseAuthException catch (e) {
-                                if (e.code ==e.code) {
+                                if (e.code == e.code) {
                                   AwesomeDialog(
                                     context: context,
                                     dialogType: DialogType.error,
                                     animType: AnimType.rightSlide,
-                                    title: 'Error',
-                                    desc: 'try another email or password',
-                                    buttonsTextStyle: const TextStyle(color: Colors.black),
+                                    title: context.translate("Error"),
+                                    desc: context.translate("Try another email or password"),
+                                    buttonsTextStyle:
+                                        const TextStyle(color: Colors.black),
                                     showCloseIcon: true,
-
                                   ).show();
-                                  print('The account already exists for that email.');
+                                  print(
+                                  context.translate( 'The account already exists for that email.'));
                                 }
                               } catch (e) {
                                 print(e);
                               }
                             }
-                          }, child:Text
-                        ('Submit')),
+                          },
+                          child: Text(context.translate('Submit'))),
                     ),
                   ),
                 ],

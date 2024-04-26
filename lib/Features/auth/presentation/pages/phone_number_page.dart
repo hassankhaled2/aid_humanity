@@ -1,6 +1,7 @@
 
 
 import 'package:aid_humanity/Features/auth/presentation/widgets/phone.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -33,12 +34,12 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children:
         [
-          Text('What is your phone Number',
+          Text(context.translate('What is your phone Number'),
             style: TextStyle(color: Colors.black,fontSize: 20,fontWeight:FontWeight.bold),
           ),
           SizedBox(height: 10,),
           Text(
-            'Please enter your phone number to verify your account',
+            context.translate('Please enter your phone number to verify your account'),
             style: TextStyle(color: Colors.black,fontSize: 15),
           )
 
@@ -109,7 +110,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                   {
                     if(val=="")
                     {
-                      return'can not to be empty';
+                      return context.translate('can not to be empty');
                     }
                     return null;
                   },
@@ -156,7 +157,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
  if(_phoneFormKey.currentState!.validate()){
    await name(context,phone.text);
  }
-                  }, child:Text('Next')),
+                  }, child:Text(context.translate('Next'))),
             ),
           ),
             ],

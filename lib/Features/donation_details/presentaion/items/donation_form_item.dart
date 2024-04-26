@@ -1,14 +1,14 @@
 import 'dart:io';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/ai_model_cubit/cubit/classificaiton_cubit.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/details_bloc.dart';
-import 'package:aid_humanity/Features/home/presentation/pages/home_donor_page.dart';
 import 'package:aid_humanity/core/entities/item_entity.dart';
 import 'package:aid_humanity/core/entities/request_entity.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
 import 'package:aid_humanity/core/utils/theme/app_color/app_color_light.dart';
-import 'package:aid_humanity/core/widgets/BottomNavigationDelivery.dart';
-
+import 'package:aid_humanity/core/utils/theme/cubit/theme_cubit.dart';
+import 'package:aid_humanity/core/widgets/BottomNavigationDonor.dart';
 import 'package:aid_humanity/core/widgets/custom_button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +34,8 @@ class _DonationFormItemState extends State<DonationFormItem> {
   late TextEditingController quantityController;
   final TextEditingController itemsController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
+  final TextEditingController governmentController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   late DateTime date = DateTime.now();
   final List<ItemEntity> items = [];
@@ -82,6 +84,8 @@ class _DonationFormItemState extends State<DonationFormItem> {
     locationController.dispose();
     dateController.dispose();
     quantityController.dispose();
+    governmentController.dispose();
+    cityController.dispose();
   }
 
   @override
@@ -107,18 +111,20 @@ class _DonationFormItemState extends State<DonationFormItem> {
             BlocProvider.of<DetailsBloc>(context).add(AddRequestEvent(
                 requestEntity: RequestEntity(
                     time: date,
-                    address: {"location": locationController.text},
+                    address: {
+                      "government": governmentController.text,
+                      "city": cityController.text,
+                      "location": locationController.text
+                    },
                     numberOfItems: totalQuantity,
                     userId: FirebaseAuth.instance.currentUser!.uid,
                     status: "Pending",
-                    qrScanned: false
-                    
-                    
-                    ),
+                    qrScanned: false),
                 items: items));
           } else if (state is UploadImagesErrorState) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text("Please check your internet connection")));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(context
+                    .translate("Please_check_your_internet_connection"))));
           }
         },
         child: Scaffold(
@@ -137,7 +143,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Donate Request Details",
+                    context.translate("Donate_Request_Details"),
                     style: TextStyle(
                         color: kPrimaryColor,
                         fontSize: context.getDefaultSize() * 2.6,
@@ -151,69 +157,112 @@ class _DonationFormItemState extends State<DonationFormItem> {
                       size: context.getDefaultSize() * 3,
                     ),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => (const HomeDonorPage())),
-                      );
+                      Navigator.pop(context);
                     },
                   ),
                 ],
               ),
             ),
             Expanded(
-                child: ListView(children: [
-              addressText(context, "Pickup location"),
-              formTextField(context, textEditingController: locationController),
-              addressText(context, "Pickup Day"),
-              formTextField(
-                context,
-                textEditingController: dateController,
-                onTap: () async {
-                  date = await _pickDate();
-                },
+                child: Padding(
+              padding: EdgeInsets.only(
+                left:
+                    BlocProvider.of<ThemeCubit>(context).locale.languageCode ==
+                            "en"
+                        ? context.getDefaultSize() / 1.5
+                        : 0,
+                right:
+                    BlocProvider.of<ThemeCubit>(context).locale.languageCode ==
+                            "ar"
+                        ? context.getDefaultSize() * 2
+                        : 0,
               ),
-              addressText(context, "Quantity : n pieces"),
-              formTextField(context,
-                  textEditingController: quantityController, readOnly: true),
-              addressText(context, "Items"),
-              widget.isKnn
-                  ? const Center(
-                      child: Image(
-                          image: NetworkImage(
-                              "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")),
-                    )
-                  : SizedBox(
-                      height: context.getDefaultSize() * 25,
-                      width: double.infinity,
-                      child: ListView.builder(
-                        itemBuilder: (context, index) => photoWidget(
-                            context, widget.itemsImages![index], index),
-                        itemCount: widget.itemsImages!.length,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        physics: const BouncingScrollPhysics(),
-                      ),
-                    )
-            ])),
+              child: ListView(children: [
+                addressText(context, context.translate("Pickup_location")),
+                SizedBox(
+                  height: context.getDefaultSize() * 2,
+                ),
+                Row(children: [
+                  addressText(context, context.translate("Government_")),
+                  SizedBox(
+                    width: context.getDefaultSize() * 13,
+                  ),
+                  addressText(context, context.translate("City_")),
+                ]),
+                Row(children: [
+                  Container(
+                    width: context.getDefaultSize() * 19,
+                    height: context.getDefaultSize() * 7,
+                    child: formTextField(context,
+                        textEditingController: governmentController),
+                  ),
+                  SizedBox(
+                    width: context.getDefaultSize() * 1.3,
+                  ),
+                  Container(
+                    width: context.getDefaultSize() * 19,
+                    height: context.getDefaultSize() * 7,
+                    child: formTextField(context,
+                        textEditingController: cityController),
+                  )
+                ]),
+                addressText(
+                    context, context.translate("Remaining_address_in_detail")),
+                formTextField(context,
+                    textEditingController: locationController),
+                addressText(context, context.translate("Pickup_day")),
+                formTextField(
+                  context,
+                  textEditingController: dateController,
+                  onTap: () async {
+                    date = await _pickDate();
+                  },
+                ),
+                addressText(context, context.translate("Quantity_n_pieces")),
+                formTextField(context,
+                    textEditingController: quantityController, readOnly: true),
+                addressText(context, context.translate("Items")),
+                widget.isKnn
+                    ? const Center(
+                        child: Image(
+                            image: NetworkImage(
+                                "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")),
+                      )
+                    : SizedBox(
+                        height: context.getDefaultSize() * 25,
+                        width: double.infinity,
+                        child: ListView.builder(
+                          itemBuilder: (context, index) => photoWidget(
+                              context, widget.itemsImages![index], index),
+                          itemCount: widget.itemsImages!.length,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                        ),
+                      )
+              ]),
+            )),
             BlocConsumer<DetailsBloc, DetailsState>(
               listener: (context, state) {
                 if (state is AddRequestSucccessState) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text("Request Submitted successfully")),
+                    SnackBar(
+                        content: Text(context
+                            .translate("Request_Submitted_successfully"))),
                   );
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const BottomNavigationDelivery()),
+                          builder: (context) => const BottomNavigationDonor()),
                       (route) => false);
                 }
                 if (state is AddRequestErrorState) {
-                  if (state.message == "check your internet con``nection") {
+                  if (state.message ==
+                      context.translate("check_your_internet_connection")) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text("check your internet connection")),
+                      SnackBar(
+                          content: Text(context
+                              .translate("check_your_internet_connection"))),
                     );
                   }
                 }
@@ -242,29 +291,56 @@ class _DonationFormItemState extends State<DonationFormItem> {
                                       "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg",
                                   quantity: 1),
                             ];
-                            BlocProvider.of<DetailsBloc>(context).add(
-                                AddRequestEvent(
-                                    requestEntity: RequestEntity(
-                                        time: date,
-                                        address: {
-                                          "location": locationController.text
-                                        },
-                                        numberOfItems: totalQuantity,
-                                        userId: FirebaseAuth
-                                            .instance.currentUser!.uid,
-                                        status: "Pending",
-                                        qrScanned: false,
-                                        ),
-                                    items: items,
-                                    
-                                    ));
+                            BlocProvider.of<DetailsBloc>(context)
+                                .add(AddRequestEvent(
+                              requestEntity: RequestEntity(
+                                time: date,
+                                address: {
+                                  "government": governmentController.text,
+                                  "city": cityController.text,
+                                  "location": locationController.text
+                                },
+                                numberOfItems: totalQuantity,
+                                userId: FirebaseAuth.instance.currentUser!.uid,
+                                status: "Pending",
+                                qrScanned: false,
+                              ),
+                              items: items,
+                            ));
                           } else {
                             BlocProvider.of<DetailsBloc>(context).add(
                                 UploadImagesEvent(images: widget.itemsImages!));
                           }
                         },
-                        child: CustomButtonWidget(
-                            height: 4, width: 20, title: "Submit", fontSize: 2),
+                        child: // BlocConsumer<HomeBloc, HomeState>(
+                            //         listener: (context, state) {
+                            //           if (state is AcceptRequsetSuccessState) {
+                            //             ScaffoldMessenger.of(context).showSnackBar(
+                            //                 const SnackBar(
+                            //                     content: Text(
+                            //                         "Request ِAdded Successfuly")));
+                            //             Navigator.pushAndRemoveUntil(
+                            //                 context,
+                            //                 MaterialPageRoute(
+                            //                     builder: (_) =>
+                            //                         const BottomNavigationDonor()),
+                            //                 (route) => false);
+                            //           }
+                            //         },
+                            //         builder: (context, state) {
+                            //           if (state is AcceptRequsetLoadingState) {
+                            //             return const Center(
+                            //               child: CircularProgressIndicator(),
+                            //             );
+                            //           }
+                            //         return
+                            CustomButtonWidget(
+                                height: 4,
+                                width: 18,
+                                title: context.translate("Accept"),
+                                fontSize: 2),
+                        //   },
+                        //  )
                       ),
                     ),
                   );

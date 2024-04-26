@@ -1,5 +1,6 @@
 import 'package:aid_humanity/core/constants/constants.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:aid_humanity/core/widgets/custom_button_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -55,7 +56,7 @@ class _ChoiceItemGoogleState extends State<ChoiceItemGoogle> {
               height: context.getDefaultSize() * 20,
             ),
             Text(
-              "Who are you ?",
+              context.translate("Who are you ?"),
               style: TextStyle(
                   color: Colors.black,
                   fontSize: context.getDefaultSize() * 3,
@@ -103,7 +104,7 @@ class _ChoiceItemGoogleState extends State<ChoiceItemGoogle> {
                                 height: context.getDefaultSize() * 2,
                               ),
                               Text(
-                                "Donor",
+                                context.translate("Donor"),
                                 style: TextStyle(
                                     color: pressedDon
                                         ? Colors.white
@@ -151,7 +152,7 @@ class _ChoiceItemGoogleState extends State<ChoiceItemGoogle> {
                                 height: context.getDefaultSize() * 2,
                               ),
                               Text(
-                                "Delivery",
+                                context.translate("Delivery"),
                                 style: TextStyle(
                                     color: pressedDel
                                         ? Colors.white
@@ -190,7 +191,7 @@ class _ChoiceItemGoogleState extends State<ChoiceItemGoogle> {
                           "id": FirebaseAuth.instance.currentUser!.uid,
                         });
                       } else {
-                        print("Document does not exist!");
+                        print(context.translate("Document does not exist!"));
                       }
                     });
 
@@ -217,7 +218,7 @@ class _ChoiceItemGoogleState extends State<ChoiceItemGoogle> {
                           "id": FirebaseAuth.instance.currentUser!.uid,
                         });
                       } else {
-                        print("Document does not exist!");
+                        print(context.translate("Document does not exist!"));
                       }
                     });
                     sharedPreferences.setString("userType", "Donor");
@@ -229,7 +230,7 @@ class _ChoiceItemGoogleState extends State<ChoiceItemGoogle> {
                 }
               },
               child: CustomButtonWidget(
-                title: "Done",
+                title: context.translate("Done"),
                 fontSize: 2,
                 height: 4.3,
                 width: 20,

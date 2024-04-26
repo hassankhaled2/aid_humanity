@@ -14,6 +14,7 @@ import 'package:aid_humanity/injection_container.dart' as di;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'Features/auth/presentation/pages/login_page.dart';
 import 'Features/home/presentation/pages/choice_page.dart';
@@ -56,6 +57,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => di.getIt<DetailsBloc>()),

@@ -3,6 +3,7 @@ import 'package:aid_humanity/Features/home/presentation/widgets/home_delivery_wi
 import 'package:aid_humanity/core/constants/constants.dart';
 
 import 'package:aid_humanity/core/entities/request_entity.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,15 +41,14 @@ class _SearchPageState extends State<SearchPage> {
     return allRequests
         .where((request) =>
             (request.address?.isNotEmpty ?? false) &&
-                request.address["location"]
+                request.address["government"]
                     .toString()
                     .toLowerCase()
                     .contains(searchTextLower) ||
-            (request.numberOfItems?.toString()?.isNotEmpty ?? false) &&
-                request.numberOfItems
-                    .toString()
-                    .toLowerCase()
-                    .contains(searchTextLower))
+            request.address["city"]
+                .toString()
+                .toLowerCase()
+                .contains(searchTextLower))
         .toList();
   }
 
@@ -72,7 +72,7 @@ class _SearchPageState extends State<SearchPage> {
                 borderSide: BorderSide(
               color: kPrimaryColor,
             )),
-            hintText: 'Search requests...',
+            hintText: context.translate('Search requests...'),
           ),
         ),
       ),
@@ -88,7 +88,7 @@ class _SearchPageState extends State<SearchPage> {
           // Conditional rendering for UI
           return _allRequests.isNotEmpty
               ? _buildSearchResults()
-              : const Center(child: Text('No results found'));
+              : Center(child: Text(context.translate('No results found')));
         },
       ),
     );
@@ -101,7 +101,10 @@ class _SearchPageState extends State<SearchPage> {
       itemCount: _filteredRequests.length,
       key: const PageStorageKey<String>('CardDeliverWidget'),
       itemBuilder: (context, index) {
-        return CardWidget(requestEntity: _filteredRequests[index]);
+        return CardWidget(
+          requestEntity: _filteredRequests[index],
+          isDonor: false,
+        );
       },
     );
   }
