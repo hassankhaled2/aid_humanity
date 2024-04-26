@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'Features/auth/presentation/pages/login_page.dart';
+import 'Features/auth/presentation/widgets/circle_avatar_widget.dart';
 import 'Features/home/presentation/pages/choice_page.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
 import 'core/widgets/routes.dart';
@@ -64,7 +65,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => di.getIt<DetailsBloc>()),
-        BlocProvider(create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
+        BlocProvider(
+            create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
         BlocProvider(
           create: (_) => ClassificaitonCubit(),
         ),
@@ -76,22 +78,28 @@ class MyApp extends StatelessWidget {
         //     }
         //
         // ),
-
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
           return MaterialApp(
             routes: routes,
 
-            /// see it if worked or not
-            home: FirebaseAuth.instance.currentUser!=null&&(FirebaseAuth.instance.currentUser!.emailVerified||FirebaseAuth.instance.currentUser!.phoneNumber!=null)?ChoicePage():SplashScreen(),
-          //CircleAvatarWidget(),
+            home: FirebaseAuth.instance.currentUser != null &&
+                    FirebaseAuth.instance.currentUser!.emailVerified
+                ? ChoicePage()
+                : SplashScreen(),
+            // CircleAvatarWidget(),
+
+            //CircleAvatarWidget(),
             debugShowCheckedModeBanner: false,
             locale: BlocProvider.of<ThemeCubit>(context).locale,
-            supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provide , which langs to use in our app
-            localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
+            supportedLocales: AppLocalizationsSetup
+                .supportedLocales, // this line to provide , which langs to use in our app
+            localizationsDelegates:
+                AppLocalizationsSetup.localizationsDelegates,
             localeResolutionCallback: (deviceLocale, supportedLocales) {
-              return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
+              return AppLocalizationsSetup.localeResolutionCallback(
+                  deviceLocale!, supportedLocales);
             },
             theme: getThemeDataLight, //const HomeView(),
           );

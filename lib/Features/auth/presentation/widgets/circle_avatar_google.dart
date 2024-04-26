@@ -1,12 +1,10 @@
 import 'dart:io';
 
 import 'package:aid_humanity/Features/auth/presentation/pages/choose_page_google.dart';
-import 'package:aid_humanity/Features/auth/presentation/widgets/choose_item_google.dart';
-import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
-import 'package:aid_humanity/Features/profile/presentation/pages/profile_page.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -49,7 +47,7 @@ class _CircleAvatarGoogleState extends State<CircleAvatarGoogle> {
           // crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(context.translate('Add Your Image')),
+            Text(context.translate("Add_Your_Image")),
             Center(
               child: Stack(
                 clipBehavior: Clip.none, // Clip overflowing widgets
@@ -59,7 +57,17 @@ class _CircleAvatarGoogleState extends State<CircleAvatarGoogle> {
                     radius:context.getDefaultSize() * 7 ,
                     child: url == null
                         ? Text('')
-                        : ClipOval(child: Image.network(url!, fit: BoxFit.fill)),
+                        : ClipOval(
+                      child: FancyShimmerImage(
+                        imageUrl: url!,
+                        shimmerDuration: Duration(seconds: 2),
+                        boxFit: BoxFit.fill,
+                        width: context.getDefaultSize() * 20,
+                        height: context.getDefaultSize() * 20,
+                        shimmerBaseColor: Colors.grey,
+                        shimmerHighlightColor: Colors.white,
+                      ),
+                    ),
                   ),
                   Positioned(
                     right: context.getDefaultSize() * 0.2, // Adjust positioning as needed
@@ -100,21 +108,24 @@ class _CircleAvatarGoogleState extends State<CircleAvatarGoogle> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (select != null) { // Check if an image is selected
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ChoicePageGoogle()),
-                  );
-                } else {
-                  // Handle the case where no image is selected (optional)
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      duration: Duration(seconds: 4),
-                      content: Text(context.translate('Please select an image to Submit')),
-                    ),
-                  );
-                }
+                Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => ChoicePageGoogle()),
+                      );
+                // if (select != null) { // Check if an image is selected
+                //   Navigator.of(context).push(
+                //     MaterialPageRoute(builder: (context) => ChoicePageGoogle()),
+                //   );
+                // } else {
+                //   // Handle the case where no image is selected (optional)
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     SnackBar(
+                //       duration: Duration(seconds: 4),
+                //       content: Text('Please select an image to Submit'),
+                //     ),
+                //   );
+                // }
               },
-              child: Text(context.translate("Submit")),
+              child:  Text(context.translate("Skip")),
             ),
           ],
         )

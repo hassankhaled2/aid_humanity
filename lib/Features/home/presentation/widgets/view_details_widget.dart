@@ -325,7 +325,7 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                                     ),
                                   ),
                                   Text(
-                                    context.translate("City"),
+                                    context.translate("_City"),
                                     style: TextStyle(
                                         color: kPrimaryColor,
                                         fontSize:

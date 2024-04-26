@@ -56,7 +56,7 @@ class _ChoiceItemGoogleState extends State<ChoiceItemGoogle> {
               height: context.getDefaultSize() * 20,
             ),
             Text(
-              context.translate("Who are you ?"),
+              context.translate("Who_are_you?"),
               style: TextStyle(
                   color: Colors.black,
                   fontSize: context.getDefaultSize() * 3,
@@ -191,7 +191,7 @@ class _ChoiceItemGoogleState extends State<ChoiceItemGoogle> {
                           "id": FirebaseAuth.instance.currentUser!.uid,
                         });
                       } else {
-                        print(context.translate("Document does not exist!"));
+                        print(context.translate("Document_does_not_exist"));
                       }
                     });
 
@@ -218,7 +218,7 @@ class _ChoiceItemGoogleState extends State<ChoiceItemGoogle> {
                           "id": FirebaseAuth.instance.currentUser!.uid,
                         });
                       } else {
-                        print(context.translate("Document does not exist!"));
+                        print(context.translate("Document_does_not_exist"));
                       }
                     });
                     sharedPreferences.setString("userType", "Donor");

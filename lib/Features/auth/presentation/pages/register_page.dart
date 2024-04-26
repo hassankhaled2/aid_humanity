@@ -1,17 +1,21 @@
 import 'dart:io';
-
+import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/constants/constants.dart';
 import '../../../../core/utils/styles/styles.dart';
 import '../widgets/text_form_field.dart';
 import 'extra_data_google.dart';
@@ -33,7 +37,14 @@ class _State extends State<RegisterPage> {
   TextEditingController phone = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  TextEditingController address = TextEditingController();
+  TextEditingController currentStreet = TextEditingController();
+
+  TextEditingController street = TextEditingController();
+  TextEditingController region = TextEditingController();
+  TextEditingController city = TextEditingController();
+  TextEditingController country = TextEditingController();
+  TextEditingController floorNumber = TextEditingController();
+  TextEditingController flatNumber = TextEditingController();
   GlobalKey<FormState>formState=GlobalKey();
   bool isloading =true;
   bool isPassword =true;
@@ -41,6 +52,31 @@ class _State extends State<RegisterPage> {
 
   File?select;
   String? url;
+
+  String? _currentStreet;
+  String? _region;
+  String? _city;
+  String? _country;
+
+  Position? _currentPosition;
+
+  SelectAndUploadImage()async {
+
+
+    final reteurnimage= await ImagePicker().pickImage(source: ImageSource.gallery);
+    select=File(reteurnimage!.path);
+    var imageName=basename(reteurnimage.path);
+    // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
+    var refStorage =FirebaseStorage.instance.ref("usersImages").child(imageName);
+    refStorage.putFile(select!);
+
+    url=await refStorage.getDownloadURL();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("userImage",url!);
+    setState(() {
+
+    });
+  }
   // SavePref(String fullName,String phone,String email,String address)async
   // {
   //   SharedPreferences sharedPreference=await SharedPreferences.getInstance();
@@ -53,22 +89,91 @@ class _State extends State<RegisterPage> {
   //   print(sharedPreference.getString("email"));
   //   print(sharedPreference.getString("address"));
   // }
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
-  SelectAndUploadImage()async {
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
+  }
 
+  Future<void> _getCurrentPosition() async {
+    final hasPermission = await _handleLocationPermission();
 
-    final reteurnimage= await ImagePicker().pickImage(source: ImageSource.gallery);
-    select=File(reteurnimage!.path);
-    var imageName=basename(reteurnimage.path);
-    // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
-    var refStorage =FirebaseStorage.instance.ref("usersImages").child(imageName);
-    refStorage.putFile(select!);
-    url=await refStorage.getDownloadURL();
-
-    setState(() {
-
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high,)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+      _getAddressFromLatLng(_currentPosition!);
+    }).catchError((e) {
+      debugPrint(e);
     });
   }
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    await placemarkFromCoordinates(
+        _currentPosition!.latitude, _currentPosition!.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        _currentStreet = '${place.street}';
+        _region ='${place.subAdministrativeArea}';
+        _city='${place.administrativeArea}';
+        _country='${place.country}';
+
+        street.text=_currentStreet??"";
+        region.text=_region??'';
+        city.text=_city??'';
+        country.text=_country??'';
+      });
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentPosition();
+
+
+  }
+
+  // SelectAndUploadImage()async {
+  //
+  //
+  //   final reteurnimage= await ImagePicker().pickImage(source: ImageSource.gallery);
+  //   select=File(reteurnimage!.path);
+  //   var imageName=basename(reteurnimage.path);
+  //   // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
+  //   var refStorage =FirebaseStorage.instance.ref("usersImages").child(imageName);
+  //   refStorage.putFile(select!);
+  //   url=await refStorage.getDownloadURL();
+  //
+  //   setState(() {
+  //
+  //   });
+  // }
   // addUsersData() async{
   //   if(formState.currentState!.validate()) {
   //     try {
@@ -95,9 +200,7 @@ class _State extends State<RegisterPage> {
   //   // Call the user's CollectionReference to add a new user
   //
   // }
-  String displayName ='';
-  String Email ='';
-  String photoUrl='';
+
   Future signInWithGoogle(BuildContext context) async {
     // final user=FirebaseAuth.instance.currentUser;
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -127,57 +230,10 @@ class _State extends State<RegisterPage> {
     return Scaffold
       (
       body: Padding(
-        padding: const EdgeInsets.only(top: 95,left: 20,right: 20),
+        padding: EdgeInsets.all(context.getDefaultSize()*2),
         child: ListView(
           children:
           [
-            // Center(
-            //   child: Stack(
-            //     clipBehavior: Clip.none, // Clip overflowing widgets
-            //     children: [
-            //       CircleAvatar(
-            //
-            //         radius: 50.0,
-            //         child: url == null
-            //             ? Text('')
-            //             : ClipOval(child: Image.network(url!, fit: BoxFit.fill)),
-            //       ),
-            //       Positioned(
-            //         right: context.getDefaultSize() * 0.2, // Adjust positioning as needed
-            //         bottom:context.getDefaultSize() * 0, // Adjust positioning as needed
-            //         child: Container(
-            //           height: context.getDefaultSize() * 3.5,
-            //           width: context.getDefaultSize() * 3.5,
-            //           decoration: BoxDecoration(
-            //             color: kPrimaryColor, // Change color as desired
-            //             shape: BoxShape.circle,
-            //           ),
-            //           child: IconButton(
-            //             icon: Icon(
-            //               Icons.add,
-            //               size: context.getDefaultSize() * 2,
-            //               color: Colors.white,
-            //             ),
-            //             onPressed:()
-            //             {
-            //               SelectAndUploadImage();
-            //
-            //
-            //             },
-            //           ),
-            //         ),
-            //       ),
-            //       // ElevatedButton(onPressed: ()
-            //       // {
-            //       //   Navigator.of(context).push(MaterialPageRoute(builder: (context)
-            //       //   {
-            //       //     return ProfilePage(k: url!,);
-            //       //   }));
-            //       // }, child:Text("nh")
-            //       // )
-            //     ],
-            //   ),
-            // ),
             Form(
               key: formState,
               child: Column(
@@ -185,158 +241,295 @@ class _State extends State<RegisterPage> {
                 children:
                 [
 
-                   Padding(
-                    padding: EdgeInsets.only(left: 5),
-                    child: Text(context.translate('Sign Up'),style: Styles.textStyle25,),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.only(top: 40,),
-                    child: CustomTextForm(
-                      obscureText: false,
-
-
-                      hinttext:context.translate("Full Name") ,
-                      mycontroller:fullName ,
-                      validator: (val)
-                      {
-                        if(val=="")
-                        {
-                          return context.translate('can not to be empty');
-                        }
-                        return null;
-                      },
-
-                    ),
-
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child:CustomTextForm(
-                      keyboardType: TextInputType.phone,
-                      // inputFormatters: [
-                      //   FilteringTextInputFormatter.digitsOnly
-
-                      // prefixIcon: CountryCodePicker(
-                      //   onChanged: (CountryCode countryCode) {},
-                      //   initialSelection: 'EG',
-                      //   showFlag: true,
-                      //   favorite: const ['+20', 'EG'],
-                      //   showCountryOnly: false,
-                      //   showOnlyCountryWhenClosed: false,
-                      //   alignLeft: false,
-                      //   showDropDownButton: true,
-                      //   padding: EdgeInsets.zero,
-                      // ),                      // inputFormatters:
-                      // [
-                      //   FilteringTextInputFormatter.allow(RegExp(r'^\-?(\d+\.?\d{0,2})?')),
-                      // ],
-                      obscureText: false,
-
-                      hinttext:"+20XXXXXXXXXX" ,
-                      mycontroller:phone ,
-                      validator: (val)
-                      {
-                        if(val=="")
-                        {
-                          return context.translate('can not to be empty');
-                        }
-                        return null;
-                      },
-
-                    ),
-//             child: IntlPhoneField(
-//               autofocus: true,
-//               focusNode:FocusNode(),
-//               // searchText:b ,
-//               // initialCountryCode: b,
-//                initialCountryCode: "IN",
-//                 controller:phone ,
-// onCountryChanged: (value)
-// {
-//   print("hhhhhhhhhhhhhhhhhhhhhh""${value.code}");
-// },
-//  onChanged: (value)
-//  {
-//
-//    print("Countryhghghghghghghghghghghghg""${value.countryCode}");
-//  },
-//               decoration: InputDecoration(
-//
-//                 hintText: 'Phone Number',
-//                 border: OutlineInputBorder(
-//                   borderSide: BorderSide(),
-//                 ),
-//               ),
-//             ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 15),
-                    child: CustomTextForm(
-                      maxLines: 4,
-                      obscureText: false,
-                      hinttext:context.translate("Enter your Address") ,
-                      mycontroller:address ,
-                      validator: (val)
-                      {
-                        if(val=="")
-                        {
-                          return context.translate('can not to be empty');
-                        }
-                        return null;
-                      },
-
-                    ),
-
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 15,),
-                    child: CustomTextForm(
-                      obscureText: false,
-                      hinttext:context.translate("Email") ,
-                      mycontroller:email ,
-                      validator: (val)
-                      {
-                        if(val=="")
-                        {
-                          return context.translate('can not to be empty');
-                        }
-                        return null;
-                      },
-
-                    ),
-
-                  ),
-
-                  Padding(
-                      padding: const EdgeInsets.only(top: 15,),
-                      child: CustomTextForm(
-                        obscureText:isPassword,
-                        suffix: isPassword?Icons.visibility:Icons.visibility_off,
-                        suffixpressed:  ()
-                        {
-                          setState(() {
-                            isPassword=!isPassword;
-                          });
-                        },
-                        hinttext: context.translate("Password"),
-                        mycontroller: password,
-                        validator: (val)
-                        {
-                          if(val=="")
-                          {
-                            return context.translate('can not to be empty');
-                          }
-                          return null;
-                        },
-
-
-                      )
-                  ),
-                  const SizedBox(height: 50,),
+                  SizedBox(height: context.getDefaultSize()*1,),
+                   Text(context.translate('Sign_up'),style: Styles.textStyle25,),
+                  SizedBox(height: context.getDefaultSize()*1.5,),
                   Center(
-                    child: Container(
+                    child: Stack(
+                      clipBehavior: Clip.none, // Clip overflowing widgets
+                      children: [
+                        CircleAvatar(
+
+                          radius:context.getDefaultSize() * 6 ,
+                          child: url == null
+                              ? Text('')
+                              : ClipOval(
+                            child: FancyShimmerImage(
+                              imageUrl: url!,
+                              shimmerDuration: Duration(seconds: 2),
+                              boxFit: BoxFit.fill,
+                              width: context.getDefaultSize() * 20,
+                              height: context.getDefaultSize() * 20,
+                              shimmerBaseColor: Colors.grey,
+                              shimmerHighlightColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          right: context.getDefaultSize() * 0.2, // Adjust positioning as needed
+                          bottom:context.getDefaultSize() * 0, // Adjust positioning as needed
+                          child: Container(
+                            height: context.getDefaultSize() * 3.5,
+                            width: context.getDefaultSize() * 3.5,
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor, // Change color as desired
+                              shape: BoxShape.circle,
+                            ),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.add,
+                                size: context.getDefaultSize() * 2,
+                                color: Colors.white,
+                              ),
+                              onPressed:()
+                              {
+                                SelectAndUploadImage();
+                                // ProfilePage(k: url!);
+
+                              },
+                            ),
+                          ),
+                        ),
+                        // ElevatedButton(onPressed: ()
+                        // {
+                        //   Navigator.of(context).push(MaterialPageRoute(builder: (context)
+                        //   {
+                        //     return ProfilePage(k: url!,);
+                        //   }));
+                        // }, child:Text("nh")
+                        // )
+                        // ProfilePage(k:url!),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: context.getDefaultSize()*4,),
+                  CustomTextForm(
+                    obscureText: false,
+                    hinttext:context.translate("Full_Name") ,
+                    mycontroller:fullName ,
+                    validator: (val)
+                    {
+                      if(val=="")
+                      {
+                        return context.translate("can_not_to_be_empty");
+                      }
+                      return null;
+                    },
+
+                  ),
+                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  CustomTextForm(
+                    keyboardType: TextInputType.phone,
+                    // inputFormatters: [
+                    //   FilteringTextInputFormatter.digitsOnly
+
+                    // prefixIcon: CountryCodePicker(
+                    //   onChanged: (CountryCode countryCode) {},
+                    //   initialSelection: 'EG',
+                    //   showFlag: true,
+                    //   favorite: const ['+20', 'EG'],
+                    //   showCountryOnly: false,
+                    //   showOnlyCountryWhenClosed: false,
+                    //   alignLeft: false,
+                    //   showDropDownButton: true,
+                    //   padding: EdgeInsets.zero,
+                    // ),                      // inputFormatters:
+                    // [
+                    //   FilteringTextInputFormatter.allow(RegExp(r'^\-?(\d+\.?\d{0,2})?')),
+                    // ],
+                    obscureText: false,
+
+                    hinttext:"+20XXXXXXXXXX" ,
+                    mycontroller:phone ,
+                    validator: (val)
+                    {
+                      if(val=="")
+                      {
+                        return context.translate("can_not_to_be_empty");
+                      }
+                      return null;
+                    },
+
+                  ),
+                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width:context.getDefaultSize()*18 ,
+                        child: CustomTextForm(
+                          // isDeny: true,
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:context.translate("No_StreetName") ,
+                          mycontroller:street,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return context.translate("can_not_to_be_empty");
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+                      SizedBox(width: context.getDefaultSize()*1,),
+                      SizedBox(
+                        width:context.getDefaultSize()*18 ,
+                        child: CustomTextForm(
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:context.translate("region") ,
+                          mycontroller:region,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return context.translate("can_not_to_be_empty");
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: context.getDefaultSize()*1,),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width:context.getDefaultSize()*25,
+                        child: CustomTextForm(
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:context.translate("City") ,
+                          mycontroller:city,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return context.translate("can_not_to_be_empty");
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+                      SizedBox(width: context.getDefaultSize()*1,),
+                      SizedBox(
+                        width:context.getDefaultSize()*11 ,
+                        child: CustomTextForm(
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:context.translate("country") ,
+                          mycontroller:country,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return context.translate("can_not_to_be_empty");
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+
+                    ],
+                  ),
+                  SizedBox(height: context.getDefaultSize()*1,),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width:context.getDefaultSize()*12 ,
+                        child: CustomTextForm(
+                          inputFormatters:
+                          [
+                            LengthLimitingTextInputFormatter(4),
+                          ],
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:context.translate("FloorNo") ,
+                          mycontroller:floorNumber,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return context.translate("can_not_to_be_empty");
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+                      SizedBox(width: context.getDefaultSize()*1,),
+                      SizedBox(
+                        width:context.getDefaultSize()*11,
+                        child: CustomTextForm(
+                          inputFormatters:
+                          [
+                            LengthLimitingTextInputFormatter(4),
+                          ],
+                          maxLines: 1,
+                          obscureText: false,
+                          hinttext:context.translate("FlatNo") ,
+                          mycontroller:flatNumber,
+                          validator: (val)
+                          {
+                            if(val=="")
+                            {
+                              return context.translate("can_not_to_be_empty");
+                            }
+                            return null;
+                          },
+
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  CustomTextForm(
+                    obscureText: false,
+                    hinttext:context.translate("Email") ,
+                    mycontroller:email ,
+                    validator: (val)
+                    {
+                      if(val=="")
+                      {
+                        return context.translate("can_not_to_be_empty");
+                      }
+                      return null;
+                    },
+
+                  ),
+                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  CustomTextForm(
+                    obscureText:isPassword,
+                    suffix: isPassword?Icons.visibility:Icons.visibility_off,
+                    suffixpressed:  ()
+                    {
+                      setState(() {
+                        isPassword=!isPassword;
+                      });
+                    },
+                    hinttext: context.translate("Password"),
+                    mycontroller: password,
+                    validator: (val)
+                    {
+                      if(val=="")
+                      {
+                        return context.translate("can_not_to_be_empty");
+                      }
+                      return null;
+                    },
+
+
+                  ),
+                  SizedBox(height: context.getDefaultSize()*4,),
+                  Center(
+                    child:Container(
                       height: 35,
                       width: 210,
                       child: ElevatedButton(
@@ -347,11 +540,11 @@ class _State extends State<RegisterPage> {
                           async {
           if(formState.currentState!.validate()) {
       try {
-       final creditional= await FirebaseAuth.instance.createUserWithEmailAndPassword(
+
+        final creditional= await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email.text,
           password: password.text,
         );
-
        final d= FirebaseAuth.instance.currentUser!.uid;
         SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
         sharedPreferences.setString("userId", d);
@@ -363,10 +556,17 @@ class _State extends State<RegisterPage> {
       // final c= sharedPreferences.getString("categories");
       //  CollectionReference<Object?> Cat = c as CollectionReference<Object?>;
        DocumentReference add=await categories.add({
-         "Full Name":fullName.text,
+         "fullName":fullName.text,
          "Email":email.text,
          "Phone":phone.text,
-         "Address":address.text,
+         "street":street.text,
+         "city":city.text,
+         "region":region.text,
+         "country":country.text,
+         "flatNumber":flatNumber.text,
+         "floorNumber":floorNumber.text,
+         "LAT":_currentPosition?.latitude??'',
+         "LNG":_currentPosition?.longitude??'',
          "id": userId
        });
        doc = add.id;
@@ -377,8 +577,14 @@ class _State extends State<RegisterPage> {
        // sharedPreferences.setString("userId", d);
        // ChoiceItem(g: d,);
        // addUsersData();
+
       await FirebaseAuth.instance.currentUser!.sendEmailVerification();
        Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+          elevation: 1,
+          duration: Duration(seconds: 4),
+          content: Text(context.translate("Verify_Your_Email")),
+        ));
     // if(creditional.user!.emailVerified)
     // {
     // Navigator.of(context).pushReplacementNamed(bottomNavigation);
@@ -401,23 +607,23 @@ class _State extends State<RegisterPage> {
             context: context,
             dialogType: DialogType.error,
             animType: AnimType.rightSlide,
-            title: context.translate('Error'),
-            desc:context.translate( 'Try another email or password'),
+            title: context.translate("Error"),
+            desc:context.translate( "Try_another_email_or_password"),
             buttonsTextStyle: const TextStyle(color: Colors.black),
             showCloseIcon: true,
 
           ).show();
-          print(context.translate('The account already exists for that email.'));
+          print(context.translate("The_account_already_exists_for_that_email"));
         }
       } catch (e) {
         print(e);
       }
     }
                           }, child:Text
-                        (context.translate('Sign Up'))),
+                        (context.translate("Sign_up"))),
                     ),
                   ),
-                  SizedBox(height: 35,),
+                  SizedBox(height: context.getDefaultSize()*4,),
                   Row(
                       children: <Widget>[
                         Expanded(
@@ -431,29 +637,27 @@ class _State extends State<RegisterPage> {
                         ),
                       ]
                   ),
-                  const SizedBox(height: 15,),
+                  SizedBox(height: context.getDefaultSize()*1.6,),
                   Center(
                     child: ElevatedButton.icon(
                       style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
                       onPressed: ()
                       {
                         signInWithGoogle(context);
-                      }, icon:Icon(FontAwesomeIcons.google), label:Text(context.translate('Continue with Google'),style: TextStyle(color: Colors.white),),),
+                      }, icon:Icon(FontAwesomeIcons.google), label:Text(context.translate("Continue_with_Google"),style: TextStyle(color: Colors.white),),),
                   ),
-                  const SizedBox(height: 18,),
+                  SizedBox(height: context.getDefaultSize()*4,),
                   Row(
                     mainAxisAlignment:MainAxisAlignment.center,
                     children:
                     [
-                     Text(context.translate('Are you have account?')),
+                     Text(context.translate("Are_you_have_account")),
                       TextButton(onPressed: ()
                        {
-
-                        //pushReplacementNamed --> علشان ميعملش back button
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>LoginPage(),
+                        Navigator.of(context).pop(MaterialPageRoute(builder: (context) =>LoginPage(),
                         )
                         );
-                        }, child:Text(context.translate('Sign in'),style: TextStyle(color: Colors.orange))),
+                        }, child:Text(context.translate("Sign_in"),style: TextStyle(color: Colors.orange))),
 
 
 

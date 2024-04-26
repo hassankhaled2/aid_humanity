@@ -180,11 +180,16 @@ import 'package:flutter/material.dart';
 import '../profile_page_widgets/profile_user_item_widget.dart';
 /// handle google sign in details with google sign up
 class SliverUSerFormWidget extends StatefulWidget {
-  SliverUSerFormWidget({super.key, required this.fullName, required this.email, required this.phone, required this.address,});
+  SliverUSerFormWidget({super.key, required this.fullName, required this.email, required this.phone, required this.street, required this.region, required this.city, required this.country, required this.flatNumber, required this.floorNumber,});
   final String fullName;
   final String email;
   final String phone;
-  final String address;
+  final String street;
+  final String region;
+  final String city;
+  final String country;
+  final String flatNumber;
+  final String floorNumber;
   @override
   State<SliverUSerFormWidget> createState() => _SliverUSerFormWidgetState();
 }
@@ -257,38 +262,115 @@ class _SliverUSerFormWidgetState extends State<SliverUSerFormWidget> {
               SizedBox(
                 height: context.getDefaultSize() * 1.5,
               ),
-              // Text(
-              //   "Password",
-              //   style: TextStyle(fontSize: context.getDefaultSize() * 2, fontWeight: FontWeight.bold),
-              // ),
-              // SizedBox(
-              //   height: context.getDefaultSize() * 0.3,
-              // ),
-              // TextFromWidget(
-              //   controller: TextEditingController(text: "Omar Salama"),
-              //   obscureText: false,
-              //   prefixIcon: Icons.lock_open_outlined,
-              //   keyboardType: TextInputType.text,
-              //   labelText: null,
-              // ),
+              Text(
+                "Street",
+                style: TextStyle(fontSize: context.getDefaultSize() * 2, fontWeight: FontWeight.bold),
+              ),
               SizedBox(
-                height: context.getDefaultSize() * 1.5,
+                height: context.getDefaultSize() * 1.3,
+              ),
+              TextFromWidget(
+                maxLines: 1,
+                controller: TextEditingController(text:widget.street),
+                obscureText: false,
+                prefixIcon: Icons.location_on_outlined,
+                keyboardType: TextInputType.text,
+                labelText: null,
+              ),
+              SizedBox(
+                height: context.getDefaultSize() * 1.3,
               ),
               Text(
-                "Address",
+                "Region",
+                style: TextStyle(fontSize: context.getDefaultSize() * 2, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: context.getDefaultSize() * 1.3,
+              ),
+              TextFromWidget(
+                maxLines: 1,
+                controller: TextEditingController(text:widget.region),
+                obscureText: false,
+                prefixIcon: Icons.location_on_outlined,
+                keyboardType: TextInputType.text,
+                labelText: null,
+              ),
+              SizedBox(
+                height: context.getDefaultSize() * 2,
+              ),
+              Text(
+                "City",
                 style: TextStyle(fontSize: context.getDefaultSize() * 2, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: context.getDefaultSize() * 0.3,
               ),
               TextFromWidget(
-                maxLines: 5,
-                controller: TextEditingController(text:widget.address),
+                maxLines: 1,
+                controller: TextEditingController(text:widget.city),
                 obscureText: false,
                 prefixIcon: Icons.location_on_outlined,
                 keyboardType: TextInputType.text,
                 labelText: null,
-              )
+              ),
+              SizedBox(
+                height: context.getDefaultSize() * 1.5,
+              ),
+              Text(
+                "Country",
+                style: TextStyle(fontSize: context.getDefaultSize() * 2, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: context.getDefaultSize() * 1.5,
+              ),
+              TextFromWidget(
+                maxLines: 1,
+                controller: TextEditingController(text:widget.country),
+                obscureText: false,
+                prefixIcon: Icons.location_on_outlined,
+                keyboardType: TextInputType.text,
+                labelText: null,
+              ),
+              SizedBox(
+                height: context.getDefaultSize() *1.3,
+              ),
+              Text(
+                "floorNumber",
+                style: TextStyle(fontSize: context.getDefaultSize() * 2, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: context.getDefaultSize() * 0.3,
+              ),
+              TextFromWidget(
+                maxLines: 1,
+                controller: TextEditingController(text:widget.floorNumber),
+                obscureText: false,
+                prefixIcon: Icons.location_on_outlined,
+                keyboardType: TextInputType.text,
+                labelText: null,
+              ),
+              SizedBox(
+                height: context.getDefaultSize() * 1.5,
+              ),
+              Text(
+                "flatNumber",
+                style: TextStyle(fontSize: context.getDefaultSize() * 2, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: context.getDefaultSize() *1.3,
+              ),
+              TextFromWidget(
+                maxLines: 1,
+                controller: TextEditingController(text:widget.flatNumber),
+                obscureText: false,
+                prefixIcon: Icons.location_on_outlined,
+                keyboardType: TextInputType.text,
+                labelText: null,
+              ),
+              SizedBox(
+                height: context.getDefaultSize() * 1.5,
+              ),
+
             ],
           )
         ],

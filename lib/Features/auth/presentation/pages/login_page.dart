@@ -6,6 +6,8 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../core/utils/app_router/app_router.dart';
 import '../../../../core/utils/styles/styles.dart';
@@ -50,7 +52,63 @@ class _State extends State<LoginPage> {
       return ExtaDataGoogle(displayName: displayName, Email: email, id: id);
     }), (route) => false);
   }
+  String? _currentAddress;
+  Position? _currentPosition;
 
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+          content: Text(
+              context.translate("Location_services"))));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.translate("Location_permissions_denied"))));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+          content: Text(
+              context.translate("Location_permissions_permanently_denied"))));
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _getCurrentPosition() async {
+    final hasPermission = await _handleLocationPermission();
+
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high,)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+      _getAddressFromLatLng(_currentPosition!);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    await placemarkFromCoordinates(
+        _currentPosition!.latitude, _currentPosition!.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        _currentAddress = '${place.street},${place.subAdministrativeArea},${place.administrativeArea},${place.country}';
+      });
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,18 +129,18 @@ class _State extends State<LoginPage> {
                     context.translate("Welcome"),
                     style: Styles.textStyle25,
                   ),
-                  Text(context.translate('Back!'), style: Styles.textStyle25),
+                  Text(context.translate("Back"), style: Styles.textStyle25),
                   SizedBox(
                     height: context.getDefaultSize() / 2,
                   ),
                   Row(
                     children: [
                       Text(
-                        context.translate('Sign in '),
+                        context.translate("Sign_in"),
                         style:
                             Styles.textStyle17.copyWith(color: Colors.orange),
                       ),
-                      Text(context.translate('to your account'),
+                      Text(context.translate("to_your_account"),
                           style: TextStyle(
                               fontSize: context.getDefaultSize() * 1.6,
                               fontWeight: FontWeight.bold))
@@ -98,7 +156,7 @@ class _State extends State<LoginPage> {
                       mycontroller: email,
                       validator: (val) {
                         if (val == "") {
-                          return context.translate('can not to be empty');
+                          return context.translate("can_not_to_be_empty");
                         }
                         return null;
                       },
@@ -123,7 +181,7 @@ class _State extends State<LoginPage> {
                         mycontroller: password,
                         validator: (val) {
                           if (val == "") {
-                            return context.translate('can not to be empty');
+                            return context.translate("can_not_to_be_empty");
                           }
                           return null;
                         },
@@ -142,9 +200,9 @@ class _State extends State<LoginPage> {
                                   showCloseIcon: true,
                                   dialogType: DialogType.warning,
                                   animType: AnimType.rightSlide,
-                                  title: context.translate('Error'),
+                                  title: context.translate("Error"),
                                   desc:
-                                      context.translate('please enter your email after that enter forget password'),
+                                      context.translate("please_enter_your_email_after_that_enter_forget_password"),
                                 ).show();
                                 return;
                               }
@@ -156,9 +214,9 @@ class _State extends State<LoginPage> {
                                   showCloseIcon: true,
                                   dialogType: DialogType.success,
                                   animType: AnimType.rightSlide,
-                                  title: context.translate('Error'),
+                                  title: context.translate("Error"),
                                   desc:
-                                      context.translate('please go to your gmail and make verify to your email'),
+                                      context.translate("please_go_to_your_gmail_and_make_verify_to_your_email"),
                                 ).show();
                               } catch (e) {
                                 AwesomeDialog(
@@ -166,15 +224,15 @@ class _State extends State<LoginPage> {
                                   showCloseIcon: true,
                                   dialogType: DialogType.warning,
                                   animType: AnimType.rightSlide,
-                                  title: context.translate('Error'),
+                                  title: context.translate("Error"),
                                   desc:
-                                      context.translate('there is something wrong in your account'),
+                                      context.translate("there_is_something_wrong_in_your_account"),
                                 ).show();
                                 //  print(e);
                               }
                             },
                             child:Text(
-                              context.translate('Forget Password?'),
+                              context.translate("Forget_Password"),
                               style: TextStyle(color: Colors.black),
                             ))
                       ],
@@ -207,7 +265,7 @@ class _State extends State<LoginPage> {
                                 );
                                 if (creditional.user!.emailVerified) {
                                   Navigator.of(context).pushReplacementNamed(
-                                      AppRouter.circleAvatarProfile);
+                                      AppRouter.onBoarding);
                                 } else {
                                   FirebaseAuth.instance.currentUser!
                                       .sendEmailVerification();
@@ -216,9 +274,9 @@ class _State extends State<LoginPage> {
                                     showCloseIcon: true,
                                     dialogType: DialogType.warning,
                                     animType: AnimType.rightSlide,
-                                    title: context.translate('Error'),
+                                    title: context.translate("Error"),
                                     desc:
-                                        context.translate('please go to your gmail and make verify to your email'),
+                                        context.translate("please_go_to_your_gmail_and_make_verify_to_your_email"),
                                   ).show();
                                 }
                                 isLoading = false;
@@ -230,14 +288,14 @@ class _State extends State<LoginPage> {
                                 ///Error in this line code
                                 if (e.code == e.code) {
                                   print(
-                                      context.translate('there is a something wrong in password or email.'));
+                                      context.translate("there_is_a_something_wrong_in_password_or_email"));
                                   AwesomeDialog(
                                     context: context,
                                     dialogType: DialogType.error,
                                     animType: AnimType.rightSlide,
-                                    title: context.translate('Error'),
+                                    title: context.translate("Error"),
                                     desc:
-                                        context.translate('there is a something wrong in password or email.'),
+                                        context.translate("there_is_a_something_wrong_in_password_or_email"),
                                     buttonsTextStyle:
                                         const TextStyle(color: Colors.black),
                                     showCloseIcon: true,
@@ -249,7 +307,7 @@ class _State extends State<LoginPage> {
                             }
                           },
                           child:  Text(
-                            context.translate('Sign In'),
+                            context.translate("Sign_In"),
                             style: TextStyle(color: Colors.white),
                           )),
                     ),
@@ -260,7 +318,7 @@ class _State extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                    Text(context.translate('Don\'t have account ?')),
+                    Text(context.translate("Don_have_account")),
                       TextButton(
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
@@ -268,7 +326,7 @@ class _State extends State<LoginPage> {
                             ));
                           },
                           child:  Text(
-                            context.translate('Sign up'),
+                            context.translate("Sign_up"),
                             style: TextStyle(color: Colors.orange),
                           ))
                     ],
@@ -300,7 +358,7 @@ class _State extends State<LoginPage> {
                         color: Colors.white,
                       ),
                       label: Text(
-                        context.translate('Continue with Google'),
+                        context.translate("Continue_with_Google"),
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -311,7 +369,10 @@ class _State extends State<LoginPage> {
                   //   listener: (context, state) {
                   //     if(state is AuthLoginSuccess)
                   //     {
-                  //       Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.circleAvatarProfile, (route) => false);
+                  //    Navigator.of(context).push(MaterialPageRoute(builder: (context)
+                  //    {
+                  //      return CircleAvatar();
+                  //    }));
                   //     }
                   //
                   //   },

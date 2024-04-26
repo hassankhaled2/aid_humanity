@@ -28,13 +28,13 @@ class _OtpPageState extends State<OtpPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children:
       [
-        Text(context.translate('Verify your phone Number'),style:TextStyle(fontSize: 22,fontWeight:FontWeight.w500),),
+        Text(context.translate("Verify_your_phone_Number"),style:TextStyle(fontSize: 22,fontWeight:FontWeight.w500),),
         SizedBox(height: 5,),
         Container(
           margin: EdgeInsets.symmetric(horizontal: 33),
           child: RichText(
               text: TextSpan(
-                  text: context.translate('Enter your 6 digit code number to sent to'),
+                  text: context.translate("Enter_your_6_digit"),
                   style: TextStyle(height: 1.2,fontSize: 18,color: Colors.black),
                   children:
                   [
@@ -125,7 +125,7 @@ class _OtpPageState extends State<OtpPage> {
  {
    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>BottomNavigationDonor()));
  }
-        }, child:Text(context.translate('Verify'))),
+        }, child:Text(context.translate("Verify"))),
     ),
     ),
               ],
