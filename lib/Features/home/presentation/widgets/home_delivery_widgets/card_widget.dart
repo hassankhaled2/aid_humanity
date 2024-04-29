@@ -16,7 +16,7 @@ class CardWidget extends StatefulWidget {
 }
 
 class _CardWidgetState extends State<CardWidget> {
-  String ? userName = "";
+  String? userName = "";
   bool isLoading = true;
 
   Future<String?> getUserNameByRequestId(String requestId) async {
@@ -34,7 +34,7 @@ class _CardWidgetState extends State<CardWidget> {
     }
     // Assuming there's only one user document with the matching userId
     final userDoc = userQuerySnap.docs.first;
-    final userName = userDoc.data()["Full Name"];
+    final userName = userDoc.data()["fullName"];
     return userName;
   }
 
@@ -94,7 +94,7 @@ class _CardWidgetState extends State<CardWidget> {
                             isLoading
                                 ? const CircularProgressIndicator()
                                 : Text(
-                                    userName??"Name not found",
+                                    userName ?? "Name not found",
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,

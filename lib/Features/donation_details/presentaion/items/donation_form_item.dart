@@ -10,6 +10,7 @@ import 'package:aid_humanity/core/utils/theme/app_color/app_color_light.dart';
 import 'package:aid_humanity/core/utils/theme/cubit/theme_cubit.dart';
 import 'package:aid_humanity/core/widgets/BottomNavigationDonor.dart';
 import 'package:aid_humanity/core/widgets/custom_button_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,6 +43,37 @@ class _DonationFormItemState extends State<DonationFormItem> {
 
   int totalQuantity = 0;
   List<int>? itemQ;
+  Map<String, dynamic>? userDetails;
+
+  Future<Map<String, dynamic>?> getUserDetailsByRequestId(
+      String requestId) async {
+    final firestore = FirebaseFirestore.instance;
+    // Get the request document reference
+    final userId = FirebaseAuth.instance.currentUser!.uid;
+    // Extract user ID from request data
+    // Query userAuth collection with retrieved userId
+    final userQuery =
+        firestore.collection('UsersAuth').where('id', isEqualTo: userId);
+    final userQuerySnap = await userQuery.get();
+    // Check if user document exists (based on userId)
+    if (userQuerySnap.docs.isEmpty) {
+      return null;
+    }
+    // Assuming there's only one user document with the matching userId
+    final userDoc = userQuerySnap.docs.first;
+    final city = userDoc.data()['city'];
+    final region = userDoc.data()['region'];
+    final street = userDoc.data()['street'];
+    final flatNumber = userDoc.data()['flatNumber'];
+
+    // Return user details as a map
+    return {
+      'city': city,
+      'region': region,
+      'street': street,
+      'flatNumber': flatNumber,
+    };
+  }
 
   void _onDecrement(int index) {
     setState(() {
@@ -68,6 +100,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
 
   @override
   void initState() {
+    _fetchUserDetails();
     itemQ = List.filled(widget.itemsImages!.length, 1);
     super.initState();
     itemsController.text = widget.items.toString();
@@ -75,6 +108,22 @@ class _DonationFormItemState extends State<DonationFormItem> {
     quantityController =
         TextEditingController(text: widget.items.length.toString());
     totalQuantity = widget.items.length;
+  }
+
+  Future<void> _fetchUserDetails() async {
+    final details =
+        await getUserDetailsByRequestId(FirebaseAuth.instance.currentUser!.uid);
+    print("-------------------------------------------------------------");
+    print(details);
+    setState(() {
+      userDetails = details;
+      governmentController.text = userDetails!["city"].toString();
+      cityController.text = userDetails!["region"].toString();
+      locationController.text = "Street  " +
+          userDetails!["street"] +
+          "  Flat Number  " +
+          userDetails!["flatNumber"].toString();
+    });
   }
 
   @override
@@ -192,7 +241,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
                 Row(children: [
                   Container(
                     width: context.getDefaultSize() * 19,
-                    height: context.getDefaultSize() * 7,
+                    height: context.getDefaultSize() * 9,
                     child: formTextField(context,
                         textEditingController: governmentController),
                   ),
@@ -201,7 +250,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
                   ),
                   Container(
                     width: context.getDefaultSize() * 19,
-                    height: context.getDefaultSize() * 7,
+                    height: context.getDefaultSize() * 9,
                     child: formTextField(context,
                         textEditingController: cityController),
                   )
