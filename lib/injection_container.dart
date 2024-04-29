@@ -52,4 +52,14 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => firestore);
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   getIt.registerLazySingleton(() => sharedPreferences);
+  // getIt.registerLazySingleton<AuthRemoteDataSource>(
+  //       () => AuthRemoteDataSourceImpl(),
+  // );
+  //
+  // getIt.registerLazySingleton<AuthRepoImpl>(
+  //       () => AuthRepoImpl(
+  //     authRemoteDataSource: getIt<AuthRemoteDataSource>(),
+  //     networkInfo: getIt<ConnctionInfo>(),
+  //   ),
+  // );
 }

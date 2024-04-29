@@ -9,12 +9,18 @@ class ProfileItemWidget extends StatelessWidget {
   final String text;
   final bool isModeWidget;
   final Function()? onTap;
-  const ProfileItemWidget({super.key, required this.icon, required this.text, required this.isModeWidget, this.iconColor = Colors.black, this.onTap});
+  const ProfileItemWidget(
+      {super.key,
+      required this.icon,
+      required this.text,
+      required this.isModeWidget,
+      this.iconColor = Colors.black,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap:onTap,
+      onTap: onTap,
       child: SizedBox(
         height: context.getDefaultSize() * 5,
         child: Column(
@@ -38,7 +44,10 @@ class ProfileItemWidget extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  isModeWidget ? const CustomSwitchButton() : Icon(Icons.navigate_next_outlined, size: context.getDefaultSize() * 3),
+                  isModeWidget
+                      ? const CustomSwitchButton()
+                      : Icon(Icons.navigate_next_outlined,
+                          size: context.getDefaultSize() * 3),
                 ],
               ),
             ),

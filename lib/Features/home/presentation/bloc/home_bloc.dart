@@ -40,24 +40,24 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
       if (event is GetLiveRequestsEvent) {
         emit(GetLiveOrDoneRequestsLoading());
-        final faliureOrRequests = await getLiveRequestsUseCase(userId: event.userId);
+        final faliureOrRequests = await getLiveRequestsUseCase(userId: event.userId,isDonor: event.isDonor);
         faliureOrRequests.fold((faliure) => emit(GetLiveOrDoneRequestsFailure(message: _mapFaliureToMessage(faliure))), (requests) => emit(GetLiveOrDoneRequestsSuccess(requests: requests)));
       }
       if (event is GetDoneRequestsEvent) {
         emit(GetLiveOrDoneRequestsLoading());
-        final faliureOrRequests = await getDoneRequestsUseCase( event.userId);
+        final faliureOrRequests = await getDoneRequestsUseCase( event.userId,event.isDonor);
         faliureOrRequests.fold((faliure) => emit(GetLiveOrDoneRequestsFailure(message: _mapFaliureToMessage(faliure))), (requests) => emit(GetLiveOrDoneRequestsSuccess(requests: requests)));
       }
     });
   }
 
-  HomeState _mapFaliureOrRequestToState(Either<Faliure, List<RequestEntity>> faliureOrRequests) {
+  HomeState _mapFaliureOrRequestToState(Either<Failure, List<RequestEntity>> faliureOrRequests) {
     return faliureOrRequests.fold((faliure) => GetAllRequestsFailure(message: _mapFaliureToMessage(faliure)), (requests) {
       return GetAllRequestsSuccess(requests: requests);
     });
   }
 
-  String _mapFaliureToMessage(Faliure failure) {
+  String _mapFaliureToMessage(Failure failure) {
     switch (failure.runtimeType) {
       // this to get the extended types while run time :)
       // ignore: type_literal_in_constant_pattern

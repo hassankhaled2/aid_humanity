@@ -3,7 +3,10 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
-import 'package:aid_humanity/core/widgets/BottomNavigation.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
+import 'package:aid_humanity/core/widgets/BottomNavigationDelivery.dart';
+import 'package:aid_humanity/cubit/dlivery_location_cubit.dart';
+import 'package:aid_humanity/order_delev.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,18 +19,19 @@ import 'package:aid_humanity/core/widgets/defualt_app_bar_widget.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/utils/theme/cubit/theme_cubit.dart';
+
 class ViewDetailsWidget extends StatefulWidget {
   final RequestEntity requestEntity;
-  const ViewDetailsWidget({
-    super.key,
-    required this.requestEntity,
-  });
+  late bool isDonor;
+  ViewDetailsWidget({super.key, required this.requestEntity, required this.isDonor});
 
   @override
   State<ViewDetailsWidget> createState() => _ViewDetailsWidgetState();
@@ -39,6 +43,40 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
   final GlobalKey globalKey = GlobalKey();
   dynamic externalDir = '/storage/emulated/0/Download';
   Set<Marker> markers = {};
+  var currentTime = DateTime.now();
+  var resultTime;
+  Map<String, dynamic>? userDetails;
+  bool isLoading = true;
+  Position? position;
+  late String deliveryId;
+
+  Future<Map<String, dynamic>?> getUserDetailsByRequestId(String requestId) async {
+    final firestore = FirebaseFirestore.instance;
+    // Get the request document reference
+    final userId = widget.requestEntity.userId;
+    // Extract user ID from request data
+    // Query userAuth collection with retrieved userId
+    final userQuery = firestore.collection('UsersAuth').where('id', isEqualTo: userId);
+    final userQuerySnap = await userQuery.get();
+    // Check if user document exists (based on userId)
+    if (userQuerySnap.docs.isEmpty) {
+      return null;
+    }
+    // Assuming there's only one user document with the matching userId
+    final userDoc = userQuerySnap.docs.first;
+    final name = userDoc.data()['Full Name'];
+    final phoneNumber = userDoc.data()['Phone'];
+    final latitude = userDoc.data()['LAT'];
+    final longitude = userDoc.data()['LNG'];
+
+    // Return user details as a map
+    return {
+      'name': name,
+      'phoneNumber': phoneNumber,
+      'latitude': latitude,
+      'longitude': longitude,
+    };
+  }
 
   _captureAndSaveQrCode() async {
     try {
@@ -75,10 +113,10 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
         if (!mounted) return;
         print("/**********************************");
         Navigator.pop(context);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.green,
-          content: Text('QR code Exported successfully'),
+          content: Text(context.translate('QR code Exported successfully')),
         ));
       }
     } catch (e) {
@@ -88,21 +126,25 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
 
   @override
   void initState() {
+    _fetchUserDetails();
+    resultTime = DateTime.now().difference(widget.requestEntity.time);
+    print(resultTime);
     FirebaseFirestore.instance.collection('request').doc(widget.requestEntity.id).snapshots().listen((event) {
       if (event.data() != null) {
-        setState(() {
+        setState(() async {
           isQrCodeScanned = event.data()!['qrScanned'];
           if (isQrCodeScanned) {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const BottomNavigation()));
             AwesomeDialog(
               context: context,
               dialogType: DialogType.success,
               animType: AnimType.rightSlide,
-              title: 'Done',
-              desc: 'Thank you for spreading humanity',
+              title: context.translate('Done'),
+              desc: context.translate('Thank_you_for_spreading_humanity'),
               buttonsTextStyle: const TextStyle(color: Colors.black),
               showCloseIcon: true,
             ).show();
+            await Future.delayed(const Duration(seconds: 3));
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const BottomNavigationDelivery()), (_) => false);
           }
         });
       }
@@ -110,25 +152,55 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
     super.initState();
   }
 
+  Future<void> _fetchUserDetails() async {
+    final details = await getUserDetailsByRequestId(widget.requestEntity.userId);
+    setState(() {
+      userDetails = details;
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0XFFE9EAEE),
-      appBar: getDefaultAppBarWidget(context: context, title: "Donation Details", backgroundColor: kPrimaryColor, iconColor: Colors.white),
+      appBar: getDefaultAppBarWidget(context: context, title: context.translate("Donation_Details"), backgroundColor: kPrimaryColor, iconColor: Colors.white),
       body: Column(
         children: [
           Expanded(
-            child: GoogleMap(
-              markers: {const Marker(markerId: MarkerId("1"), position: LatLng(5, 5))},
-              mapType: MapType.normal,
-              onMapCreated: (GoogleMapController controller) {
-                googleMapController = controller;
-              },
-              initialCameraPosition: const CameraPosition(
-                target: LatLng(5, 5),
-                zoom: 14,
-              ),
-            ),
+            child: isLoading
+                ? Center(
+                    child: CircularProgressIndicator(
+                      color: kPrimaryColor,
+                      strokeWidth: 5,
+                      value: 5,
+                    ),
+                  )
+                : GestureDetector(
+                    onDoubleTap: () async {
+                      print("******************************--------------------------------------");
+                print(widget.requestEntity.id);
+                      BlocProvider.of<DliveryLocationCubit>(context).getLocation(context);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OrderDelivery(
+                                    donorLatLng: LatLng(userDetails?['latitude'], userDetails?['longitude']),
+                                    reqId: widget.requestEntity.id!,
+                                  )));
+                    },
+                    child: GoogleMap(
+                      markers: {Marker(markerId: MarkerId("1"), position: LatLng(userDetails?['latitude'], userDetails?['longitude']))},
+                      mapType: MapType.normal,
+                      onMapCreated: (GoogleMapController controller) {
+                        googleMapController = controller;
+                      },
+                      initialCameraPosition: CameraPosition(
+                        target: LatLng(userDetails?['latitude'], userDetails?['longitude']),
+                        zoom: 20,
+                      ),
+                    ),
+                  ),
           ),
           Container(
             height: context.getHight() / 1.8,
@@ -150,7 +222,8 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                     Padding(
                       padding: EdgeInsets.only(
                         top: context.getDefaultSize() * 2,
-                        left: context.getDefaultSize() * 2,
+                        left: BlocProvider.of<ThemeCubit>(context).locale.languageCode == "en" ? context.getDefaultSize() * 2 : 0,
+                        right: BlocProvider.of<ThemeCubit>(context).locale.languageCode == "ar" ? context.getDefaultSize() * 2 : 0,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -159,7 +232,7 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                           Row(
                             children: [
                               Text(
-                                "Donor's name:",
+                                context.translate("Donor_name_"),
                                 style: TextStyle(color: kPrimaryColor, fontSize: context.getDefaultSize() * 1.8, fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
@@ -167,34 +240,16 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                               ),
                               SizedBox(
                                 height: context.getDefaultSize() * 3,
-                                width: context.getDefaultSize() * 14.5,
+                                width: context.getDefaultSize() * 16,
                                 child: ListView(
                                   shrinkWrap: true,
                                   scrollDirection: Axis.horizontal,
                                   children: [
                                     Text(
-                                      "Menna Ahmed",
+                                      userDetails?['name'] ?? "Name not found",
                                       style: TextStyle(fontSize: context.getDefaultSize() * 2, color: Colors.black, fontWeight: FontWeight.bold),
                                     ),
                                   ],
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(context.getDefaultSize()),
-                                child: Container(
-                                  width: context.getDefaultSize() * 10,
-                                  decoration: BoxDecoration(
-                                    color: kSecondryColor,
-                                    borderRadius: BorderRadius.circular(
-                                      context.getDefaultSize() * 2,
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "2 min ago",
-                                      style: TextStyle(fontSize: context.getDefaultSize() * 1.5, color: Colors.white, fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
                                 ),
                               ),
                             ],
@@ -202,7 +257,7 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                           Row(
                             children: [
                               Text(
-                                "Location :",
+                                context.translate("Government"),
                                 style: TextStyle(color: kPrimaryColor, fontSize: context.getDefaultSize() * 1.6, fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
@@ -210,14 +265,40 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                               ),
                               SizedBox(
                                 height: context.getDefaultSize() * 3,
-                                width: context.getDefaultSize() * 25,
+                                width: context.getDefaultSize() * 10,
                                 child: ListView(
                                   shrinkWrap: true,
                                   scrollDirection: Axis.horizontal,
                                   children: [
                                     Center(
                                       child: Text(
-                                        "Cairo, El-Shrouk city, Dar Masr,-----------",
+                                        widget.requestEntity.address["government"].toString(),
+                                        style: TextStyle(
+                                          fontSize: context.getDefaultSize() * 1.6,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                context.translate("_City"),
+                                style: TextStyle(color: kPrimaryColor, fontSize: context.getDefaultSize() * 1.6, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                width: context.getDefaultSize(),
+                              ),
+                              SizedBox(
+                                height: context.getDefaultSize() * 3,
+                                width: context.getDefaultSize() * 10,
+                                child: ListView(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  children: [
+                                    Center(
+                                      child: Text(
+                                        widget.requestEntity.address["city"].toString(),
                                         style: TextStyle(
                                           fontSize: context.getDefaultSize() * 1.6,
                                           color: Colors.black,
@@ -229,17 +310,45 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                               ),
                             ],
                           ),
+                          Row(children: [
+                            Text(
+                              context.translate("Remaining_address"),
+                              style: TextStyle(color: kPrimaryColor, fontSize: context.getDefaultSize() * 1.6, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              width: context.getDefaultSize(),
+                            ),
+                            SizedBox(
+                              height: context.getDefaultSize() * 3,
+                              width: context.getDefaultSize() * 10,
+                              child: ListView(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      widget.requestEntity.address["location"].toString(),
+                                      style: TextStyle(
+                                        fontSize: context.getDefaultSize() * 1.6,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ]),
                           Row(
                             children: [
                               Text(
-                                "Phone no.:",
+                                context.translate("Phone_no_"),
                                 style: TextStyle(color: kPrimaryColor, fontSize: context.getDefaultSize() * 1.6, fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
                                 width: context.getDefaultSize(),
                               ),
                               Text(
-                                "01002736659",
+                                userDetails?['phoneNumber'] ?? "Phone number not found",
                                 style: TextStyle(
                                   fontSize: context.getDefaultSize() * 1.6,
                                   color: Colors.black,
@@ -254,39 +363,45 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                       height: context.getDefaultSize() * 2,
                     ),
                     Expanded(
-                      child: ListView(
-                        scrollDirection: Axis.vertical,
-                        children: [
-                          Row(
-                            children: [
-                              addressText(context, "quantity"),
-                              SizedBox(
-                                width: context.getDefaultSize() * 14,
-                              ),
-                              addressText(context, "Pickup day"),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              formTextField(context, widget.requestEntity.numberOfItems.toString()),
-                              SizedBox(
-                                width: context.getDefaultSize() * 4,
-                              ),
-                              formTextField(context, DateFormat('yyyy-MM-dd').format(widget.requestEntity.time)),
-                            ],
-                          ),
-                          addressText(context, "Items"),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                              height: context.getDefaultSize() * 20,
-                              child: ListView.builder(scrollDirection: Axis.horizontal, itemCount: widget.requestEntity.items!.length, itemBuilder: (_, index) => photoWidget(context, widget.requestEntity.items![index].image, index)),
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: BlocProvider.of<ThemeCubit>(context).locale.languageCode == "en" ? context.getDefaultSize() / 2 : 0,
+                          right: BlocProvider.of<ThemeCubit>(context).locale.languageCode == "ar" ? context.getDefaultSize() * 1.5 : 0,
+                        ),
+                        child: ListView(
+                          scrollDirection: Axis.vertical,
+                          children: [
+                            Row(
+                              children: [
+                                addressText(context, context.translate("quantity")),
+                                SizedBox(
+                                  width: context.getDefaultSize() * 16,
+                                ),
+                                addressText(context, context.translate("Pickup_day")),
+                              ],
                             ),
-                          ),
-                          SizedBox(
-                            height: context.getDefaultSize(),
-                          ),
-                        ],
+                            Row(
+                              children: [
+                                formTextField(context, widget.requestEntity.numberOfItems.toString()),
+                                SizedBox(
+                                  width: context.getDefaultSize() * 4,
+                                ),
+                                formTextField(context, DateFormat('yyyy-MM-dd').format(widget.requestEntity.time)),
+                              ],
+                            ),
+                            addressText(context, context.translate("Items")),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                height: context.getDefaultSize() * 20,
+                                child: ListView.builder(scrollDirection: Axis.horizontal, itemCount: widget.requestEntity.items!.length, itemBuilder: (_, index) => photoWidget(context, widget.requestEntity.items![index].image, index)),
+                              ),
+                            ),
+                            SizedBox(
+                              height: context.getDefaultSize(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -297,6 +412,9 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   GestureDetector(
                       onTap: () {
+                        setState(() {
+                          deliveryId = FirebaseAuth.instance.currentUser!.uid;
+                        });
                         widget.requestEntity.status == "Pending"
                             ? BlocProvider.of<HomeBloc>(context).add(AcceptRequestEvent(requestId: widget.requestEntity.id!, deliveryId: FirebaseAuth.instance.currentUser!.uid, status: "inProgress"))
                             : showModalBottomSheet(
@@ -321,11 +439,11 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                                             onPressed: () {
                                               _captureAndSaveQrCode();
                                             },
-                                            child: const Padding(
-                                              padding: EdgeInsets.all(10.0),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(10.0),
                                               child: Text(
-                                                "export",
-                                                style: TextStyle(color: Colors.white),
+                                                context.translate("export"),
+                                                style: const TextStyle(color: Colors.white),
                                               ),
                                             ))
                                       ],
@@ -334,10 +452,11 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                                 });
                       },
                       child: BlocConsumer<HomeBloc, HomeState>(
-                        listener: (context, state) {
+                        listener: (context, state) async {
                           if (state is AcceptRequsetSuccessState) {
-                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Request Accepted Successfuly")));
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const BottomNavigation()), (route) => false);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(context.translate("Request Accepted Successfuly"))));
+                            BlocProvider.of<DliveryLocationCubit>(context).getCurrentLocation(context);
+                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const BottomNavigationDelivery()), (route) => false);
                           }
                         },
                         builder: (context, state) {
@@ -346,24 +465,38 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                               child: CircularProgressIndicator(),
                             );
                           }
-                          return widget.requestEntity.status == "Pending" ? CustomButtonWidget(height: 4, width: 18, title: "Accept", fontSize: 2) : CustomButtonWidget(height: 4, width: 18, title: "Done", fontSize: 2);
+                          return widget.requestEntity.status == "Pending"
+                              ? CustomButtonWidget(height: 4, width: 18, title: context.translate("Accept"), fontSize: 2)
+                              : widget.requestEntity.status == "inProgress" && widget.isDonor == false
+                                  ? CustomButtonWidget(height: 4, width: 18, title: context.translate("Done"), fontSize: 2)
+                                  : Container(
+                                      color: Colors.white,
+                                    );
                         },
                       )),
-                  GestureDetector(
-                    onTap: () async {
-                      final Uri url = Uri(
-                        scheme: 'tel',
-                        path: "0100 273 6659",
-                      );
-                      if (await canLaunchUrl(url)) {
-                        await launchUrl(url);
-                      } else {
-                        // ignore: avoid_print
-                        print("cannot lunch this url");
-                      }
-                    },
-                    child: CustomButtonWidget(height: 4, width: 18, title: "CALL NOW", fontSize: 1.8),
-                  ),
+                  widget.requestEntity.status == "done"
+                      ? Container(
+                          color: Colors.white,
+                        )
+                      : widget.requestEntity.status == "inProgress" && widget.isDonor == true
+                          ? Container(
+                              color: Colors.white,
+                            )
+                          : GestureDetector(
+                              onTap: () async {
+                                final Uri url = Uri(
+                                  scheme: 'tel',
+                                  path: userDetails!["phoneNumber"],
+                                );
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(url);
+                                } else {
+                                  // ignore: avoid_print
+                                  print("cannot lunch this url");
+                                }
+                              },
+                              child: CustomButtonWidget(height: 4, width: 18, title: context.translate("CALL_NOW"), fontSize: 1.8),
+                            ),
                 ]),
               ),
             ]),

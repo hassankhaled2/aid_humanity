@@ -8,7 +8,8 @@ class GetDoneRequestsUseCase {
   GetDoneRequestsUseCase({
     required this.homeRepository,
   });
-  Future<Either<Faliure,List<RequestEntity>>> call(String userId) async {
-    return homeRepository.getDoneRequests(userId);
+  Future<Either<Failure, List<RequestEntity>>> call(
+      String userId, bool isDonor) async {
+    return homeRepository.getDoneRequests(userId, isDonor);
   }
 }

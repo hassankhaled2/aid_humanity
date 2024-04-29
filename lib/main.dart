@@ -5,13 +5,16 @@ import 'package:aid_humanity/Features/spalsh/spalsh.dart';
 import 'package:aid_humanity/bloc_observer.dart';
 import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart';
 import 'package:aid_humanity/core/utils/theme/cubit/theme_cubit.dart';
+import 'package:aid_humanity/cubit/dlivery_location_cubit.dart';
 import 'package:aid_humanity/injection_container.dart' as di;
+import 'package:aid_humanity/order_delev.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'Features/home/presentation/pages/choice_page.dart';
 import 'core/utils/theme/theme_data/theme_data_light.dart';
-import 'core/widgets/BottomNavigation.dart';
 import 'core/widgets/routes.dart';
 
 void main() async {
@@ -50,28 +53,50 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => di.getIt<DetailsBloc>()),
-        BlocProvider(create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
+        BlocProvider(
+            create: (_) => di.getIt<HomeBloc>()..add(GetAllRequestsEvent())),
         BlocProvider(
           create: (_) => ClassificaitonCubit(),
         ),
-        BlocProvider(create: (_) => di.getIt<ThemeCubit>()..getCurrentLocale())
+        BlocProvider(create: (_) => di.getIt<ThemeCubit>()..getCurrentLocale()),
+        // BlocProvider(
+        //     create: (context)
+        //     {
+        //       return AuthLoginCubit(CallLoginWithGoogleUseCase(getIt.get<AuthRepoImpl>()));
+        //     }
+        //
+        // ),
+                BlocProvider(create: (_) => DliveryLocationCubit()..getCurrentLocation(context))
+
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
           return MaterialApp(
             routes: routes,
 
-            /// see it if worked or not
-            home: FirebaseAuth.instance.currentUser == null ? SplashScreen() : BottomNavigation(),
+            home: FirebaseAuth.instance.currentUser != null &&
+                    FirebaseAuth.instance.currentUser!.emailVerified
+                ? ChoicePage()
+                : SplashScreen(),
+            // CircleAvatarWidget(),
+
+            //CircleAvatarWidget(),
             debugShowCheckedModeBanner: false,
             locale: BlocProvider.of<ThemeCubit>(context).locale,
-            supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provide , which langs to use in our app
-            localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
+            supportedLocales: AppLocalizationsSetup
+                .supportedLocales, // this line to provide , which langs to use in our app
+            localizationsDelegates:
+                AppLocalizationsSetup.localizationsDelegates,
             localeResolutionCallback: (deviceLocale, supportedLocales) {
-              return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
+              return AppLocalizationsSetup.localeResolutionCallback(
+                  deviceLocale!, supportedLocales);
             },
             theme: getThemeDataLight, //const HomeView(),
           );

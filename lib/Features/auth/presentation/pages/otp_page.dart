@@ -1,9 +1,10 @@
 
-
-import 'package:aid_humanity/core/widgets/BottomNavigation.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+
+import '../../../../core/widgets/BottomNavigationDonor.dart';
 
 
 class OtpPage extends StatefulWidget {
@@ -27,13 +28,13 @@ class _OtpPageState extends State<OtpPage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children:
       [
-        Text('Verify your phone Number',style:TextStyle(fontSize: 22,fontWeight:FontWeight.w500),),
+        Text(context.translate("Verify_your_phone_Number"),style:TextStyle(fontSize: 22,fontWeight:FontWeight.w500),),
         SizedBox(height: 5,),
         Container(
           margin: EdgeInsets.symmetric(horizontal: 33),
           child: RichText(
               text: TextSpan(
-                  text: 'Enter your 6 digit code number to sent to',
+                  text: context.translate("Enter_your_6_digit"),
                   style: TextStyle(height: 1.2,fontSize: 18,color: Colors.black),
                   children:
                   [
@@ -94,7 +95,7 @@ class _OtpPageState extends State<OtpPage> {
             cursorColor:Colors.black,
 
             onCompleted: (v) {
-              print("Completed");
+              print(context.translate("Completed"));
             },
             onChanged: (value) {
               print(value);
@@ -122,9 +123,9 @@ class _OtpPageState extends State<OtpPage> {
           await auth.signInWithCredential(credential);
  if (auth.currentUser?.uid!=null)
  {
-   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>BottomNavigation()));
+   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>BottomNavigationDonor()));
  }
-        }, child:Text('Verify')),
+        }, child:Text(context.translate("Verify"))),
     ),
     ),
               ],

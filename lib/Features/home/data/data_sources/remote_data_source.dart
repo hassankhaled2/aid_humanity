@@ -6,8 +6,8 @@ import 'package:dartz/dartz.dart';
 
 abstract class HomeRemoteDataSource {
   Future<List<RequestModel>> getAllRequests();
-  Future<List<RequestModel>> getLiveRequests(String userId);
-  Future<List<RequestModel>> getDoneRequests(String userId);
+  Future<List<RequestModel>> getLiveRequests(String userId,bool isDonor);
+  Future<List<RequestModel>> getDoneRequests(String userId,bool isDonor);
   Future<Unit> updateRequest(String requestId, String userId, String status);
 }
 
@@ -19,14 +19,21 @@ class HomeRemoteDataSourceImplWithFireBase extends HomeRemoteDataSource {
   Future<List<RequestModel>> getAllRequests() async {
     List<RequestModel> requests = [];
     try {
-      QuerySnapshot requestSnapshot = await firebaseFirestore.collection('request').where('status', isEqualTo: 'Pending').get();
+      QuerySnapshot requestSnapshot = await firebaseFirestore
+          .collection('request')
+          .where('status', isEqualTo: 'Pending')
+          .get();
 
       for (QueryDocumentSnapshot requestsdoc in requestSnapshot.docs) {
-        var itemsSnapshot = await requestsdoc.reference.collection('items').get();
+        var itemsSnapshot =
+            await requestsdoc.reference.collection('items').get();
 
-        List<ItemModel> itemModels = itemsSnapshot.docs.map((doc) => ItemModel.fromJson(doc.data())).toList();
+        List<ItemModel> itemModels = itemsSnapshot.docs
+            .map((doc) => ItemModel.fromJson(doc.data()))
+            .toList();
 
-        RequestModel requestModel = RequestModel.fromJson(requestsdoc.data() as Map<String, dynamic>, itemModels);
+        RequestModel requestModel = RequestModel.fromJson(
+            requestsdoc.data() as Map<String, dynamic>, itemModels);
 
         requests.add(requestModel);
       }
@@ -36,20 +43,28 @@ class HomeRemoteDataSourceImplWithFireBase extends HomeRemoteDataSource {
         return requests;
       }
     } on FirebaseException {
-      throw ServerException();
+      throw ServerException(exceptionName: " Exception in firebase");
     }
   }
 
   @override
-  Future<List<RequestModel>> getLiveRequests(String userId) async {
+  Future<List<RequestModel>> getLiveRequests(String userId,bool isDonor) async {
     List<RequestModel> liveRequests = [];
     try {
-      QuerySnapshot requestSnapshot = await firebaseFirestore.collection('request').where('status', isEqualTo: 'inProgress').where('deliveryId', isEqualTo: userId).get();
+      QuerySnapshot requestSnapshot = await firebaseFirestore
+          .collection('request')
+          .where('status', isEqualTo: 'inProgress')
+          .where(isDonor?'userId':'deliveryId', isEqualTo: userId)
+          .get();
 
       for (QueryDocumentSnapshot requestsdoc in requestSnapshot.docs) {
-        var itemsSnapshot = await requestsdoc.reference.collection('items').get();
-        List<ItemModel> itemModels = itemsSnapshot.docs.map((doc) => ItemModel.fromJson(doc.data())).toList();
-        RequestModel requestModel = RequestModel.fromJson(requestsdoc.data() as Map<String, dynamic>, itemModels);
+        var itemsSnapshot =
+            await requestsdoc.reference.collection('items').get();
+        List<ItemModel> itemModels = itemsSnapshot.docs
+            .map((doc) => ItemModel.fromJson(doc.data()))
+            .toList();
+        RequestModel requestModel = RequestModel.fromJson(
+            requestsdoc.data() as Map<String, dynamic>, itemModels);
 
         liveRequests.add(requestModel);
       }
@@ -60,30 +75,42 @@ class HomeRemoteDataSourceImplWithFireBase extends HomeRemoteDataSource {
         return liveRequests;
       }
     } on FirebaseException {
-      throw ServerException();
+      throw ServerException(exceptionName: '');
     }
   }
 
   @override
-  Future<Unit> updateRequest(String requestId, String userId, String status) async {
+  Future<Unit> updateRequest(
+      String requestId, String userId, String status) async {
     try {
-      await firebaseFirestore.collection('request').doc(requestId).update({'status': status, 'deliveryId': userId});
+      await firebaseFirestore
+          .collection('request')
+          .doc(requestId)
+          .update({'status': status, 'deliveryId': userId});
       return Future.value(unit);
     } on FirebaseException {
-      throw ServerException();
+      throw ServerException(exceptionName: '');
     }
   }
 
   @override
-  Future<List<RequestModel>> getDoneRequests(String userId) async {
+  Future<List<RequestModel>> getDoneRequests(String userId,bool isDonor) async {
     List<RequestModel> doneRequests = [];
     try {
-      QuerySnapshot requestSnapshot = await firebaseFirestore.collection('request').where('status', isEqualTo: 'done').where('deliveryId', isEqualTo: userId).get();
+      QuerySnapshot requestSnapshot = await firebaseFirestore
+          .collection('request')
+          .where('status', isEqualTo: 'done')
+          .where(isDonor?'userId':'deliveryId', isEqualTo: userId)
+          .get();
 
       for (QueryDocumentSnapshot requestsdoc in requestSnapshot.docs) {
-        var itemsSnapshot = await requestsdoc.reference.collection('items').get();
-        List<ItemModel> itemModels = itemsSnapshot.docs.map((doc) => ItemModel.fromJson(doc.data())).toList();
-        RequestModel requestModel = RequestModel.fromJson(requestsdoc.data() as Map<String, dynamic>, itemModels);
+        var itemsSnapshot =
+            await requestsdoc.reference.collection('items').get();
+        List<ItemModel> itemModels = itemsSnapshot.docs
+            .map((doc) => ItemModel.fromJson(doc.data()))
+            .toList();
+        RequestModel requestModel = RequestModel.fromJson(
+            requestsdoc.data() as Map<String, dynamic>, itemModels);
 
         doneRequests.add(requestModel);
       }
@@ -94,7 +121,7 @@ class HomeRemoteDataSourceImplWithFireBase extends HomeRemoteDataSource {
         return doneRequests;
       }
     } on FirebaseException {
-      throw ServerException();
+      throw ServerException(exceptionName: '');
     }
   }
 }

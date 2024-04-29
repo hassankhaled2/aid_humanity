@@ -8,7 +8,7 @@ class UpdateRequestUseCase {
     required this.homeRepository,
   });
 
-  Future<Either<Faliure, Unit>> call({required String requestId,required String userId,required String status}) {
+  Future<Either<Failure, Unit>> call({required String requestId,required String userId,required String status}) {
     return homeRepository.updateRequest(requestId, userId, status);
   }
 }

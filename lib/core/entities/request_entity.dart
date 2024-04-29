@@ -10,10 +10,10 @@ class RequestEntity extends Equatable {
   final List<ItemEntity>? items;
   final String userId;
   final String status;
-  final String? deliveryId;
+   String? deliveryId;
   final bool? qrScanned;
 
-  const RequestEntity({
+   RequestEntity({
     this.id,
     required this.time,
     required this.address,

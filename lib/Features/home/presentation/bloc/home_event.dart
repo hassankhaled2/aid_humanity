@@ -12,14 +12,19 @@ class GetAllRequestsEvent extends HomeEvent {}
 // ignore: must_be_immutable
 class GetLiveRequestsEvent extends HomeEvent {
   String userId;
+  bool isDonor;
   GetLiveRequestsEvent({
     required this.userId,
+    required this.isDonor,
   });
 }
+
 class GetDoneRequestsEvent extends HomeEvent {
   String userId;
+  bool isDonor;
   GetDoneRequestsEvent({
     required this.userId,
+    required this.isDonor,
   });
 }
 

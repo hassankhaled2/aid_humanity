@@ -1,12 +1,8 @@
 
-
-import 'package:aid_humanity/Features/auth/presentation/widgets/phone.dart';
-import 'package:country_code_picker/country_code_picker.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
-
 import '../widgets/text_form_field.dart';
 import 'otp_page.dart';
 
@@ -33,12 +29,12 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children:
         [
-          Text('What is your phone Number',
+          Text(context.translate("What_is_your_phone_Number"),
             style: TextStyle(color: Colors.black,fontSize: 20,fontWeight:FontWeight.bold),
           ),
           SizedBox(height: 10,),
           Text(
-            'Please enter your phone number to verify your account',
+            context.translate("Please_enter_your_phone_number"),
             style: TextStyle(color: Colors.black,fontSize: 15),
           )
 
@@ -109,7 +105,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                   {
                     if(val=="")
                     {
-                      return'can not to be empty';
+                      return context.translate("can_not_to_be_empty");
                     }
                     return null;
                   },
@@ -156,7 +152,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
  if(_phoneFormKey.currentState!.validate()){
    await name(context,phone.text);
  }
-                  }, child:Text('Next')),
+                  }, child:Text(context.translate("Next"))),
             ),
           ),
             ],
