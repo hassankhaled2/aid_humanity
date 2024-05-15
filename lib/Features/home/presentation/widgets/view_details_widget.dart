@@ -321,7 +321,7 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                                   ),
                                   SizedBox(
                                     height: context.getDefaultSize() * 3,
-                                    width: context.getDefaultSize() * 10,
+                                    width: context.getDefaultSize() * 18,
                                     child: ListView(
                                       shrinkWrap: true,
                                       scrollDirection: Axis.horizontal,
@@ -342,6 +342,10 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                                       ],
                                     ),
                                   ),
+                                ],
+                              ),
+                              Row(
+                                children: [
                                   Text(
                                     context.translate("_City"),
                                     style: TextStyle(
@@ -355,7 +359,7 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                                   ),
                                   SizedBox(
                                     height: context.getDefaultSize() * 3,
-                                    width: context.getDefaultSize() * 10,
+                                    width: context.getDefaultSize() * 18,
                                     child: ListView(
                                       shrinkWrap: true,
                                       scrollDirection: Axis.horizontal,
@@ -379,7 +383,7 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                               ),
                               Row(children: [
                                 Text(
-                                  context.translate("Remaining_address"),
+                                  context.translate("Address"),
                                   style: TextStyle(
                                       color: kPrimaryColor,
                                       fontSize: context.getDefaultSize() * 1.6,
