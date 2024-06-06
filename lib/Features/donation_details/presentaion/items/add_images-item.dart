@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
-
 class AddImagesItem extends StatefulWidget {
   const AddImagesItem({super.key});
 
@@ -42,6 +41,7 @@ class _AddImagesItemState extends State<AddImagesItem> {
   void deleteImage(int index) {
     setState(() {
       imageFileList.removeAt(index);
+      galleryImages = imageFileList.map((image) => File(image.path)).toList();
     });
   }
 
@@ -63,14 +63,17 @@ class _AddImagesItemState extends State<AddImagesItem> {
                     context.getDefaultSize() * 2,
                   ),
                   child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3, crossAxisSpacing: 8.0, // Add horizontal spacing
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 8.0, // Add horizontal spacing
                       mainAxisSpacing: 8.0, // Add vertical spacing
                       childAspectRatio: 1.0,
                     ),
                     itemCount: imageFileList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Stack(
+                        key: ValueKey(imageFileList[index].path),
                         children: [
                           Image.file(
                             galleryImages![index],
@@ -80,7 +83,9 @@ class _AddImagesItemState extends State<AddImagesItem> {
                             top: -3,
                             right: 9,
                             child: GestureDetector(
-                              onTap: () => deleteImage(index),
+                              onTap: () {
+                                deleteImage(index);
+                              },
                               child: Icon(
                                 Icons.cancel,
                                 color: kPrimaryColor,
@@ -96,10 +101,8 @@ class _AddImagesItemState extends State<AddImagesItem> {
             height: 20.0,
           ),
           BlocConsumer<ClassificaitonCubit, ClassificaitonState>(
-            listener: (context, state)  {
+            listener: (context, state) {
               if (state is ClassificaitonSuccessState) {
-               
-
                 Navigator.push(
                     // ignore: use_build_context_synchronously
                     context,
@@ -112,7 +115,9 @@ class _AddImagesItemState extends State<AddImagesItem> {
               }
             },
             builder: (context, state) {
-              if (state is ClassificaitonLoadingState || state is ModelLoadingState || state is ModelLoadedState) {
+              if (state is ClassificaitonLoadingState ||
+                  state is ModelLoadingState ||
+                  state is ModelLoadedState) {
                 return Padding(
                     padding: EdgeInsets.all(context.getDefaultSize() * 1.5),
                     child: const CircularProgressIndicator(
@@ -127,20 +132,33 @@ class _AddImagesItemState extends State<AddImagesItem> {
                       padding: EdgeInsets.all(context.getDefaultSize() * 1.5),
                       child: GestureDetector(
                         onTap: selectImages,
-                        child: CustomButtonWidget(height: 4, width: 18, title:context.translate( "Pick_images"), fontSize: 2),
+                        child: CustomButtonWidget(
+                            height: 4,
+                            width: 18,
+                            title: context.translate("Pick_images"),
+                            fontSize: 2),
                       )),
                   Padding(
-                    padding: EdgeInsets.only(top: context.getDefaultSize() * 1.5, bottom: context.getDefaultSize() * 1.5, right: context.getDefaultSize()),
+                    padding: EdgeInsets.only(
+                        top: context.getDefaultSize() * 1.5,
+                        bottom: context.getDefaultSize() * 1.5,
+                        right: context.getDefaultSize()),
                     child: GestureDetector(
-                      child: CustomButtonWidget(height: 4, width: 18, title: context.translate("continue"), fontSize: 2),
+                      child: CustomButtonWidget(
+                          height: 4,
+                          width: 18,
+                          title: context.translate("continue"),
+                          fontSize: 2),
                       onTap: () async {
                         if (galleryImages == null) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(context.translate("Please_select_images")),
+                            content:
+                                Text(context.translate("Please_select_images")),
                             backgroundColor: AppColorsLight.primaryColor,
                           ));
                         } else {
-                          BlocProvider.of<ClassificaitonCubit>(context).Classification(galleryImages!);
+                          BlocProvider.of<ClassificaitonCubit>(context)
+                              .Classification(galleryImages!);
                         }
                       },
                     ),
@@ -153,6 +171,4 @@ class _AddImagesItemState extends State<AddImagesItem> {
       )),
     );
   }
-
- 
 }
