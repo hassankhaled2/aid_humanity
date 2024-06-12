@@ -68,11 +68,7 @@ class _UserSliverAppBarState extends State<UserSliverAppBar> {
       backgroundColor: Colors.transparent,
       iconTheme: const IconThemeData(color: AppColorsLight.primaryColor),
       actions: [
-        IconButton(onPressed: ()
-        {
-          // selectImage();
-          // SelectAndUploadImage();
-        }, icon: const Icon(Icons.camera_alt_rounded)),
+
       ],
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
