@@ -43,4 +43,6 @@ class ThemeCubit extends Cubit<ThemeState> {
     await sharedPreferences.setString("locale", lc.languageCode);
     emit(LangChangedState());
   }
+
+
 }
