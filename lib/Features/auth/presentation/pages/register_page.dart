@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -17,6 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/constants.dart';
 import '../../../../core/constants/test.dart';
 import '../../../../core/utils/styles/styles.dart';
+import '../bloc/auth_bloc.dart';
 import '../widgets/text_form_field.dart';
 import 'extra_data_google.dart';
 import 'login_page.dart';
@@ -528,101 +530,51 @@ class _State extends State<RegisterPage> {
 
                   ),
                   SizedBox(height: context.getDefaultSize()*4,),
-                  Center(
-                    child:Container(
-                      height: 35,
-                      width: 210,
-                      child: ElevatedButton(
-                    style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black),shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)))),
-
-                          onPressed: ()
-
-                          async {
-          if(formState.currentState!.validate()) {
-      try {
-
-        final creditional= await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email.text,
-          password: password.text,
-        );
-       final d= FirebaseAuth.instance.currentUser!.uid;
-        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-        sharedPreferences.setString("userId", d);
-        String? userId = sharedPreferences.getString("userId");
-       final  f=categories.doc();
-       String?doc;
-
-         // sharedPreferences.setString("categories",categories as String ) ;
-      // final c= sharedPreferences.getString("categories");
-      //  CollectionReference<Object?> Cat = c as CollectionReference<Object?>;
-       DocumentReference add=await categories.add({
-         "fullName":fullName.text,
-         "Email":email.text,
-         "Phone":phone.text,
-         "street":street.text,
-         "city":city.text,
-         "region":region.text,
-         "country":country.text,
-         "flatNumber":flatNumber.text,
-         "floorNumber":floorNumber.text,
-         "LAT":_currentPosition?.latitude??'',
-         "LNG":_currentPosition?.longitude??'',
-         "id": userId
-       });
-       doc = add.id;
-       print(doc);
-       // Save docId in SharedPreferences (optional):
-       sharedPreferences.setString("doc", doc);
-       // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-       // sharedPreferences.setString("userId", d);
-       // ChoiceItem(g: d,);
-       // addUsersData();
-
-      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
-       Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          elevation: 1,
-          duration: Duration(seconds: 4),
-          content: Text('Please Go to Your Gmail & Verify Your Email'),
-        ));
-    // if(creditional.user!.emailVerified)
-    // {
-    // Navigator.of(context).pushReplacementNamed(bottomNavigation);
-    // }else {
-    //
-    //   AwesomeDialog(
-    //     context: context,
-    //     dialogType: DialogType.error,
-    //     animType: AnimType.rightSlide,
-    //     title: 'Error',
-    //     desc:
-    //     'please go to your gmail and make verify to your email',
-    //   ).show();
-    // }
-        // GoRouter.of(context).push(AppRouter.KBottomNavigation);
-
-      } on FirebaseAuthException catch (e) {
-         if (e.code ==e.code) {
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            animType: AnimType.rightSlide,
-            title: 'Error',
-            desc: 'try another email or password',
-            buttonsTextStyle: const TextStyle(color: Colors.black),
-            showCloseIcon: true,
-
-          ).show();
-          print('The account already exists for that email.');
-        }
-      } catch (e) {
-        print(e);
-      }
-    }
-                          }, child:Text
-                        ('Sign Up')),
+        BlocBuilder<SignUpBloc, SignUpState>(
+          builder: (context, state) {
+            return Center(
+              child: Container(
+                height: 35,
+                width: 210,
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.black),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
                   ),
+                  onPressed: state is! SignUpLoading
+                      ? () {
+                    BlocProvider.of<SignUpBloc>(context).add(
+                      SignUpButtonPressed(
+                        fullName: fullName.text,
+                        email: email.text,
+                        password: password.text,
+                        phone: phone.text,
+                        street: street.text,
+                        city: city.text,
+                        region: region.text,
+                        country: country.text,
+                        flatNumber: flatNumber.text,
+                        floorNumber: floorNumber.text,
+                        latitude: _currentPosition?.latitude ?? 0.0,
+                        longitude: _currentPosition?.longitude ?? 0.0,
+                      ),
+                    );
+                  }
+                      : null,
+                  child: state is SignUpLoading
+                      ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  )
+                      : Text('Sign Up'),
+                ),
+              ),
+            );
+          },
+        ),
                   SizedBox(height: context.getDefaultSize()*4,),
                   const Row(
                       children: <Widget>[

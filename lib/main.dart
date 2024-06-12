@@ -11,10 +11,12 @@ import 'package:aid_humanity/core/utils/Localization/app_localization_setup.dart
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:aid_humanity/core/utils/theme/cubit/theme_cubit.dart';
 import 'package:aid_humanity/injection_container.dart' as di;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'Features/auth/presentation/bloc/auth_bloc.dart';
 import 'Features/auth/presentation/pages/login_page.dart';
 import 'Features/auth/presentation/widgets/circle_avatar_widget.dart';
 import 'Features/home/presentation/pages/choice_page.dart';
@@ -64,7 +66,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => ClassificaitonCubit(),
         ),
-        BlocProvider(create: (_) => di.getIt<ThemeCubit>()..getCurrentLocale())
+        BlocProvider(create: (_) => di.getIt<ThemeCubit>()..getCurrentLocale()),
+        BlocProvider(create: (context) => SignUpBloc(     firebaseAuth: FirebaseAuth.instance,
+          firestore: FirebaseFirestore.instance, ),)
         // BlocProvider(
         //     create: (context)
         //     {

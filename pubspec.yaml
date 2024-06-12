@@ -70,10 +70,24 @@ dependencies:
   tflite_v2: ^1.0.0
   url_launcher: ^6.1.12
   fancy_shimmer_image: ^2.0.3
+
+
 dev_dependencies:
+
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo/logo.png"
+  adaptive_icon_background: "#ed1e79"
+##  adaptive_icon_background: "assets/logo/background.png"
+#  adaptive_icon_foreground: "assets/logo/foreground.png"
+
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
