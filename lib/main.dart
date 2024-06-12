@@ -67,8 +67,6 @@ class MyApp extends StatelessWidget {
           create: (_) => ClassificaitonCubit(),
         ),
         BlocProvider(create: (_) => di.getIt<ThemeCubit>()..getCurrentLocale()),
-        BlocProvider(create: (context) => SignUpBloc(     firebaseAuth: FirebaseAuth.instance,
-          firestore: FirebaseFirestore.instance, ),)
         // BlocProvider(
         //     create: (context)
         //     {
