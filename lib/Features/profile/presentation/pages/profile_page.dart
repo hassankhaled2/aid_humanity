@@ -17,7 +17,8 @@ class ProfilePage extends StatelessWidget {
   AppBar _buildAppBar(BuildContext context) => getDefaultAppBarWidget(
         context: context,
         title: context.translate("profile"),
-        color: Colors.black,
+        color: Color(0xFFF8B145),
+        backgroundColor:Colors.black12
       );
 
   Widget _buildBody() =>  ProfileWidget();

@@ -67,6 +67,7 @@ class MyApp extends StatelessWidget {
           create: (_) => ClassificaitonCubit(),
         ),
         BlocProvider(create: (_) => di.getIt<ThemeCubit>()..getCurrentLocale()),
+        BlocProvider(create: (_) => di.getIt<ThemeCubit>()..getCurrentTheme()),
         // BlocProvider(
         //     create: (context)
         //     {
@@ -78,23 +79,27 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
-          return MaterialApp(
-            routes: routes,
+          if(state is LoadedThemeState)
+          {
+            return MaterialApp(
+              routes: routes,
 
 
-            home:FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser!.emailVerified?ChoicePage():SplashScreen(),
-            // CircleAvatarWidget(),
+              home:FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser!.emailVerified?ChoicePage():SplashScreen(),
+              // CircleAvatarWidget(),
 
-          //CircleAvatarWidget(),
-            debugShowCheckedModeBanner: false,
-            locale: BlocProvider.of<ThemeCubit>(context).locale,
-            supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provide , which langs to use in our app
-            localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
-            localeResolutionCallback: (deviceLocale, supportedLocales) {
-              return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
-            },
-            theme: getThemeDataLight, //const HomeView(),
+              //CircleAvatarWidget(),
+              debugShowCheckedModeBanner: false,
+              locale: BlocProvider.of<ThemeCubit>(context).locale,
+              supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provide , which langs to use in our app
+              localizationsDelegates: AppLocalizationsSetup.localizationsDelegates,
+              localeResolutionCallback: (deviceLocale, supportedLocales) {
+                return AppLocalizationsSetup.localeResolutionCallback(deviceLocale!, supportedLocales);
+              },
+              theme: state.themeData, //const HomeView(),
           );
+        }
+          return Container();
         },
       ),
     );

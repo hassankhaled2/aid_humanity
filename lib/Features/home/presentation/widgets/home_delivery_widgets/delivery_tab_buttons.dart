@@ -53,7 +53,7 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
       },
       child: Scaffold(
           body: Padding(
-        padding: EdgeInsets.only(top: context.getDefaultSize() * 2),
+        padding: EdgeInsets.only(top: context.getDefaultSize() * 0),
         child: DefaultTabController(
           length: 3,
           child: NestedScrollView(
@@ -61,7 +61,7 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                 (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverAppBar(
-                  backgroundColor: Colors.white,
+                  // backgroundColor: Colors.white,
                   title: const Text('Aid Humanity',
                       style: TextStyle(color: Color(0xFFF8B145))),
                   actions: [
@@ -87,11 +87,11 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                   ],
                   pinned: true,
                   floating: true,
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: Container(
-                      color: Colors.white,
-                    ),
-                  ),
+                  // flexibleSpace: FlexibleSpaceBar(
+                  //   background: Container(
+                  //     color: Colors.white,
+                  //   ),
+                  // ),
                   bottom: TabBar(
                     onTap: (index) {
                       if (index == 0) {
