@@ -3,7 +3,7 @@ import 'package:aid_humanity/core/models/item_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RequestModel extends RequestEntity {
-  const RequestModel(
+   RequestModel(
       {required super.time,
       required super.address,
       required super.numberOfItems,

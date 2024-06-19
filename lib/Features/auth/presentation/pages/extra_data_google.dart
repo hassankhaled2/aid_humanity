@@ -1,10 +1,7 @@
 import 'dart:io';
-
-import 'package:aid_humanity/Features/auth/presentation/pages/choose_page_google.dart';
-import 'package:aid_humanity/Features/auth/presentation/widgets/circle_avatar_google.dart';
 import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
-import 'package:aid_humanity/core/utils/app_router/app_router.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
@@ -22,10 +19,13 @@ import '../../../../core/utils/styles/styles.dart';
 import '../widgets/text_form_field.dart';
 import 'package:path/path.dart';
 
-
-
 class ExtaDataGoogle extends StatefulWidget {
-  const ExtaDataGoogle({Key? key, required this.displayName, required this.Email, required this.id}) : super(key: key);
+  const ExtaDataGoogle(
+      {Key? key,
+      required this.displayName,
+      required this.Email,
+      required this.id})
+      : super(key: key);
   final String displayName;
   final String Email;
   final String id;
@@ -73,8 +73,8 @@ class _State extends State<ExtaDataGoogle> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
-          content: Text(
-              'Location services are disabled. Please enable the services')));
+          content: Text('Location services are disabled. Please enable the services'
+            )));
       return false;
     }
     permission = await Geolocator.checkPermission();
@@ -82,14 +82,14 @@ class _State extends State<ExtaDataGoogle> {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         ScaffoldMessenger.of(context as BuildContext).showSnackBar(
-            const SnackBar(content: Text('Location permissions are denied')));
+           const  SnackBar(content: Text('Location permissions are denied')));
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
       ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
           content: Text(
-              'Location permissions are permanently denied, we cannot request permissions.')));
+              'Location permissions are permanently denied, we cannot request permissions.')));
       return false;
     }
     return true;
@@ -128,39 +128,37 @@ class _State extends State<ExtaDataGoogle> {
     select=File(reteurnimage!.path);
     var imageName=basename(reteurnimage.path);
     // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
-    var refStorage =FirebaseStorage.instance.ref("usersImages").child(imageName);
+    var refStorage =
+        FirebaseStorage.instance.ref("usersImages").child(imageName);
     refStorage.putFile(select!);
-    url=await refStorage.getDownloadURL();
+    url = await refStorage.getDownloadURL();
 
-    setState(() {
-
-    });
+    setState(() {});
   }
-@override
+
+  @override
   void initState() {
     super.initState();
     _getCurrentPosition();
     // TODO: implement initState
-    fullName.text=widget.displayName;
-    email.text=widget.Email;
+    fullName.text = widget.displayName;
+    email.text = widget.Email;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold
-      (
+    return Scaffold(
       body: Padding(
         padding: const EdgeInsets.only(top: 10,left: 20,right: 20),
         child: ListView(
-          children:
-          [
+          children: [
             Form(
               key: formState,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children:
                 [
-                  const Text('Continue your Information',style: Styles.textStyle25,),
+                  Text(context.translate("Continue_your_Information"),style: Styles.textStyle25,),
                   SizedBox(height: context.getDefaultSize()*4,),
                   Center(
                     child: Stack(
@@ -223,13 +221,13 @@ class _State extends State<ExtaDataGoogle> {
                   SizedBox(height: context.getDefaultSize()*4,),
                   CustomTextForm(
                     obscureText: false,
-                    hinttext:"Full Name" ,
+                    hinttext:context.translate("Full_Name") ,
                     mycontroller:fullName ,
                     validator: (val)
                     {
                       if(val=="")
                       {
-                        return'can not to be empty';
+                        return context.translate("can_not_to_be_empty");
                       }
                       return null;
                     },
@@ -263,7 +261,7 @@ class _State extends State<ExtaDataGoogle> {
                     {
                       if(val=="")
                       {
-                        return'can not to be empty';
+                        return context.translate("can_not_to_be_empty");
                       }
                       return null;
                     },
@@ -278,13 +276,13 @@ class _State extends State<ExtaDataGoogle> {
                           // isDeny: true,
                           maxLines: 1,
                           obscureText: false,
-                          hinttext:"No.StreetName" ,
+                          hinttext:context.translate("No_StreetName") ,
                           mycontroller:street,
                           validator: (val)
                           {
                             if(val=="")
                             {
-                              return'can not to be empty';
+                              return context.translate("can_not_to_be_empty");
                             }
                             return null;
                           },
@@ -297,13 +295,13 @@ class _State extends State<ExtaDataGoogle> {
                         child: CustomTextForm(
                           maxLines: 1,
                           obscureText: false,
-                          hinttext:"region" ,
+                          hinttext:context.translate("region") ,
                           mycontroller:region,
                           validator: (val)
                           {
                             if(val=="")
                             {
-                              return'can not to be empty';
+                              return context.translate("can_not_to_be_empty");
                             }
                             return null;
                           },
@@ -320,13 +318,13 @@ class _State extends State<ExtaDataGoogle> {
                         child: CustomTextForm(
                           maxLines: 1,
                           obscureText: false,
-                          hinttext:"City" ,
+                          hinttext:context.translate("City") ,
                           mycontroller:city,
                           validator: (val)
                           {
                             if(val=="")
                             {
-                              return'can not to be empty';
+                              return context.translate("can_not_to_be_empty");
                             }
                             return null;
                           },
@@ -339,13 +337,13 @@ class _State extends State<ExtaDataGoogle> {
                         child: CustomTextForm(
                           maxLines: 1,
                           obscureText: false,
-                          hinttext:"country" ,
+                          hinttext:context.translate("country") ,
                           mycontroller:country,
                           validator: (val)
                           {
                             if(val=="")
                             {
-                              return'can not to be empty';
+                              return context.translate("can_not_to_be_empty");
                             }
                             return null;
                           },
@@ -369,13 +367,13 @@ class _State extends State<ExtaDataGoogle> {
                           ],
                           maxLines: 1,
                           obscureText: false,
-                          hinttext:"FloorNo." ,
+                          hinttext:context.translate("FloorNo") ,
                           mycontroller:floorNumber,
                           validator: (val)
                           {
                             if(val=="")
                             {
-                              return'can not to be empty';
+                              return context.translate("can_not_to_be_empty");
                             }
                             return null;
                           },
@@ -392,13 +390,13 @@ class _State extends State<ExtaDataGoogle> {
                           ],
                           maxLines: 1,
                           obscureText: false,
-                          hinttext:"FlatNo." ,
+                          hinttext:context.translate("FlatNo") ,
                           mycontroller:flatNumber,
                           validator: (val)
                           {
                             if(val=="")
                             {
-                              return'can not to be empty';
+                              return context.translate("can_not_to_be_empty");
                             }
                             return null;
                           },
@@ -410,13 +408,13 @@ class _State extends State<ExtaDataGoogle> {
                   SizedBox(height: context.getDefaultSize()*1.6,),
                   CustomTextForm(
                     obscureText: false,
-                    hinttext:"Email" ,
+                    hinttext:context.translate("Email") ,
                     mycontroller:email ,
                     validator: (val)
                     {
                       if(val=="")
                       {
-                        return'can not to be empty';
+                        return context.translate("can_not_to_be_empty");
                       }
                       return null;
                     },
@@ -432,13 +430,13 @@ class _State extends State<ExtaDataGoogle> {
                         isPassword=!isPassword;
                       });
                     },
-                    hinttext: "Password",
+                    hinttext: context.translate("Password"),
                     mycontroller: password,
                     validator: (val)
                     {
                       if(val=="")
                       {
-                        return'can not to be empty';
+                        return context.translate("can_not_to_be_empty");
                       }
                       return null;
                     },
@@ -452,12 +450,15 @@ class _State extends State<ExtaDataGoogle> {
                       height: 35,
                       width: 210,
                       child: ElevatedButton(
-                          style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black),shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)))),
-
-                          onPressed: ()
-
-                          async {
-                            if(formState.currentState!.validate()) {
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.black),
+                              shape: MaterialStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20)))),
+                          onPressed: () async {
+                            if (formState.currentState!.validate()) {
                               try {
                                 SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                                 String?docgoogle;
@@ -469,10 +470,11 @@ class _State extends State<ExtaDataGoogle> {
                                   "LAT":_currentPosition?.latitude??'',
                                   "LNG":_currentPosition?.longitude??'',
                                   // to determine which each user add to firestore that depend on  their ID
-                                  "id":widget.id
+                                  "id": widget.id
                                 });
                                 docgoogle = add.id;
-                                sharedPreferences.setString("docGoogle", docgoogle);
+                                sharedPreferences.setString(
+                                    "docGoogle", docgoogle);
                                 // addUsersData();
                                 Navigator.of(context).push(MaterialPageRoute(builder: (context)
                                 {
@@ -494,27 +496,27 @@ class _State extends State<ExtaDataGoogle> {
                                 //   ).show();
                                 // }
                                 // GoRouter.of(context).push(AppRouter.KBottomNavigation);
-
                               } on FirebaseAuthException catch (e) {
-                                if (e.code ==e.code) {
+                                if (e.code == e.code) {
                                   AwesomeDialog(
                                     context: context,
                                     dialogType: DialogType.error,
                                     animType: AnimType.rightSlide,
-                                    title: 'Error',
-                                    desc: 'try another email or password',
-                                    buttonsTextStyle: const TextStyle(color: Colors.black),
+                                    title: context.translate("Error"),
+                                    desc: context.translate("Try_another_email_or_password"),
+                                    buttonsTextStyle:
+                                        const TextStyle(color: Colors.black),
                                     showCloseIcon: true,
-
                                   ).show();
-                                  print('The account already exists for that email.');
+                                  print(
+                                  context.translate( "The_account_already_exists_for_that_email"));
                                 }
                               } catch (e) {
                                 print(e);
                               }
                             }
-                          }, child:Text
-                        ('Submit')),
+                          },
+                          child: Text(context.translate("Submit"))),
                     ),
                   ),
                   SizedBox(height: context.getDefaultSize()*8,),

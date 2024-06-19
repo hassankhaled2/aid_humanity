@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:aid_humanity/core/utils/app_router/app_router.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,14 +16,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/constants/constants.dart';
-import '../../../../core/constants/test.dart';
 import '../../../../core/utils/styles/styles.dart';
 import '../widgets/text_form_field.dart';
 import 'extra_data_google.dart';
 import 'login_page.dart';
 import 'package:path/path.dart';
-
-
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -45,12 +43,12 @@ class _State extends State<RegisterPage> {
   TextEditingController country = TextEditingController();
   TextEditingController floorNumber = TextEditingController();
   TextEditingController flatNumber = TextEditingController();
-  GlobalKey<FormState>formState=GlobalKey();
-  bool isloading =true;
-  bool isPassword =true;
+  GlobalKey<FormState> formState = GlobalKey();
+  bool isloading = true;
+  bool isPassword = true;
   CollectionReference categories = FirebaseFirestore.instance.collection('UsersAuth');
 
-  File?select;
+  File? select;
   String? url;
 
   String? _currentStreet;
@@ -60,23 +58,20 @@ class _State extends State<RegisterPage> {
 
   Position? _currentPosition;
 
-  SelectAndUploadImage()async {
-
-
-    final reteurnimage= await ImagePicker().pickImage(source: ImageSource.gallery);
-    select=File(reteurnimage!.path);
-    var imageName=basename(reteurnimage.path);
+  SelectAndUploadImage() async {
+    final reteurnimage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    select = File(reteurnimage!.path);
+    var imageName = basename(reteurnimage.path);
     // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
-    var refStorage =FirebaseStorage.instance.ref("usersImages").child(imageName);
+    var refStorage = FirebaseStorage.instance.ref("usersImages").child(imageName);
     refStorage.putFile(select!);
 
-    url=await refStorage.getDownloadURL();
+    url = await refStorage.getDownloadURL();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString("userImage",url!);
-    setState(() {
-
-    });
+    sharedPreferences.setString("userImage", url!);
+    setState(() {});
   }
+
   // SavePref(String fullName,String phone,String email,String address)async
   // {
   //   SharedPreferences sharedPreference=await SharedPreferences.getInstance();
@@ -95,24 +90,19 @@ class _State extends State<RegisterPage> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
-          content: Text(
-              'Location services are disabled. Please enable the services')));
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(content: Text('Location services are disabled. Please enable the services')));
       return false;
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
-            const SnackBar(content: Text('Location permissions are denied')));
+        ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(content: Text('Location permissions are denied')));
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
-          content: Text(
-              'Location permissions are permanently denied, we cannot request permissions.')));
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(content: Text('Location permissions are permanently denied, we cannot request permissions.')));
       return false;
     }
     return true;
@@ -122,8 +112,9 @@ class _State extends State<RegisterPage> {
     final hasPermission = await _handleLocationPermission();
 
     if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high,)
-        .then((Position position) {
+    await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    ).then((Position position) {
       setState(() => _currentPosition = position);
       _getAddressFromLatLng(_currentPosition!);
     }).catchError((e) {
@@ -132,31 +123,28 @@ class _State extends State<RegisterPage> {
   }
 
   Future<void> _getAddressFromLatLng(Position position) async {
-    await placemarkFromCoordinates(
-        _currentPosition!.latitude, _currentPosition!.longitude)
-        .then((List<Placemark> placemarks) {
+    await placemarkFromCoordinates(_currentPosition!.latitude, _currentPosition!.longitude).then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
         _currentStreet = '${place.street}';
-        _region ='${place.subAdministrativeArea}';
-        _city='${place.administrativeArea}';
-        _country='${place.country}';
+        _region = '${place.subAdministrativeArea}';
+        _city = '${place.administrativeArea}';
+        _country = '${place.country}';
 
-        street.text=_currentStreet??"";
-        region.text=_region??'';
-        city.text=_city??'';
-        country.text=_country??'';
+        street.text = _currentStreet ?? "";
+        region.text = _region ?? '';
+        city.text = _city ?? '';
+        country.text = _country ?? '';
       });
     }).catchError((e) {
       debugPrint(e);
     });
   }
+
   @override
   void initState() {
     super.initState();
     _getCurrentPosition();
-
-
   }
 
   // SelectAndUploadImage()async {
@@ -205,69 +193,69 @@ class _State extends State<RegisterPage> {
     // final user=FirebaseAuth.instance.currentUser;
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
-    GoogleSignInAuthentication?googleAuth = await googleUser?.authentication;
+    GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
 
     // Create a new credential
     final credential = GoogleAuthProvider.credential(
-
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
     // Once signed in, return the UserCredential
-   final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+    final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
     final id = userCredential.user!.uid;
     final user = userCredential.user!;
     final displayName = user.displayName ?? 'hahadhda';
     final email = user.email ?? 'hdahdhah';
-   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)
-   {
-     return  ExtaDataGoogle(displayName: displayName, Email:email , id: id);
-   }), (route) => false);
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) {
+      return ExtaDataGoogle(displayName: displayName, Email: email, id: id);
+    }), (route) => false);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold
-      (
+    return Scaffold(
       body: Padding(
-        padding: EdgeInsets.all(context.getDefaultSize()*2),
+        padding: EdgeInsets.all(context.getDefaultSize() * 2),
         child: ListView(
-          children:
-          [
+          children: [
             Form(
               key: formState,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children:
-                [
-
-                  SizedBox(height: context.getDefaultSize()*1,),
-                  const Text('Sign Up',style: Styles.textStyle25,),
-                  SizedBox(height: context.getDefaultSize()*1.5,),
+                children: [
+                  SizedBox(
+                    height: context.getDefaultSize() * 1,
+                  ),
+                  Text(
+                    context.translate('Sign_up'),
+                    style: Styles.textStyle25,
+                  ),
+                  SizedBox(
+                    height: context.getDefaultSize() * 1.5,
+                  ),
                   Center(
                     child: Stack(
                       clipBehavior: Clip.none, // Clip overflowing widgets
                       children: [
                         CircleAvatar(
-
-                          radius:context.getDefaultSize() * 6 ,
+                          radius: context.getDefaultSize() * 6,
                           child: url == null
                               ? Text('')
                               : ClipOval(
-                            child: FancyShimmerImage(
-                              imageUrl: url!,
-                              shimmerDuration: Duration(seconds: 2),
-                              boxFit: BoxFit.fill,
-                              width: context.getDefaultSize() * 20,
-                              height: context.getDefaultSize() * 20,
-                              shimmerBaseColor: Colors.grey,
-                              shimmerHighlightColor: Colors.white,
-                            ),
-                          ),
+                                  child: FancyShimmerImage(
+                                    imageUrl: url!,
+                                    shimmerDuration: Duration(seconds: 2),
+                                    boxFit: BoxFit.fill,
+                                    width: context.getDefaultSize() * 20,
+                                    height: context.getDefaultSize() * 20,
+                                    shimmerBaseColor: Colors.grey,
+                                    shimmerHighlightColor: Colors.white,
+                                  ),
+                                ),
                         ),
                         Positioned(
                           right: context.getDefaultSize() * 0.2, // Adjust positioning as needed
-                          bottom:context.getDefaultSize() * 0, // Adjust positioning as needed
+                          bottom: context.getDefaultSize() * 0, // Adjust positioning as needed
                           child: Container(
                             height: context.getDefaultSize() * 3.5,
                             width: context.getDefaultSize() * 3.5,
@@ -281,11 +269,9 @@ class _State extends State<RegisterPage> {
                                 size: context.getDefaultSize() * 2,
                                 color: Colors.white,
                               ),
-                              onPressed:()
-                              {
+                              onPressed: () {
                                 SelectAndUploadImage();
                                 // ProfilePage(k: url!);
-
                               },
                             ),
                           ),
@@ -302,22 +288,23 @@ class _State extends State<RegisterPage> {
                       ],
                     ),
                   ),
-                  SizedBox(height: context.getDefaultSize()*4,),
+                  SizedBox(
+                    height: context.getDefaultSize() * 4,
+                  ),
                   CustomTextForm(
                     obscureText: false,
-                    hinttext:"Full Name" ,
-                    mycontroller:fullName ,
-                    validator: (val)
-                    {
-                      if(val=="")
-                      {
-                        return'can not to be empty';
+                    hinttext: context.translate("Full_Name"),
+                    mycontroller: fullName,
+                    validator: (val) {
+                      if (val == "") {
+                        return context.translate("can_not_to_be_empty");
                       }
                       return null;
                     },
-
                   ),
-                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  SizedBox(
+                    height: context.getDefaultSize() * 1.6,
+                  ),
                   CustomTextForm(
                     keyboardType: TextInputType.phone,
                     // inputFormatters: [
@@ -339,329 +326,296 @@ class _State extends State<RegisterPage> {
                     // ],
                     obscureText: false,
 
-                    hinttext:"+20XXXXXXXXXX" ,
-                    mycontroller:phone ,
-                    validator: (val)
-                    {
-                      if(val=="")
-                      {
-                        return'can not to be empty';
+                    hinttext: "+20XXXXXXXXXX",
+                    mycontroller: phone,
+                    validator: (val) {
+                      if (val == "") {
+                        return context.translate("can_not_to_be_empty");
                       }
                       return null;
                     },
-
                   ),
-                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  SizedBox(
+                    height: context.getDefaultSize() * 1.6,
+                  ),
                   Row(
                     children: [
                       SizedBox(
-                        width:context.getDefaultSize()*18 ,
+                        width: context.getDefaultSize() * 18,
                         child: CustomTextForm(
                           // isDeny: true,
                           maxLines: 1,
                           obscureText: false,
-                          hinttext:"No.StreetName" ,
-                          mycontroller:street,
-                          validator: (val)
-                          {
-                            if(val=="")
-                            {
-                              return'can not to be empty';
+                          hinttext: context.translate("No_StreetName"),
+                          mycontroller: street,
+                          validator: (val) {
+                            if (val == "") {
+                              return context.translate("can_not_to_be_empty");
                             }
                             return null;
                           },
-
                         ),
                       ),
-                      SizedBox(width: context.getDefaultSize()*1,),
                       SizedBox(
-                        width:context.getDefaultSize()*18 ,
+                        width: context.getDefaultSize() * 1,
+                      ),
+                      SizedBox(
+                        width: context.getDefaultSize() * 18,
                         child: CustomTextForm(
                           maxLines: 1,
                           obscureText: false,
-                          hinttext:"region" ,
-                          mycontroller:region,
-                          validator: (val)
-                          {
-                            if(val=="")
-                            {
-                              return'can not to be empty';
+                          hinttext: context.translate("region"),
+                          mycontroller: region,
+                          validator: (val) {
+                            if (val == "") {
+                              return context.translate("can_not_to_be_empty");
                             }
                             return null;
                           },
-
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: context.getDefaultSize()*1,),
+                  SizedBox(
+                    height: context.getDefaultSize() * 1,
+                  ),
                   Row(
                     children: [
                       SizedBox(
-                        width:context.getDefaultSize()*25,
+                        width: context.getDefaultSize() * 25,
                         child: CustomTextForm(
                           maxLines: 1,
                           obscureText: false,
-                          hinttext:"City" ,
-                          mycontroller:city,
-                          validator: (val)
-                          {
-                            if(val=="")
-                            {
-                              return'can not to be empty';
+                          hinttext: context.translate("City"),
+                          mycontroller: city,
+                          validator: (val) {
+                            if (val == "") {
+                              return context.translate("can_not_to_be_empty");
                             }
                             return null;
                           },
-
                         ),
                       ),
-                      SizedBox(width: context.getDefaultSize()*1,),
                       SizedBox(
-                        width:context.getDefaultSize()*11 ,
+                        width: context.getDefaultSize() * 1,
+                      ),
+                      SizedBox(
+                        width: context.getDefaultSize() * 11,
                         child: CustomTextForm(
                           maxLines: 1,
                           obscureText: false,
-                          hinttext:"country" ,
-                          mycontroller:country,
-                          validator: (val)
-                          {
-                            if(val=="")
-                            {
-                              return'can not to be empty';
+                          hinttext: context.translate("country"),
+                          mycontroller: country,
+                          validator: (val) {
+                            if (val == "") {
+                              return context.translate("can_not_to_be_empty");
                             }
                             return null;
                           },
-
                         ),
                       ),
-
                     ],
                   ),
-                  SizedBox(height: context.getDefaultSize()*1,),
+                  SizedBox(
+                    height: context.getDefaultSize() * 1,
+                  ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width:context.getDefaultSize()*12 ,
+                        width: context.getDefaultSize() * 12,
                         child: CustomTextForm(
-                          inputFormatters:
-                          [
+                          inputFormatters: [
                             LengthLimitingTextInputFormatter(4),
                           ],
                           maxLines: 1,
                           obscureText: false,
-                          hinttext:"FloorNo." ,
-                          mycontroller:floorNumber,
-                          validator: (val)
-                          {
-                            if(val=="")
-                            {
-                              return'can not to be empty';
+                          hinttext: context.translate("FloorNo"),
+                          mycontroller: floorNumber,
+                          validator: (val) {
+                            if (val == "") {
+                              return context.translate("can_not_to_be_empty");
                             }
                             return null;
                           },
-
                         ),
                       ),
-                      SizedBox(width: context.getDefaultSize()*1,),
                       SizedBox(
-                        width:context.getDefaultSize()*11,
+                        width: context.getDefaultSize() * 1,
+                      ),
+                      SizedBox(
+                        width: context.getDefaultSize() * 11,
                         child: CustomTextForm(
-                          inputFormatters:
-                          [
+                          inputFormatters: [
                             LengthLimitingTextInputFormatter(4),
                           ],
                           maxLines: 1,
                           obscureText: false,
-                          hinttext:"FlatNo." ,
-                          mycontroller:flatNumber,
-                          validator: (val)
-                          {
-                            if(val=="")
-                            {
-                              return'can not to be empty';
+                          hinttext: context.translate("FlatNo"),
+                          mycontroller: flatNumber,
+                          validator: (val) {
+                            if (val == "") {
+                              return context.translate("can_not_to_be_empty");
                             }
                             return null;
                           },
-
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  SizedBox(
+                    height: context.getDefaultSize() * 1.6,
+                  ),
                   CustomTextForm(
                     obscureText: false,
-                    hinttext:"Email" ,
-                    mycontroller:email ,
-                    validator: (val)
-                    {
-                      if(val=="")
-                      {
-                        return'can not to be empty';
+                    hinttext: context.translate("Email"),
+                    mycontroller: email,
+                    validator: (val) {
+                      if (val == "") {
+                        return context.translate("can_not_to_be_empty");
                       }
                       return null;
                     },
-
                   ),
-                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  SizedBox(
+                    height: context.getDefaultSize() * 1.6,
+                  ),
                   CustomTextForm(
-                    obscureText:isPassword,
-                    suffix: isPassword?Icons.visibility:Icons.visibility_off,
-                    suffixpressed:  ()
-                    {
+                    obscureText: isPassword,
+                    suffix: isPassword ? Icons.visibility : Icons.visibility_off,
+                    suffixpressed: () {
                       setState(() {
-                        isPassword=!isPassword;
+                        isPassword = !isPassword;
                       });
                     },
-                    hinttext: "Password",
+                    hinttext: context.translate("Password"),
                     mycontroller: password,
-                    validator: (val)
-                    {
-                      if(val=="")
-                      {
-                        return'can not to be empty';
+                    validator: (val) {
+                      if (val == "") {
+                        return context.translate("can_not_to_be_empty");
                       }
                       return null;
                     },
-
-
                   ),
-                  SizedBox(height: context.getDefaultSize()*4,),
+                  SizedBox(
+                    height: context.getDefaultSize() * 4,
+                  ),
                   Center(
-                    child:Container(
+                    child: Container(
                       height: 35,
                       width: 210,
                       child: ElevatedButton(
-                    style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black),shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius:BorderRadius.circular(20)))),
+                          style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black), shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))),
+                          onPressed: () async {
+                            if (formState.currentState!.validate()) {
+                              try {
+                                final creditional = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                                  email: email.text,
+                                  password: password.text,
+                                );
+                                final d = FirebaseAuth.instance.currentUser!.uid;
+                                SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                sharedPreferences.setString("userId", d);
+                                String? userId = sharedPreferences.getString("userId");
+                                final f = categories.doc();
+                                String? doc;
 
-                          onPressed: ()
+                                // sharedPreferences.setString("categories",categories as String ) ;
+                                // final c= sharedPreferences.getString("categories");
+                                //  CollectionReference<Object?> Cat = c as CollectionReference<Object?>;
+                                DocumentReference add = await categories.doc(userId);
+                                add..set({"fullName": fullName.text, "Email": email.text, "Phone": phone.text, "street": street.text, "city": city.text, "region": region.text, "country": country.text, "flatNumber": flatNumber.text, "floorNumber": floorNumber.text, "LAT": _currentPosition?.latitude ?? '', "LNG": _currentPosition?.longitude ?? '', "id": userId});
+                                doc = add.id;
+                                print(doc);
+                                // Save docId in SharedPreferences (optional):
+                                sharedPreferences.setString("doc", doc);
+                                // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                // sharedPreferences.setString("userId", d);
+                                // ChoiceItem(g: d,);
+                                // addUsersData();
 
-                          async {
-          if(formState.currentState!.validate()) {
-      try {
-
-        final creditional= await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email.text,
-          password: password.text,
-        );
-       final d= FirebaseAuth.instance.currentUser!.uid;
-        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-        sharedPreferences.setString("userId", d);
-        String? userId = sharedPreferences.getString("userId");
-       final  f=categories.doc();
-       String?doc;
-
-         // sharedPreferences.setString("categories",categories as String ) ;
-      // final c= sharedPreferences.getString("categories");
-      //  CollectionReference<Object?> Cat = c as CollectionReference<Object?>;
-       DocumentReference add=await categories.add({
-         "fullName":fullName.text,
-         "Email":email.text,
-         "Phone":phone.text,
-         "street":street.text,
-         "city":city.text,
-         "region":region.text,
-         "country":country.text,
-         "flatNumber":flatNumber.text,
-         "floorNumber":floorNumber.text,
-         "LAT":_currentPosition?.latitude??'',
-         "LNG":_currentPosition?.longitude??'',
-         "id": userId
-       });
-       doc = add.id;
-       print(doc);
-       // Save docId in SharedPreferences (optional):
-       sharedPreferences.setString("doc", doc);
-       // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-       // sharedPreferences.setString("userId", d);
-       // ChoiceItem(g: d,);
-       // addUsersData();
-
-      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
-       Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          elevation: 1,
-          duration: Duration(seconds: 4),
-          content: Text('Please Go to Your Gmail & Verify Your Email'),
-        ));
-    // if(creditional.user!.emailVerified)
-    // {
-    // Navigator.of(context).pushReplacementNamed(bottomNavigation);
-    // }else {
-    //
-    //   AwesomeDialog(
-    //     context: context,
-    //     dialogType: DialogType.error,
-    //     animType: AnimType.rightSlide,
-    //     title: 'Error',
-    //     desc:
-    //     'please go to your gmail and make verify to your email',
-    //   ).show();
-    // }
-        // GoRouter.of(context).push(AppRouter.KBottomNavigation);
-
-      } on FirebaseAuthException catch (e) {
-         if (e.code ==e.code) {
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.error,
-            animType: AnimType.rightSlide,
-            title: 'Error',
-            desc: 'try another email or password',
-            buttonsTextStyle: const TextStyle(color: Colors.black),
-            showCloseIcon: true,
-
-          ).show();
-          print('The account already exists for that email.');
-        }
-      } catch (e) {
-        print(e);
-      }
-    }
-                          }, child:Text
-                        ('Sign Up')),
+                                await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+                                Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                  elevation: 1,
+                                  duration: Duration(seconds: 4),
+                                  content: Text(context.translate("Verify_Your_Email")),
+                                ));
+                                // if(creditional.user!.emailVerified)
+                                // {
+                                // Navigator.of(context).pushReplacementNamed(bottomNavigation);
+                                // }else {
+                                //
+                                //   AwesomeDialog(
+                                //     context: context,
+                                //     dialogType: DialogType.error,
+                                //     animType: AnimType.rightSlide,
+                                //     title: 'Error',
+                                //     desc:
+                                //     'please go to your gmail and make verify to your email',
+                                //   ).show();
+                                // }
+                                // GoRouter.of(context).push(AppRouter.KBottomNavigation);
+                              } on FirebaseAuthException catch (e) {
+                                if (e.code == e.code) {
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.error,
+                                    animType: AnimType.rightSlide,
+                                    title: context.translate("Error"),
+                                    desc: context.translate("Try_another_email_or_password"),
+                                    buttonsTextStyle: const TextStyle(color: Colors.black),
+                                    showCloseIcon: true,
+                                  ).show();
+                                  print(context.translate("The_account_already_exists_for_that_email"));
+                                }
+                              } catch (e) {
+                                print(e);
+                              }
+                            }
+                          },
+                          child: Text(context.translate("Sign_up"))),
                     ),
                   ),
-                  SizedBox(height: context.getDefaultSize()*4,),
-                  const Row(
-                      children: <Widget>[
-                        Expanded(
-                            child: Divider()
-                        ),
-
-                        Text("OR"),
-
-                        Expanded(
-                            child: Divider()
-                        ),
-                      ]
+                  SizedBox(
+                    height: context.getDefaultSize() * 4,
                   ),
-                  SizedBox(height: context.getDefaultSize()*1.6,),
+                  Row(children: <Widget>[
+                    Expanded(child: Divider()),
+                    Text(context.translate("OR")),
+                    Expanded(child: Divider()),
+                  ]),
+                  SizedBox(
+                    height: context.getDefaultSize() * 1.6,
+                  ),
                   Center(
                     child: ElevatedButton.icon(
                       style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
-                      onPressed: ()
-                      {
+                      onPressed: () {
                         signInWithGoogle(context);
-                      }, icon:Icon(FontAwesomeIcons.google), label:Text('Continue with Google',style: TextStyle(color: Colors.white),),),
+                      },
+                      icon: Icon(FontAwesomeIcons.google),
+                      label: Text(
+                        context.translate("Continue_with_Google"),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
                   ),
-                  SizedBox(height: context.getDefaultSize()*4,),
+                  SizedBox(
+                    height: context.getDefaultSize() * 4,
+                  ),
                   Row(
-                    mainAxisAlignment:MainAxisAlignment.center,
-                    children:
-                    [
-                      const Text('Are you have account?'),
-                      TextButton(onPressed: ()
-                       {
-                        Navigator.of(context).pop(MaterialPageRoute(builder: (context) =>LoginPage(),
-                        )
-                        );
-                        }, child:Text('Sign in',style: TextStyle(color: Colors.orange))),
-
-
-
-
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(context.translate("Are_you_have_account")),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(MaterialPageRoute(
+                              builder: (context) => LoginPage(),
+                            ));
+                          },
+                          child: Text(context.translate("Sign_in"), style: TextStyle(color: Colors.orange))),
                     ],
                   ),
                 ],
@@ -673,4 +627,3 @@ class _State extends State<RegisterPage> {
     );
   }
 }
-

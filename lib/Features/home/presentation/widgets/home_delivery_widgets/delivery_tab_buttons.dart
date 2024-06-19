@@ -1,4 +1,4 @@
-import 'package:aid_humanity/Features/home/domain/use_cases/get_live_requests_usecase.dart';
+
 import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/search_page.dart';
 import 'package:aid_humanity/Features/home/presentation/widgets/history_widgets/history_widget.dart';
@@ -13,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:live_indicator/live_indicator.dart';
 
 
 class DeliveryTabButtons extends StatefulWidget {
@@ -53,7 +54,7 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
       },
       child: Scaffold(
           body: Padding(
-        padding: EdgeInsets.only(top: context.getDefaultSize() * 0),
+        padding: EdgeInsets.only(top: context.getDefaultSize() * 2),
         child: DefaultTabController(
           length: 3,
           child: NestedScrollView(
@@ -61,8 +62,8 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                 (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverAppBar(
-                  // backgroundColor: Colors.white,
-                  title: const Text('Aid Humanity',
+                  backgroundColor: Colors.white,
+                  title:  Text(context.translate('Aid Humanity'),
                       style: TextStyle(color: Color(0xFFF8B145))),
                   actions: [
                     IconButton(
@@ -87,11 +88,11 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                   ],
                   pinned: true,
                   floating: true,
-                  // flexibleSpace: FlexibleSpaceBar(
-                  //   background: Container(
-                  //     color: Colors.white,
-                  //   ),
-                  // ),
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Container(
+                      color: Colors.white,
+                    ),
+                  ),
                   bottom: TabBar(
                     onTap: (index) {
                       if (index == 0) {
@@ -102,13 +103,13 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                         BlocProvider.of<HomeBloc>(context).add(
                             GetLiveRequestsEvent(
                                 userId:
-                                    FirebaseAuth.instance.currentUser!.uid));
+                                    FirebaseAuth.instance.currentUser!.uid,isDonor: false));
                       }
                       if (index == 2) {
                         BlocProvider.of<HomeBloc>(context).add(
                             GetDoneRequestsEvent(
                                 userId:
-                                    FirebaseAuth.instance.currentUser!.uid));
+                                    FirebaseAuth.instance.currentUser!.uid,isDonor: false));
                       }
                     },
                     labelColor: const Color(0xFFF8B145),
@@ -129,10 +130,10 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                           const SizedBox(
                             width: 20,
                           ),
-                          // hasLiveRequests ? LiveIndicator(
-                          //         color: Colors.greenAccent,
-                          //         spreadRadius: 10,
-                          //       ) : Container()
+                           hasLiveRequests ? LiveIndicator(
+                                  color: Colors.greenAccent,
+                                  spreadRadius: 10,
+                                ) : Container()
                         ],
                       )),
                       Tab(
@@ -164,6 +165,7 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                         itemBuilder: (context, index) {
                           return CardWidget(
                             requestEntity: state.requests[index],
+                            isDonor: false,
                           );
                         },
                       );
@@ -195,6 +197,7 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                           itemBuilder: (context, index) {
                             return CardWidget(
                               requestEntity: state.requests[index],
+                              isDonor: false,
                             );
                           },
                         );
@@ -204,7 +207,7 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                               BlocProvider.of<HomeBloc>(context).add(
                                   GetLiveRequestsEvent(
                                       userId: FirebaseAuth
-                                          .instance.currentUser!.uid));
+                                          .instance.currentUser!.uid,isDonor: false));
                             },
                             child: FaliureWidget(faliureName: state.message));
                       } else {

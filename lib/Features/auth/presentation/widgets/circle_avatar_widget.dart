@@ -1,7 +1,7 @@
 import 'dart:io';
-
 import 'package:aid_humanity/Features/onBoarding/onboarding.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,33 +11,31 @@ import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CircleAvatarWidget extends StatefulWidget {
-  const CircleAvatarWidget({super.key,});
+  const CircleAvatarWidget({
+    super.key,
+  });
 
   @override
   State<CircleAvatarWidget> createState() => _CircleAvatarWidgetState();
 }
 
 class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
-  File?select;
-  String ?url;
-  SelectAndUploadImage()async {
-
-
-    final reteurnimage= await ImagePicker().pickImage(source: ImageSource.gallery);
-    select=File(reteurnimage!.path);
-    var imageName=basename(reteurnimage.path);
+  File? select;
+  String? url;
+  SelectAndUploadImage() async {
+    final reteurnimage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    select = File(reteurnimage!.path);
+    var imageName = basename(reteurnimage.path);
     // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
     var refStorage =FirebaseStorage.instance.ref("usersImages").child(imageName);
     await refStorage.putFile(select!);
 
-    url=await refStorage.getDownloadURL();
+    url = await refStorage.getDownloadURL();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString("userImage",url!);
-    setState(() {
-
-    });
+    sharedPreferences.setString("userImage", url!);
+    setState(() {});
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +44,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
           // crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Add Your Image'),
+            Text(context.translate("Add_Your_Image")),
             Center(
               child: Stack(
                 // clipBehavior: Clip.none, // Clip overflowing widgets
@@ -124,7 +122,7 @@ class _CircleAvatarWidgetState extends State<CircleAvatarWidget> {
                 //   );
                 // }
               },
-              child: Text("Skip"),
+              child: Text(context.translate("Skip")),
             ),
           ],
         )

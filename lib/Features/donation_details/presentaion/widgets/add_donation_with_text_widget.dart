@@ -1,6 +1,7 @@
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/ai_model_cubit/cubit/classificaiton_cubit.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/items/donation_form_item.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:aid_humanity/core/widgets/default_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +10,8 @@ class AddDonationWithTextWidget extends StatefulWidget {
   AddDonationWithTextWidget({super.key});
 
   @override
-  State<AddDonationWithTextWidget> createState() => _AddDonationWithTextWidgetState();
+  State<AddDonationWithTextWidget> createState() =>
+      _AddDonationWithTextWidgetState();
 }
 
 class _AddDonationWithTextWidgetState extends State<AddDonationWithTextWidget> {
@@ -24,24 +26,25 @@ class _AddDonationWithTextWidgetState extends State<AddDonationWithTextWidget> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.only(bottom: 10, top: 130, left: 20, right: 20),
+              padding: const EdgeInsets.only(
+                  bottom: 10, top: 130, left: 20, right: 20),
               child: TextFormField(
                 controller: text,
                 validator: (val) {
                   if (val!.isEmpty) {
-                    return 'can not to be empty';
+                    return context.translate('can_not_to_be_empty');
                   }
                   return null;
                 },
                 enabled: true,
-                decoration: const InputDecoration(
-                    hintText: 'Enter Your Description Item',
-                    disabledBorder: OutlineInputBorder(
+                decoration: InputDecoration(
+                    hintText: context.translate('Enter_Your_Description_Item'),
+                    disabledBorder: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide(
                           color: Colors.black,
                         )),
-                    labelStyle: TextStyle(color: Colors.black)),
+                    labelStyle: const TextStyle(color: Colors.black)),
               ),
             ),
             SizedBox(
@@ -59,7 +62,7 @@ class _AddDonationWithTextWidgetState extends State<AddDonationWithTextWidget> {
                             context,
                             MaterialPageRoute(
                                 builder: (_) => DonationFormItem(
-                                  items:state.knnOutput,
+                                      items: state.knnOutput,
                                       isKnn: true,
                                     )));
                       }
@@ -72,9 +75,11 @@ class _AddDonationWithTextWidgetState extends State<AddDonationWithTextWidget> {
                       }
                       return DefaultElevatedButton(
                         onPressed: () {
-                          if (formState.currentState!.validate()) BlocProvider.of<ClassificaitonCubit>(context).knnClassification(text.text);
+                          if (formState.currentState!.validate())
+                            BlocProvider.of<ClassificaitonCubit>(context)
+                                .knnClassification(text.text);
                         },
-                        text: "Submit",
+                        text: context.translate("Submit"),
                         radius: 10,
                         width: context.getDefaultSize() * 24.0,
                       );

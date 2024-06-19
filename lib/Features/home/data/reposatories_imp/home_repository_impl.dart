@@ -30,10 +30,10 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<Either<Failure, List<RequestEntity>>> getLiveRequests(String userId) async {
+  Future<Either<Failure, List<RequestEntity>>> getLiveRequests(String userId,bool isDonor) async {
     if (await networkInfo.isConnected) {
       try {
-        return right(await homeRemoteDataSource.getLiveRequests(userId));
+        return right(await homeRemoteDataSource.getLiveRequests(userId,isDonor));
       } on ServerException {
         return left(ServerFaliure(""));
       } on NoDataExecption {
@@ -58,10 +58,10 @@ class HomeRepositoryImpl implements HomeRepository {
   }
   
   @override
-  Future<Either<Failure, List<RequestEntity>>> getDoneRequests(String userId) async{
-       if (await networkInfo.isConnected) {
+  Future<Either<Failure, List<RequestEntity>>> getDoneRequests(String userId,bool isDonor) async{
+      if (await networkInfo.isConnected) {
       try {
-        return right(await homeRemoteDataSource.getDoneRequests(userId));
+        return right(await homeRemoteDataSource.getDoneRequests(userId,isDonor));
       } on ServerException {
         return left(ServerFaliure(""));
       } on NoDataExecption {

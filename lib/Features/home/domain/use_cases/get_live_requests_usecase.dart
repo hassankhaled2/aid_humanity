@@ -8,7 +8,7 @@ class GetLiveRequestsUseCase {
   GetLiveRequestsUseCase({
     required this.homeRepository,
   });
-  Future<Either<Failure, List<RequestEntity>>> call({required String userId}) {
-    return homeRepository.getLiveRequests(userId);
+  Future<Either<Failure, List<RequestEntity>>> call({required String userId,required bool isDonor}) {
+    return homeRepository.getLiveRequests(userId,isDonor);
   }
 }

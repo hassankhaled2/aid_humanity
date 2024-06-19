@@ -1,5 +1,8 @@
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
+import 'package:aid_humanity/core/utils/theme/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:aid_humanity/core/entities/request_entity.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
@@ -15,7 +18,10 @@ class HistoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(right: context.getDefaultSize() * 3, left: context.getDefaultSize() * 3, top: context.getDefaultSize() * 1.5),
+      padding: EdgeInsets.only(
+          right: context.getDefaultSize() * 2,
+          left: context.getDefaultSize() * 2,
+          top: context.getDefaultSize() * 1.5),
       child: Container(
         width: context.getDefaultSize(),
         decoration: BoxDecoration(
@@ -34,7 +40,7 @@ class HistoryWidget extends StatelessWidget {
                       color: kPrimaryColor,
                       size: context.getDefaultSize() * 1.5,
                     ),
-                    "Request Id",
+                    context.translate("Request_Id"),
                     "${request.id}",
                     context),
                 rowDataWidget(
@@ -43,7 +49,7 @@ class HistoryWidget extends StatelessWidget {
                       color: kPrimaryColor,
                       size: context.getDefaultSize() * 1.5,
                     ),
-                    "Donor name",
+                    context.translate("Donor_Name"),
                     "Menna Ahmed",
                     context),
                 rowDataWidget(
@@ -52,7 +58,7 @@ class HistoryWidget extends StatelessWidget {
                       color: kPrimaryColor,
                       size: context.getDefaultSize() * 1.5,
                     ),
-                    "Contact number",
+                    context.translate("Contact_number"),
                     "+011465697336",
                     context),
                 rowDataWidget(
@@ -61,7 +67,7 @@ class HistoryWidget extends StatelessWidget {
                       color: kPrimaryColor,
                       size: context.getDefaultSize() * 1.5,
                     ),
-                    "Address",
+                    context.translate("Address"),
                     "compound dar masr,...........",
                     context),
                 rowDataWidget(
@@ -70,23 +76,37 @@ class HistoryWidget extends StatelessWidget {
                       color: kPrimaryColor,
                       size: context.getDefaultSize() * 1.5,
                     ),
-                    "Items' quantity",
+                    context.translate("Items_quantity"),
                     "${request.numberOfItems}",
                     context),
               ],
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: context.getDefaultSize(), right: context.getDefaultSize()),
+            padding: EdgeInsets.only(
+              top: context.getDefaultSize(),
+              left: BlocProvider.of<ThemeCubit>(context).locale.languageCode ==
+                      "en"
+                  ? context.getDefaultSize() * 2
+                  : 0,
+              right: BlocProvider.of<ThemeCubit>(context).locale.languageCode ==
+                      "ar"
+                  ? context.getDefaultSize() * 2
+                  : 0,
+            ),
             child: Column(
               children: [
                 Text(
                   DateFormat('yyyy-MM-dd').format(request.time),
-                  style: TextStyle(fontSize: context.getDefaultSize(), fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: context.getDefaultSize(),
+                      fontWeight: FontWeight.bold),
                 ),
                 Text(
                   DateFormat.jm().format(request.time),
-                  style: TextStyle(fontSize: context.getDefaultSize(), fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: context.getDefaultSize(),
+                      fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
                   height: context.getDefaultSize() * 7,
@@ -108,9 +128,12 @@ class HistoryWidget extends StatelessWidget {
     );
   }
 
-  Padding rowDataWidget(Icon icon, String title, String data, BuildContext context) {
+  Padding rowDataWidget(
+      Icon icon, String title, String data, BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: context.getDefaultSize() / 2, vertical: context.getDefaultSize() / 2),
+      padding: EdgeInsets.symmetric(
+          horizontal: context.getDefaultSize() / 2,
+          vertical: context.getDefaultSize() / 2),
       child: Row(
         children: [
           icon,
@@ -119,9 +142,13 @@ class HistoryWidget extends StatelessWidget {
           ),
           Text(
             "$title :",
-            style: TextStyle(color: Colors.black, fontSize: context.getDefaultSize() * 1.2),
+            style: TextStyle(
+                color: Colors.black, fontSize: context.getDefaultSize() * 1.2),
           ),
-          Text(data, style: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: context.getDefaultSize() * 1.2))
+          Text(data,
+              style: TextStyle(
+                  color: Colors.black.withOpacity(0.6),
+                  fontSize: context.getDefaultSize() * 1.2))
         ],
       ),
     );

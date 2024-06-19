@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:aid_humanity/Features/auth/presentation/pages/choose_page_google.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -46,7 +47,7 @@ class _CircleAvatarGoogleState extends State<CircleAvatarGoogle> {
           // crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Add Your Image'),
+            Text(context.translate("Add_Your_Image")),
             Center(
               child: Stack(
                 clipBehavior: Clip.none, // Clip overflowing widgets
@@ -124,7 +125,7 @@ class _CircleAvatarGoogleState extends State<CircleAvatarGoogle> {
                 //   );
                 // }
               },
-              child: const Text("Skip"),
+              child:  Text(context.translate("Skip")),
             ),
           ],
         )
