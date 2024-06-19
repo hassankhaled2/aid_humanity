@@ -18,7 +18,7 @@ class ProfilePage extends StatelessWidget {
         context: context,
         title: context.translate("profile"),
         color: Color(0xFFF8B145),
-        backgroundColor:Colors.black12
+        backgroundColor:Colors.white
       );
 
   Widget _buildBody() =>  ProfileWidget();

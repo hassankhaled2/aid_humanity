@@ -6,10 +6,13 @@ import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/utils/app_router/app_router.dart';
+import '../../../../../core/utils/theme/App_theme.dart';
+import '../../../../../core/utils/theme/cubit/theme_cubit.dart';
 
 class ProfileWidget extends StatefulWidget {
   const ProfileWidget({
@@ -21,6 +24,8 @@ class ProfileWidget extends StatefulWidget {
 }
 
 class _ProfileWidgetState extends State<ProfileWidget> {
+  // bool isDarkTheme = true;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -64,7 +69,11 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     icon: Icons.notifications_outlined,
                     text: context.translate("notification"),
                     isModeWidget: true,
-                    onTap: () {}),
+                    onTap: ()
+                    {
+
+                    }),
+
                 ProfileItemWidget(
                     icon: Icons.history,
                     text: context.translate("history"),
@@ -75,6 +84,20 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     text: context.translate("help"),
                     isModeWidget: false,
                     onTap: () {}),
+                // ListTile(
+                //   title: Text('Dark Theme'),
+                //   trailing: Switch(
+                //     value: isDarkTheme,
+                //     onChanged: (value) {
+                //       setState(() {
+                //         isDarkTheme = value;
+                //       });
+                //
+                //       final selectedTheme = isDarkTheme ? AppTheme.values[1] : AppTheme.values[0];
+                //       context.read<ThemeCubit>().changeTheme(selectedTheme);
+                //     },
+                //   ),
+                // ),
                 ProfileItemWidget(
                     icon: Icons.info_outline,
                     text: context.translate("about"),

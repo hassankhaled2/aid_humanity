@@ -188,7 +188,7 @@ class _State extends State<LoginPage> {
                       )),
                   Padding(
                     padding: EdgeInsets.only(
-                        left: context.getDefaultSize() * 20,
+                        left: context.getDefaultSize() * 22,
                         top: context.getDefaultSize()),
                     child: Row(
                       children: [
