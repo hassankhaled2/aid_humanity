@@ -77,6 +77,12 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
+          ThemeData? themeData;
+
+        if (state is LoadedThemeState) {
+            themeData = state.themeData;
+          }
+
           return MaterialApp(
             routes: routes,
 
@@ -88,7 +94,7 @@ class MyApp extends StatelessWidget {
 
             //CircleAvatarWidget(),
             debugShowCheckedModeBanner: false,
-            locale: BlocProvider.of<ThemeCubit>(context).locale,
+            locale:BlocProvider.of<ThemeCubit>(context).locale,
             supportedLocales: AppLocalizationsSetup
                 .supportedLocales, // this line to provide , which langs to use in our app
             localizationsDelegates:
@@ -97,7 +103,7 @@ class MyApp extends StatelessWidget {
               return AppLocalizationsSetup.localeResolutionCallback(
                   deviceLocale!, supportedLocales);
             },
-            theme: getThemeDataLight, //const HomeView(),
+            theme: themeData, //const HomeView(),
           );
         },
       ),

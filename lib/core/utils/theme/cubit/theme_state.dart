@@ -11,7 +11,9 @@ final class ThemeInitial extends ThemeState {}
 
 final class ThemeLoadingState extends ThemeState{}
 
-final class LangChangedState extends ThemeState{}
+final class LangChangedState extends ThemeState
+{
+}
 class LoadedThemeState extends ThemeState{
 
   final ThemeData  themeData;

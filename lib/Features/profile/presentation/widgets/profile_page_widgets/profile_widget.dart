@@ -24,7 +24,7 @@ class ProfileWidget extends StatefulWidget {
 }
 
 class _ProfileWidgetState extends State<ProfileWidget> {
-  // bool isDarkTheme = true;
+  bool isDarkTheme = true;
 
   @override
   Widget build(BuildContext context) {
@@ -84,20 +84,20 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     text: context.translate("help"),
                     isModeWidget: false,
                     onTap: () {}),
-                // ListTile(
-                //   title: Text('Dark Theme'),
-                //   trailing: Switch(
-                //     value: isDarkTheme,
-                //     onChanged: (value) {
-                //       setState(() {
-                //         isDarkTheme = value;
-                //       });
-                //
-                //       final selectedTheme = isDarkTheme ? AppTheme.values[1] : AppTheme.values[0];
-                //       context.read<ThemeCubit>().changeTheme(selectedTheme);
-                //     },
-                //   ),
-                // ),
+                ListTile(
+                  title: Text(context.translate('Change Theme')),
+                  trailing: Switch(
+                    value: isDarkTheme,
+                    onChanged: (value) {
+                      setState(() {
+                        isDarkTheme = value;
+                      });
+
+                      final selectedTheme = isDarkTheme ? AppTheme.values[1] : AppTheme.values[0];
+                      context.read<ThemeCubit>().changeTheme(selectedTheme);
+                    },
+                  ),
+                ),
                 ProfileItemWidget(
                     icon: Icons.info_outline,
                     text: context.translate("about"),
