@@ -6,13 +6,12 @@ class ItemEntity extends Equatable {
   final String gender;
   final String image;
   final int quantity;
-  const ItemEntity({
+  const ItemEntity( {
+    required this.quantity,
     required this.type,
     required this.category,
     required this.gender,
     required this.image,
-    required this.quantity,
-   
   });
 
   @override

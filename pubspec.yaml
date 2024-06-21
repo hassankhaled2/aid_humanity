@@ -29,8 +29,9 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   awesome_dialog: ^3.2.0
-  bloc: ^8.1.3
-  cloud_firestore: ^4.13.6
+  build_runner: ^2.4.6
+  cloud_firestore: ^4.13.2
+  country_code_picker: ^3.0.0
   cupertino_icons: ^1.0.2
   dartz: ^0.10.1
   dio: ^5.4.1
@@ -39,6 +40,7 @@ dependencies:
   firebase_core: ^2.23.0
   firebase_messaging: ^14.7.5
   firebase_storage: ^11.5.2
+  google_maps_webservice: ^0.0.19
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.4
@@ -47,22 +49,29 @@ dependencies:
   flutter_speed_dial: ^7.0.0
   flutter_switch: ^0.3.2
   font_awesome_flutter: ^10.6.0
-  geocoding: ^2.2.0
+  geocoding: ^2.2.1
   geolocator: ^11.0.0
   get_it: ^7.6.4
   go_router: ^12.1.3
+  image: ^4.1.7
   google_maps_flutter: ^2.5.3
   google_sign_in: ^6.1.6
   image_picker: ^1.0.4
   internet_connection_checker: ^1.0.0+1
-  intl: ^0.18.1
   intl_phone_field: ^3.2.0
+  json_annotation: ^4.8.1
+  json_serializable: ^6.7.1
+  live_indicator: ^0.0.4
+  pdf: ^3.10.8
+  permission_handler: ^10.2.0
   pin_code_fields: ^8.0.1
+  qr_code_scanner: ^1.0.1
+  qr_flutter: ^4.1.0
   shared_preferences: ^2.2.2
   smooth_page_indicator: ^1.1.0
   tflite_v2: ^1.0.0
-  url_launcher: ^6.2.5
-
+  url_launcher: ^6.1.12
+  fancy_shimmer_image: ^2.0.3
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
@@ -78,18 +87,13 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/
+    - assets/pics/
+    - assets/ai_model/
     - assets/logo/logo.png
     - assets/lang/en.json
     - assets/lang/ar.json
-    - lib/core/utils/assets_images/Men clothes/
-    - lib/core/utils/assets_images/Women clothes/
-    - lib/core/utils/assets_images/girls clothes/
-    - lib/core/utils/assets_images/boys clothes/
-    - lib/core/utils/assets_images/babies clothes/
-    - assets/ai_model/
-    - assets/font_families/static/
-    - assets/pics/
-    - assets/ai_model/
+    - assets/pics/circle_avatar.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

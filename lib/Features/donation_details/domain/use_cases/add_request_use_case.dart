@@ -10,7 +10,7 @@ class AddRequestUSeCase {
     required this.detailsRepository,
   });
 
-  Future<Either<Faliure, Unit>> addRequest(RequestEntity requestEntity,List<ItemEntity>items) {
+  Future<Either<Failure, Unit>> addRequest(RequestEntity requestEntity,List<ItemEntity>items) {
     return detailsRepository.addRequest(requestEntity,items);
   }
 }

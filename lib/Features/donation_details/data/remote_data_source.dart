@@ -6,7 +6,7 @@ import 'package:dartz/dartz.dart';
 import 'package:aid_humanity/core/error/faliures.dart';
 
 abstract class DetailsRemoteDataSource {
-  Future<Either<Faliure, Unit>> addRequest(RequestModel requestModel, List<ItemModel> items);
+  Future<Either<Failure, Unit>> addRequest(RequestModel requestModel, List<ItemModel> items);
 }
 
 class DetailsRemoteDataSourceImplWithFireBase extends DetailsRemoteDataSource {
@@ -15,7 +15,7 @@ class DetailsRemoteDataSourceImplWithFireBase extends DetailsRemoteDataSource {
     required this.firestore,
   });
   @override
-  Future<Either<Faliure, Unit>> addRequest(RequestModel requestModel, List<ItemModel> items) async {
+  Future<Either<Failure, Unit>> addRequest(RequestModel requestModel, List<ItemModel> items) async {
     try {
       DocumentReference requestDocumentReference = await firestore.collection('request').add(requestModel.toJson(requestModel));
       requestDocumentReference.update({"id": requestDocumentReference.id});
@@ -26,7 +26,7 @@ class DetailsRemoteDataSourceImplWithFireBase extends DetailsRemoteDataSource {
 
       return Future.value(const Right(unit));
     } catch (error) {
-      throw ServerException();
+      throw ServerException(exceptionName: error.toString());
     }
   }
 }

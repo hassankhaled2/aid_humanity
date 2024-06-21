@@ -2,12 +2,14 @@ import 'dart:io';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/ai_model_cubit/cubit/classificaiton_cubit.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/pages/donation_form_page.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
+import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
 import 'package:aid_humanity/core/utils/theme/app_color/app_color_light.dart';
 import 'package:aid_humanity/core/widgets/custom_button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+
 
 class AddImagesItem extends StatefulWidget {
   const AddImagesItem({super.key});
@@ -94,13 +96,23 @@ class _AddImagesItemState extends State<AddImagesItem> {
             height: 20.0,
           ),
           BlocConsumer<ClassificaitonCubit, ClassificaitonState>(
-            listener: (context, state) {
+            listener: (context, state)  {
               if (state is ClassificaitonSuccessState) {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DonationFormPage(items: state.result, itemsImages: state.itemsImages,isKnn: false,)));
+               
+
+                Navigator.push(
+                    // ignore: use_build_context_synchronously
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DonationFormPage(
+                              items: state.result,
+                              itemsImages: state.itemsImages,
+                              isKnn: false,
+                            )));
               }
             },
             builder: (context, state) {
-              if (state is ClassificaitonLoadingState) {
+              if (state is ClassificaitonLoadingState || state is ModelLoadingState || state is ModelLoadedState) {
                 return Padding(
                     padding: EdgeInsets.all(context.getDefaultSize() * 1.5),
                     child: const CircularProgressIndicator(
@@ -115,16 +127,16 @@ class _AddImagesItemState extends State<AddImagesItem> {
                       padding: EdgeInsets.all(context.getDefaultSize() * 1.5),
                       child: GestureDetector(
                         onTap: selectImages,
-                        child: CustomButtonWidget(height: 4, width: 18, title: "Pick images", fontSize: 2),
+                        child: CustomButtonWidget(height: 4, width: 18, title:context.translate( "Pick_images"), fontSize: 2),
                       )),
                   Padding(
                     padding: EdgeInsets.only(top: context.getDefaultSize() * 1.5, bottom: context.getDefaultSize() * 1.5, right: context.getDefaultSize()),
                     child: GestureDetector(
-                      child: CustomButtonWidget(height: 4, width: 18, title: "continue", fontSize: 2),
+                      child: CustomButtonWidget(height: 4, width: 18, title: context.translate("continue"), fontSize: 2),
                       onTap: () async {
                         if (galleryImages == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text("Please select images"),
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(context.translate("Please_select_images")),
                             backgroundColor: AppColorsLight.primaryColor,
                           ));
                         } else {
@@ -141,4 +153,6 @@ class _AddImagesItemState extends State<AddImagesItem> {
       )),
     );
   }
+
+ 
 }

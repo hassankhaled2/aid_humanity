@@ -15,17 +15,60 @@ class HomeRepositoryImpl implements HomeRepository {
     required this.networkInfo,
   });
   @override
-  Future<Either<Faliure, List<RequestEntity>>> getAllRequests() async {
+  Future<Either<Failure, List<RequestEntity>>> getAllRequests() async {
     if (await networkInfo.isConnected) {
       try {
         return right(await homeRemoteDataSource.getAllRequests());
       } on ServerException {
-        return left(ServerFaliure());
+        return left(ServerFaliure(""));
       } on NoDataExecption {
-        return left(NoDataFaliure());
+        return left(NoDataFaliure(""));
       }
     } else {
-      return Left(OfflineFaliure());
+      return Left(OfflineFaliure(""));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<RequestEntity>>> getLiveRequests(String userId,bool isDonor) async {
+    if (await networkInfo.isConnected) {
+      try {
+        return right(await homeRemoteDataSource.getLiveRequests(userId,isDonor));
+      } on ServerException {
+        return left(ServerFaliure(""));
+      } on NoDataExecption {
+        return left(NoDataFaliure(""));
+      }
+    } else {
+      return Left(OfflineFaliure(""));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> updateRequest(String requestId, String userId, String status) async {
+    if (await networkInfo.isConnected) {
+      try {
+        return right(await homeRemoteDataSource.updateRequest(requestId, userId, status));
+      } on ServerException {
+        return left(ServerFaliure(""));
+      }
+    } else {
+      return Left(OfflineFaliure(""));
+    }
+  }
+  
+  @override
+  Future<Either<Failure, List<RequestEntity>>> getDoneRequests(String userId,bool isDonor) async{
+      if (await networkInfo.isConnected) {
+      try {
+        return right(await homeRemoteDataSource.getDoneRequests(userId,isDonor));
+      } on ServerException {
+        return left(ServerFaliure(""));
+      } on NoDataExecption {
+        return left(NoDataFaliure(""));
+      }
+    } else {
+      return Left(OfflineFaliure(""));
     }
   }
 }
