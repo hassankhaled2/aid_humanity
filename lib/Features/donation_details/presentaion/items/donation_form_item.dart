@@ -77,7 +77,9 @@ class _DonationFormItemState extends State<DonationFormItem> {
 
   void _onDecrement(int index) {
     setState(() {
-      if (itemQ![index] > 0 && totalQuantity > 2) {
+      if (itemQ![index] > 0 &&
+          totalQuantity > itemQ!.length &&
+          itemQ![index] > 1) {
         itemQ![index]--;
         totalQuantity--;
         quantityController =
@@ -232,7 +234,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
                   height: context.getDefaultSize() * 2,
                 ),
                 Row(children: [
-                  addressText(context, context.translate("Government_")),
+                  addressText(context, context.translate("Governorate_")),
                   SizedBox(
                     width: context.getDefaultSize() * 13,
                   ),

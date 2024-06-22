@@ -198,8 +198,6 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                   )
                 : GestureDetector(
                     onDoubleTap: () async {
-                      print(
-                          "******************************--------------------------------------");
                       print(widget.requestEntity.id);
                       BlocProvider.of<DliveryLocationCubit>(context)
                           .getLocation(context);
@@ -309,7 +307,7 @@ class _ViewDetailsWidgetState extends State<ViewDetailsWidget> {
                               Row(
                                 children: [
                                   Text(
-                                    context.translate("Government"),
+                                    context.translate("Governorate"),
                                     style: TextStyle(
                                         color: kPrimaryColor,
                                         fontSize:

@@ -83,39 +83,25 @@ class _CardWidgetState extends State<CardWidget> {
                   padding: EdgeInsets.only(
                       left: context.getDefaultSize() * .9,
                       top: context.getDefaultSize() * .8),
-                  child: Row(
-                    children: [
-                      Container(
-                        height: context.getDefaultSize() * 3,
-                        width: context.getDefaultSize() * 20,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            isLoading
-                                ? const CircularProgressIndicator()
-                                : Text(
-                                    userName ?? "Name not found",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: context.getDefaultSize() * 2.1,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: context.getDefaultSize() * 3,
-                      ),
-                      Text(
-                        "20 min ago",
-                        style: TextStyle(
-                            color: Colors.orange,
-                            height: context.getDefaultSize() * .23,
-                            fontSize: context.getDefaultSize() * 1.5),
-                      ),
-                    ],
+                  child: Container(
+                    height: context.getDefaultSize() * 3,
+                    width: context.getDefaultSize() * 20,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        isLoading
+                            ? const CircularProgressIndicator()
+                            : Text(
+                                userName ?? "Name not found",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: context.getDefaultSize() * 2.1,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                      ],
+                    ),
                   ),
                 ),
                 Padding(

@@ -31,7 +31,7 @@ class _UserItemWidgetState extends State<UserItemWidget> {
   void initState()  {
     super.initState();
 
-     getImage();
+   getImage();
     // getPref();
   }
 
@@ -75,7 +75,7 @@ String ?image;
         final Phone =user["Phone"];
         final flatNumber =user["flatNumber"];
         final floorNumber =user["floorNumber"];
-       return  InkWell(
+        return  InkWell(
           onTap:()
           {
             Navigator.push(context, MaterialPageRoute(builder: (context) =>  UserInfoPage(fullName:fullName, email: Email, phone: Phone, street: street, photoUrl:image!= null?image!:"assets/pics/circle_avatar.jpg", region:region, city: city ,country: country, flatNumber: flatNumber,floorNumber: floorNumber,)));
@@ -116,7 +116,7 @@ String ?image;
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                 Text(
+                              Text(
                                     fullName,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -159,7 +159,7 @@ String ?image;
       }
     },
 
-   );
+);
 
   }
 }

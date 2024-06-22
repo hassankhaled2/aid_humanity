@@ -1,4 +1,5 @@
 import 'package:aid_humanity/Features/home/presentation/widgets/choise_Item.dart';
+import 'package:aid_humanity/Features/profile/presentation/pages/about_page.dart';
 import 'package:aid_humanity/Features/profile/presentation/widgets/language_page_widgets/language_dialog_widget.dart';
 import 'package:aid_humanity/Features/profile/presentation/widgets/profile_page_widgets/profile_item_widget.dart';
 import 'package:aid_humanity/Features/profile/presentation/widgets/profile_page_widgets/profile_user_item_widget.dart';
@@ -60,24 +61,23 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                   text: context.translate("language"),
                   isModeWidget: false,
                 ),
-                ProfileItemWidget(
-                    icon: Icons.notifications_outlined,
-                    text: context.translate("notification"),
-                    isModeWidget: true,
-                    onTap: () {}),
-                ProfileItemWidget(
-                    icon: Icons.history,
-                    text: context.translate("history"),
-                    isModeWidget: false,
-                    onTap: () {}),
-                ProfileItemWidget(
-                    icon: Icons.help,
-                    text: context.translate("help"),
-                    isModeWidget: false,
-                    onTap: () {}),
+                // ProfileItemWidget(
+                //     icon: Icons.notifications_outlined,
+                //     text: context.translate("notification"),
+                //     isModeWidget: true,
+                //     onTap: () {}),
                 ProfileItemWidget(
                     icon: Icons.info_outline,
                     text: context.translate("about"),
+                    isModeWidget: false,
+                    onTap: () async {
+                      /// remove it later
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => AboutPage()));
+                    }),
+                ProfileItemWidget(
+                    icon: Icons.info_outline,
+                    text: context.translate("transition"),
                     isModeWidget: false,
                     onTap: () async {
                       /// remove it later
