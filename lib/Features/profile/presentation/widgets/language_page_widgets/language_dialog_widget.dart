@@ -19,7 +19,7 @@ class _LangageDialogWidgetState extends State<LangageDialogWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: context.getDefaultSize() * 13,
+      height: context.getDefaultSize() * 15,
       width: context.getDefaultSize() * 38,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -32,10 +32,12 @@ class _LangageDialogWidgetState extends State<LangageDialogWidget> {
             ),
             trailing: Radio<int>(
               value: 1,
-              groupValue: getIt<SharedPreferences>().getInt('lang')??selectedValue,
+              groupValue:
+                  getIt<SharedPreferences>().getInt('lang') ?? selectedValue,
               onChanged: (value) {
                 setState(() {
-                  BlocProvider.of<ThemeCubit>(context).changeLocale(const Locale('en'));
+                  BlocProvider.of<ThemeCubit>(context)
+                      .changeLocale(const Locale('en'));
                 });
               },
               fillColor: MaterialStateProperty.all(AppColorsLight.primaryColor),
@@ -44,15 +46,17 @@ class _LangageDialogWidgetState extends State<LangageDialogWidget> {
           ),
           const CustomDividerWidget(thickness: 1.0, whiteSpaceBegin: 15),
           ListTile(
-            title: const Text("العربية", style: TextStyle(fontWeight: FontWeight.bold)),
+            title: const Text("العربية",
+                style: TextStyle(fontWeight: FontWeight.bold)),
             trailing: Radio<int>(
               value: 2,
-              groupValue: getIt<SharedPreferences>().getInt('lang')??selectedValue,
+              groupValue:
+                  getIt<SharedPreferences>().getInt('lang') ?? selectedValue,
               onChanged: (value) {
                 setState(() {
-                  
-                    getIt<SharedPreferences>().setInt('lang', 2);
-                  BlocProvider.of<ThemeCubit>(context).changeLocale(const Locale('ar'));
+                  getIt<SharedPreferences>().setInt('lang', 2);
+                  BlocProvider.of<ThemeCubit>(context)
+                      .changeLocale(const Locale('ar'));
                 });
               },
               fillColor: MaterialStateProperty.all(AppColorsLight.primaryColor),

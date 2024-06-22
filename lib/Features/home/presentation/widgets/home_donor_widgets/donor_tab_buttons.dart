@@ -1,12 +1,10 @@
 import 'package:aid_humanity/Features/donation_details/presentaion/pages/add_images_page.dart';
-import 'package:aid_humanity/Features/donation_details/presentaion/pages/choose_items_page.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/pages/donation_with_text_page.dart';
 import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
 import 'package:aid_humanity/Features/home/presentation/widgets/history_widgets/history_widget.dart';
-import 'package:aid_humanity/Features/home/presentation/widgets/home_delivery_widgets/card_widget.dart';
+import 'package:aid_humanity/Features/home/presentation/widgets/card_widget.dart';
 import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:aid_humanity/core/utils/constants.dart';
-
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/utils/theme/app_color/app_color_light.dart';
 import 'package:aid_humanity/core/utils/theme/cubit/theme_cubit.dart';
@@ -68,14 +66,6 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
                       backgroundColor: Colors.white,
                       title: Text(context.translate('Aid Humanity'),
                           style: const TextStyle(color: Color(0xFFF8B145))),
-                      actions: [
-                        IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.notifications,
-                              color: Colors.black,
-                            )),
-                      ],
                       pinned: true,
                       floating: true,
                       flexibleSpace: FlexibleSpaceBar(
@@ -228,10 +218,10 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
       return SpeedDial(
         icon: Icons.add,
         activeIcon: Icons.close,
-        spacing: 3,
+        spacing: 30,
         //openCloseDial: isDialOpen,
         childPadding: const EdgeInsets.all(5),
-        spaceBetweenChildren: 4,
+        spaceBetweenChildren: 20,
         //.....
         buttonSize: const Size.fromRadius(
             35), //speedDial size which defaults to 56 itself
@@ -243,7 +233,7 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
 
         ///transition builder between label and active label, default
         // labelTransitionBuilder: (widget,animation)=>ScaleTransition(scale: double),
-        childrenButtonSize: const Size.fromRadius(40),
+        childrenButtonSize: const Size.fromRadius(45),
         visible: true,
         direction: SpeedDialDirection.up,
         switchLabelPosition: false,
@@ -269,7 +259,10 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
         // childMargin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         children: [
           SpeedDialChild(
-            child: const Icon(Icons.description_outlined),
+            child: const Icon(
+              Icons.description_outlined,
+              size: 40,
+            ),
             backgroundColor: kSecondaryColor,
             foregroundColor: Colors.white,
             label: context.translate("Enter_short_description"),
@@ -283,21 +276,10 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
             },
           ),
           SpeedDialChild(
-            child: const Icon(Icons.photo_album_outlined),
-            backgroundColor: kSecondaryColor,
-            foregroundColor: Colors.white,
-            label: context.translate("Choose_the_items"),
-            labelStyle: TextStyle(fontSize: context.getDefaultSize() * 2),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => (const ChooseItemsPage())),
-              );
-            },
-          ),
-          SpeedDialChild(
-            child: const Icon(Icons.camera_alt_outlined),
+            child: const Icon(
+              Icons.camera_alt_outlined,
+              size: 40,
+            ),
             backgroundColor: kSecondaryColor,
             foregroundColor: Colors.white,
             label: context.translate("Pick_an_image"),

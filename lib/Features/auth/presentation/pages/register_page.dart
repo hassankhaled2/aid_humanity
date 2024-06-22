@@ -46,7 +46,8 @@ class _State extends State<RegisterPage> {
   GlobalKey<FormState> formState = GlobalKey();
   bool isloading = true;
   bool isPassword = true;
-  CollectionReference categories = FirebaseFirestore.instance.collection('UsersAuth');
+  CollectionReference categories =
+      FirebaseFirestore.instance.collection('UsersAuth');
 
   File? select;
   String? url;
@@ -59,11 +60,13 @@ class _State extends State<RegisterPage> {
   Position? _currentPosition;
 
   SelectAndUploadImage() async {
-    final reteurnimage = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final reteurnimage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     select = File(reteurnimage!.path);
     var imageName = basename(reteurnimage.path);
     // var refStorage =FirebaseStorage.instance.ref("usersProfile/$imageName");
-    var refStorage = FirebaseStorage.instance.ref("usersImages").child(imageName);
+    var refStorage =
+        FirebaseStorage.instance.ref("usersImages").child(imageName);
     refStorage.putFile(select!);
 
     url = await refStorage.getDownloadURL();
@@ -90,19 +93,24 @@ class _State extends State<RegisterPage> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(content: Text('Location services are disabled. Please enable the services')));
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
       return false;
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(content: Text('Location permissions are denied')));
+        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(content: Text('Location permissions are permanently denied, we cannot request permissions.')));
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
       return false;
     }
     return true;
@@ -123,7 +131,9 @@ class _State extends State<RegisterPage> {
   }
 
   Future<void> _getAddressFromLatLng(Position position) async {
-    await placemarkFromCoordinates(_currentPosition!.latitude, _currentPosition!.longitude).then((List<Placemark> placemarks) {
+    await placemarkFromCoordinates(
+            _currentPosition!.latitude, _currentPosition!.longitude)
+        .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
         _currentStreet = '${place.street}';
@@ -201,12 +211,14 @@ class _State extends State<RegisterPage> {
       idToken: googleAuth?.idToken,
     );
     // Once signed in, return the UserCredential
-    final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+    final userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
     final id = userCredential.user!.uid;
     final user = userCredential.user!;
     final displayName = user.displayName ?? 'hahadhda';
     final email = user.email ?? 'hdahdhah';
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) {
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) {
       return ExtaDataGoogle(displayName: displayName, Email: email, id: id);
     }), (route) => false);
   }
@@ -254,8 +266,10 @@ class _State extends State<RegisterPage> {
                                 ),
                         ),
                         Positioned(
-                          right: context.getDefaultSize() * 0.2, // Adjust positioning as needed
-                          bottom: context.getDefaultSize() * 0, // Adjust positioning as needed
+                          right: context.getDefaultSize() *
+                              0.2, // Adjust positioning as needed
+                          bottom: context.getDefaultSize() *
+                              0, // Adjust positioning as needed
                           child: Container(
                             height: context.getDefaultSize() * 3.5,
                             width: context.getDefaultSize() * 3.5,
@@ -483,7 +497,8 @@ class _State extends State<RegisterPage> {
                   ),
                   CustomTextForm(
                     obscureText: isPassword,
-                    suffix: isPassword ? Icons.visibility : Icons.visibility_off,
+                    suffix:
+                        isPassword ? Icons.visibility : Icons.visibility_off,
                     suffixpressed: () {
                       setState(() {
                         isPassword = !isPassword;
@@ -506,26 +521,51 @@ class _State extends State<RegisterPage> {
                       height: 35,
                       width: 210,
                       child: ElevatedButton(
-                          style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black), shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)))),
+                          style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.black),
+                              shape: MaterialStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20)))),
                           onPressed: () async {
                             if (formState.currentState!.validate()) {
                               try {
-                                final creditional = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                                final creditional = await FirebaseAuth.instance
+                                    .createUserWithEmailAndPassword(
                                   email: email.text,
                                   password: password.text,
                                 );
-                                final d = FirebaseAuth.instance.currentUser!.uid;
-                                SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                final d =
+                                    FirebaseAuth.instance.currentUser!.uid;
+                                SharedPreferences sharedPreferences =
+                                    await SharedPreferences.getInstance();
                                 sharedPreferences.setString("userId", d);
-                                String? userId = sharedPreferences.getString("userId");
+                                String? userId =
+                                    sharedPreferences.getString("userId");
                                 final f = categories.doc();
                                 String? doc;
 
                                 // sharedPreferences.setString("categories",categories as String ) ;
                                 // final c= sharedPreferences.getString("categories");
                                 //  CollectionReference<Object?> Cat = c as CollectionReference<Object?>;
-                                DocumentReference add = await categories.doc(userId);
-                                add..set({"fullName": fullName.text, "Email": email.text, "Phone": phone.text, "street": street.text, "city": city.text, "region": region.text, "country": country.text, "flatNumber": flatNumber.text, "floorNumber": floorNumber.text, "LAT": _currentPosition?.latitude ?? '', "LNG": _currentPosition?.longitude ?? '', "id": userId});
+                                DocumentReference add =
+                                    await categories.doc(userId);
+                                add
+                                  ..set({
+                                    "fullName": fullName.text,
+                                    "Email": email.text,
+                                    "Phone": phone.text,
+                                    "street": street.text,
+                                    "city": city.text,
+                                    "region": region.text,
+                                    "country": country.text,
+                                    "flatNumber": flatNumber.text,
+                                    "floorNumber": floorNumber.text,
+                                    "LAT": _currentPosition?.latitude ?? '',
+                                    "LNG": _currentPosition?.longitude ?? '',
+                                    "id": userId
+                                  });
                                 doc = add.id;
                                 print(doc);
                                 // Save docId in SharedPreferences (optional):
@@ -535,12 +575,16 @@ class _State extends State<RegisterPage> {
                                 // ChoiceItem(g: d,);
                                 // addUsersData();
 
-                                await FirebaseAuth.instance.currentUser!.sendEmailVerification();
-                                Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.login, (route) => false);
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                await FirebaseAuth.instance.currentUser!
+                                    .sendEmailVerification();
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    AppRouter.login, (route) => false);
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
                                   elevation: 1,
                                   duration: Duration(seconds: 4),
-                                  content: Text(context.translate("Verify_Your_Email")),
+                                  content: Text(
+                                      context.translate("Verify_Your_Email")),
                                 ));
                                 // if(creditional.user!.emailVerified)
                                 // {
@@ -564,18 +608,24 @@ class _State extends State<RegisterPage> {
                                     dialogType: DialogType.error,
                                     animType: AnimType.rightSlide,
                                     title: context.translate("Error"),
-                                    desc: context.translate("Try_another_email_or_password"),
-                                    buttonsTextStyle: const TextStyle(color: Colors.black),
+                                    desc: context.translate(
+                                        "Try_another_email_or_password"),
+                                    buttonsTextStyle:
+                                        const TextStyle(color: Colors.black),
                                     showCloseIcon: true,
                                   ).show();
-                                  print(context.translate("The_account_already_exists_for_that_email"));
+                                  print(context.translate(
+                                      "The_account_already_exists_for_that_email"));
                                 }
                               } catch (e) {
                                 print(e);
                               }
                             }
                           },
-                          child: Text(context.translate("Sign_up"))),
+                          child: Text(
+                            context.translate("Sign_up"),
+                            style: TextStyle(color: Colors.white),
+                          )),
                     ),
                   ),
                   SizedBox(
@@ -591,7 +641,9 @@ class _State extends State<RegisterPage> {
                   ),
                   Center(
                     child: ElevatedButton.icon(
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.black)),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStatePropertyAll(Colors.black)),
                       onPressed: () {
                         signInWithGoogle(context);
                       },
@@ -615,7 +667,8 @@ class _State extends State<RegisterPage> {
                               builder: (context) => LoginPage(),
                             ));
                           },
-                          child: Text(context.translate("Sign_in"), style: TextStyle(color: Colors.orange))),
+                          child: Text(context.translate("Sign_in"),
+                              style: TextStyle(color: Colors.orange))),
                     ],
                   ),
                 ],

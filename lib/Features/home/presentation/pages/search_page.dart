@@ -1,5 +1,5 @@
 import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
-import 'package:aid_humanity/Features/home/presentation/widgets/home_delivery_widgets/card_widget.dart';
+import 'package:aid_humanity/Features/home/presentation/widgets/card_widget.dart';
 import 'package:aid_humanity/core/constants/constants.dart';
 
 import 'package:aid_humanity/core/entities/request_entity.dart';

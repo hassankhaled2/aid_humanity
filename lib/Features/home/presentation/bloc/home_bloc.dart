@@ -43,7 +43,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         final faliureOrRequests = await getLiveRequestsUseCase(userId: event.userId,isDonor: event.isDonor);
         faliureOrRequests.fold((faliure) => emit(GetLiveOrDoneRequestsFailure(message: _mapFaliureToMessage(faliure))), (requests) => emit(GetLiveOrDoneRequestsSuccess(requests: requests)));
       }
-      if (event is GetDoneRequestsEvent) {
+      if (event is GetDoneRequestsEvent) { 
         emit(GetLiveOrDoneRequestsLoading());
         final faliureOrRequests = await getDoneRequestsUseCase( event.userId,event.isDonor);
         faliureOrRequests.fold((faliure) => emit(GetLiveOrDoneRequestsFailure(message: _mapFaliureToMessage(faliure))), (requests) => emit(GetLiveOrDoneRequestsSuccess(requests: requests)));

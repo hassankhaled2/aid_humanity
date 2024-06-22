@@ -1,8 +1,7 @@
-
 import 'package:aid_humanity/Features/home/presentation/bloc/home_bloc.dart';
 import 'package:aid_humanity/Features/home/presentation/pages/search_page.dart';
 import 'package:aid_humanity/Features/home/presentation/widgets/history_widgets/history_widget.dart';
-import 'package:aid_humanity/Features/home/presentation/widgets/home_delivery_widgets/card_widget.dart';
+import 'package:aid_humanity/Features/home/presentation/widgets/card_widget.dart';
 import 'package:aid_humanity/core/constants/strings/faliures_strings.dart';
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:aid_humanity/core/extensions/translation_extension.dart';
@@ -13,8 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:live_indicator/live_indicator.dart';
-
+import 'package:live_indicator/live_indicator.dart';
 
 class DeliveryTabButtons extends StatefulWidget {
   const DeliveryTabButtons({super.key});
@@ -63,7 +61,7 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
               return <Widget>[
                 SliverAppBar(
                   backgroundColor: Colors.white,
-                  title:  Text(context.translate('Aid Humanity'),
+                  title: Text(context.translate('Aid Humanity'),
                       style: TextStyle(color: Color(0xFFF8B145))),
                   actions: [
                     IconButton(
@@ -78,12 +76,6 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                           FontAwesomeIcons.magnifyingGlass,
                           color: Colors.black,
                           size: 20,
-                        )),
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.notifications,
-                          color: Colors.black,
                         )),
                   ],
                   pinned: true,
@@ -102,14 +94,14 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                       if (index == 1) {
                         BlocProvider.of<HomeBloc>(context).add(
                             GetLiveRequestsEvent(
-                                userId:
-                                    FirebaseAuth.instance.currentUser!.uid,isDonor: false));
+                                userId: FirebaseAuth.instance.currentUser!.uid,
+                                isDonor: false));
                       }
                       if (index == 2) {
                         BlocProvider.of<HomeBloc>(context).add(
                             GetDoneRequestsEvent(
-                                userId:
-                                    FirebaseAuth.instance.currentUser!.uid,isDonor: false));
+                                userId: FirebaseAuth.instance.currentUser!.uid,
+                                isDonor: false));
                       }
                     },
                     labelColor: const Color(0xFFF8B145),
@@ -130,10 +122,12 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                           const SizedBox(
                             width: 20,
                           ),
-                           // hasLiveRequests ? LiveIndicator(
-                           //        color: Colors.greenAccent,
-                           //        spreadRadius: 10,
-                           //      ) : Container()
+                          hasLiveRequests
+                              ? LiveIndicator(
+                                  color: Colors.greenAccent,
+                                  spreadRadius: 10,
+                                )
+                              : Container()
                         ],
                       )),
                       Tab(
@@ -207,7 +201,8 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                               BlocProvider.of<HomeBloc>(context).add(
                                   GetLiveRequestsEvent(
                                       userId: FirebaseAuth
-                                          .instance.currentUser!.uid,isDonor: false));
+                                          .instance.currentUser!.uid,
+                                      isDonor: false));
                             },
                             child: FaliureWidget(faliureName: state.message));
                       } else {
