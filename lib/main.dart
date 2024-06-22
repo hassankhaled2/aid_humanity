@@ -72,38 +72,32 @@ class MyApp extends StatelessWidget {
         //     }
         //
         // ),
-                BlocProvider(create: (_) => DliveryLocationCubit()..getCurrentLocation(context))
+        BlocProvider(create: (_) => DliveryLocationCubit()..getCurrentLocation(context))
 
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
-          ThemeData? themeData;
-
-        if (state is LoadedThemeState) {
-            themeData = state.themeData;
-          }
-
           return MaterialApp(
             routes: routes,
 
             home: FirebaseAuth.instance.currentUser != null &&
-                    FirebaseAuth.instance.currentUser!.emailVerified
+                FirebaseAuth.instance.currentUser!.emailVerified
                 ? ChoicePage()
                 : SplashScreen(),
             // CircleAvatarWidget(),
 
             //CircleAvatarWidget(),
             debugShowCheckedModeBanner: false,
-            locale:BlocProvider.of<ThemeCubit>(context).locale,
+            locale: BlocProvider.of<ThemeCubit>(context).locale,
             supportedLocales: AppLocalizationsSetup
                 .supportedLocales, // this line to provide , which langs to use in our app
             localizationsDelegates:
-                AppLocalizationsSetup.localizationsDelegates,
+            AppLocalizationsSetup.localizationsDelegates,
             localeResolutionCallback: (deviceLocale, supportedLocales) {
               return AppLocalizationsSetup.localeResolutionCallback(
                   deviceLocale!, supportedLocales);
             },
-            theme: themeData, //const HomeView(),
+            theme: getThemeDataLight, //const HomeView(),
           );
         },
       ),
