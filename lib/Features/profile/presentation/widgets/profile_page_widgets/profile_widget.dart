@@ -90,10 +90,10 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     isModeWidget: false,
                     iconColor: Colors.red,
                     onTap: () async {
-                      String keyToRemove = "userType";
-                      SharedPreferences sharedPreferences =
-                          await SharedPreferences.getInstance();
-                      sharedPreferences.remove(keyToRemove);
+                      // String keyToRemove = "userType";
+                      // SharedPreferences sharedPreferences =
+                      //     await SharedPreferences.getInstance();
+                      // sharedPreferences.remove(keyToRemove);
                       // await FirebaseAuth.instance.currentUser!.delete();
                       GoogleSignIn googleSign = GoogleSignIn();
                       googleSign.disconnect();
