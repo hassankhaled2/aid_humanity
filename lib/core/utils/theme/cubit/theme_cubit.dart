@@ -25,7 +25,7 @@ class ThemeCubit extends Cubit<ThemeState> {
       final String devicelocale = Platform.localeName;
       if (devicelocale.contains("ar")) {
         locale = const Locale('ar');
-         getIt<SharedPreferences>().setInt('lang', 2);
+        getIt<SharedPreferences>().setInt('lang', 2);
       } else {
         locale = const Locale("en");
         getIt<SharedPreferences>().setInt('lang', 1);

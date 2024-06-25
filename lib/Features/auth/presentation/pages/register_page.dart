@@ -647,7 +647,10 @@ class _State extends State<RegisterPage> {
                       onPressed: () {
                         signInWithGoogle(context);
                       },
-                      icon: Icon(FontAwesomeIcons.google),
+                      icon: Icon(
+                        FontAwesomeIcons.google,
+                        color: Colors.white,
+                      ),
                       label: Text(
                         context.translate("Continue_with_Google"),
                         style: TextStyle(color: Colors.white),

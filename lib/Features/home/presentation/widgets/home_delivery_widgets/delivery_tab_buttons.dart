@@ -12,7 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:live_indicator/live_indicator.dart';
+import 'package:live_indicator/live_indicator.dart';
 
 class DeliveryTabButtons extends StatefulWidget {
   const DeliveryTabButtons({super.key});
@@ -122,10 +122,12 @@ class _DeliveryTabButtonsState extends State<DeliveryTabButtons> {
                           const SizedBox(
                             width: 20,
                           ),
-                          // hasLiveRequests ? LiveIndicator(
-                          //         color: Colors.greenAccent,
-                          //         spreadRadius: 10,
-                          //       ) : Container()
+                          hasLiveRequests
+                              ? LiveIndicator(
+                                  color: Colors.greenAccent,
+                                  spreadRadius: 10,
+                                )
+                              : Container()
                         ],
                       )),
                       Tab(

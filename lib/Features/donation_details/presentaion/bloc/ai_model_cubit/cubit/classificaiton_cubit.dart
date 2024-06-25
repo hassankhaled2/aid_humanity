@@ -17,8 +17,8 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
       await loadModel("assets/ai_model/Master_CNN.tflite",
           "assets/ai_model/master_lables.txt");
       await classifyImage(images, "Master");
-      await loadModel(
-          "assets/ai_model/New_CNN.tflite", "assets/ai_model/lables.txt");
+      await loadModel("assets/ai_model/cnn_newdata.tflite",
+          "assets/ai_model/labels_V2.txt");
       await classifyImage(images, "Type");
       await loadModel("assets/ai_model/Gender_CNN.tflite",
           "assets/ai_model/Gender_classes.txt");

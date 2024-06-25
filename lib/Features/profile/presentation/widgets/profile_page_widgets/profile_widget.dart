@@ -8,7 +8,6 @@ import 'package:aid_humanity/core/extensions/translation_extension.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/utils/app_router/app_router.dart';
 

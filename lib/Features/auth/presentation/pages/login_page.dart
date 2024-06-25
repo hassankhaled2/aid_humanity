@@ -52,6 +52,7 @@ class _State extends State<LoginPage> {
       return ExtaDataGoogle(displayName: displayName, Email: email, id: id);
     }), (route) => false);
   }
+
   String? _currentAddress;
   Position? _currentPosition;
 
@@ -61,22 +62,21 @@ class _State extends State<LoginPage> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(
-          content: Text(
-              context.translate("Location_services"))));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.translate("Location_services"))));
       return false;
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.translate("Location_permissions_denied"))));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(context.translate("Location_permissions_denied"))));
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
               context.translate("Location_permissions_permanently_denied"))));
       return false;
@@ -88,8 +88,9 @@ class _State extends State<LoginPage> {
     final hasPermission = await _handleLocationPermission();
 
     if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high,)
-        .then((Position position) {
+    await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    ).then((Position position) {
       setState(() => _currentPosition = position);
       _getAddressFromLatLng(_currentPosition!);
     }).catchError((e) {
@@ -99,16 +100,18 @@ class _State extends State<LoginPage> {
 
   Future<void> _getAddressFromLatLng(Position position) async {
     await placemarkFromCoordinates(
-        _currentPosition!.latitude, _currentPosition!.longitude)
+            _currentPosition!.latitude, _currentPosition!.longitude)
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
-        _currentAddress = '${place.street},${place.subAdministrativeArea},${place.administrativeArea},${place.country}';
+        _currentAddress =
+            '${place.street},${place.subAdministrativeArea},${place.administrativeArea},${place.country}';
       });
     }).catchError((e) {
       debugPrint(e);
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,7 +180,7 @@ class _State extends State<LoginPage> {
                             isPassword = !isPassword;
                           });
                         },
-                        hinttext:context.translate( "Password"),
+                        hinttext: context.translate("Password"),
                         mycontroller: password,
                         validator: (val) {
                           if (val == "") {
@@ -201,8 +204,8 @@ class _State extends State<LoginPage> {
                                   dialogType: DialogType.warning,
                                   animType: AnimType.rightSlide,
                                   title: context.translate("Error"),
-                                  desc:
-                                      context.translate("please_enter_your_email_after_that_enter_forget_password"),
+                                  desc: context.translate(
+                                      "please_enter_your_email_after_that_enter_forget_password"),
                                 ).show();
                                 return;
                               }
@@ -215,8 +218,8 @@ class _State extends State<LoginPage> {
                                   dialogType: DialogType.success,
                                   animType: AnimType.rightSlide,
                                   title: context.translate("Error"),
-                                  desc:
-                                      context.translate("please_go_to_your_gmail_and_make_verify_to_your_email"),
+                                  desc: context.translate(
+                                      "please_go_to_your_gmail_and_make_verify_to_your_email"),
                                 ).show();
                               } catch (e) {
                                 AwesomeDialog(
@@ -225,15 +228,17 @@ class _State extends State<LoginPage> {
                                   dialogType: DialogType.warning,
                                   animType: AnimType.rightSlide,
                                   title: context.translate("Error"),
-                                  desc:
-                                      context.translate("there_is_something_wrong_in_your_account"),
+                                  desc: context.translate(
+                                      "there_is_something_wrong_in_your_account"),
                                 ).show();
                                 //  print(e);
                               }
                             },
-                            child:Text(
+                            child: Text(
                               context.translate("Forget_Password"),
-                              style: TextStyle(color: Colors.black),
+                              style: TextStyle(
+                                  fontSize: context.getDefaultSize() * 1.5,
+                                  color: Colors.black),
                             ))
                       ],
                     ),
@@ -275,8 +280,8 @@ class _State extends State<LoginPage> {
                                     dialogType: DialogType.warning,
                                     animType: AnimType.rightSlide,
                                     title: context.translate("Error"),
-                                    desc:
-                                        context.translate("please_go_to_your_gmail_and_make_verify_to_your_email"),
+                                    desc: context.translate(
+                                        "please_go_to_your_gmail_and_make_verify_to_your_email"),
                                   ).show();
                                 }
                                 isLoading = false;
@@ -287,15 +292,15 @@ class _State extends State<LoginPage> {
 
                                 ///Error in this line code
                                 if (e.code == e.code) {
-                                  print(
-                                      context.translate("there_is_a_something_wrong_in_password_or_email"));
+                                  print(context.translate(
+                                      "there_is_a_something_wrong_in_password_or_email"));
                                   AwesomeDialog(
                                     context: context,
                                     dialogType: DialogType.error,
                                     animType: AnimType.rightSlide,
                                     title: context.translate("Error"),
-                                    desc:
-                                        context.translate("there_is_a_something_wrong_in_password_or_email"),
+                                    desc: context.translate(
+                                        "there_is_a_something_wrong_in_password_or_email"),
                                     buttonsTextStyle:
                                         const TextStyle(color: Colors.black),
                                     showCloseIcon: true,
@@ -306,7 +311,7 @@ class _State extends State<LoginPage> {
                               }
                             }
                           },
-                          child:  Text(
+                          child: Text(
                             context.translate("Sign_In"),
                             style: TextStyle(color: Colors.white),
                           )),
@@ -318,20 +323,20 @@ class _State extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                    Text(context.translate("Don_have_account")),
+                      Text(context.translate("Don_have_account")),
                       TextButton(
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const RegisterPage(),
                             ));
                           },
-                          child:  Text(
+                          child: Text(
                             context.translate("Sign_up"),
                             style: TextStyle(color: Colors.orange),
                           ))
                     ],
                   ),
-                 Row(children: <Widget>[
+                  Row(children: <Widget>[
                     Expanded(child: Divider()),
                     Text(context.translate("OR")),
                     Expanded(child: Divider()),
