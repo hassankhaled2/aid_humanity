@@ -17,8 +17,8 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
       await loadModel("assets/ai_model/Master_CNN.tflite",
           "assets/ai_model/master_lables.txt");
       await classifyImage(images, "Master");
-      await loadModel("assets/ai_model/cnn_newdata.tflite",
-          "assets/ai_model/labels_V2.txt");
+      await loadModel("assets/ai_model/model_unquant.tflite",
+          "assets/ai_model/lables_type.txt");
       await classifyImage(images, "Type");
       await loadModel("assets/ai_model/Gender_CNN.tflite",
           "assets/ai_model/Gender_classes.txt");
@@ -53,6 +53,9 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
       for (int i = 0; i < images.length; i++) {
         output = await Tflite.runModelOnImage(
           numResults: 2,
+          threshold: 0.5,
+          imageMean: 127.5,
+          imageStd: 127.5,
           path: images[i].path,
         );
         outputs.add(output[0]);
@@ -67,11 +70,11 @@ class ClassificaitonCubit extends Cubit<ClassificaitonState> {
   _mapModelOutputsToLabels(List<dynamic> outputs, String type) {
     for (int i = 0; i < outputs.length; i++) {
       if (type == "Master") {
-        results.add({"Master": outputs[i]["label"].toString().split(" ")[1]});
+        results.add({"Master": outputs[i]["label"].toString()});
       } else if (type == "Type") {
-        results[i][type] = outputs[i]["label"].toString().substring(3);
+        results[i][type] = outputs[i]["label"].toString().split(' ')[1];
       } else if (type == "Gender") {
-        results[i][type] = outputs[i]["label"].toString().substring(1);
+        results[i][type] = outputs[i]["label"].toString();
       }
     }
   }

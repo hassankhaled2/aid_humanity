@@ -1,0 +1,20 @@
+0 Not sure
+1 T-Shirt
+2 Shoes
+3 Shorts
+4 Shirt
+5 Pants
+6 Skirt
+7 Other
+8 Top
+9 Outwear
+10 Dress
+11 Body
+12 Longsleeve
+13 Undershirt
+14 Hat
+15 Polo
+16 Blouse
+17 Hoodie
+18 Skip
+19 Blazer
