@@ -89,8 +89,7 @@ class MyApp extends StatelessWidget {
             //CircleAvatarWidget(),
             debugShowCheckedModeBanner: false,
             locale: BlocProvider.of<ThemeCubit>(context).locale,
-            supportedLocales: AppLocalizationsSetup
-                .supportedLocales, // this line to provide , which langs to use in our app
+            supportedLocales: AppLocalizationsSetup.supportedLocales, // this line to provide , which langs to use in our app
             localizationsDelegates:
             AppLocalizationsSetup.localizationsDelegates,
             localeResolutionCallback: (deviceLocale, supportedLocales) {

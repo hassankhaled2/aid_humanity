@@ -14,7 +14,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:live_indicator/live_indicator.dart';
+// import 'package:live_indicator/live_indicator.dart';
 
 class DonorTapButtons extends StatefulWidget {
   const DonorTapButtons({super.key});
@@ -109,10 +109,10 @@ class _DonorTapButtonsState extends State<DonorTapButtons> {
                               const SizedBox(
                                 width: 20,
                               ),
-                              hasLiveRequests ? LiveIndicator(
-                                      color: Colors.greenAccent,
-                                      spreadRadius: 10,
-                                    ) : Container()
+                              // hasLiveRequests ? LiveIndicator(
+                              //         color: Colors.greenAccent,
+                              //         spreadRadius: 10,
+                              //       ) : Container()
                             ],
                           )),
                         ],
