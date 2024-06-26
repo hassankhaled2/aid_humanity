@@ -1,5 +1,6 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings, sized_box_for_whitespace
+
 import 'dart:io';
-import 'dart:math';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/ai_model_cubit/cubit/classificaiton_cubit.dart';
 import 'package:aid_humanity/Features/donation_details/presentaion/bloc/details_bloc.dart';
 import 'package:aid_humanity/core/entities/item_entity.dart';
@@ -12,7 +13,9 @@ import 'package:aid_humanity/core/utils/theme/cubit/theme_cubit.dart';
 import 'package:aid_humanity/core/widgets/BottomNavigationDonor.dart';
 import 'package:aid_humanity/core/widgets/custom_button_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -25,6 +28,7 @@ class DonationFormItem extends StatefulWidget {
     required this.isKnn,
     this.itemsImages,
   });
+
   final bool isKnn;
   final List<Map<String, dynamic>> items;
   final List<File>? itemsImages;
@@ -44,10 +48,11 @@ class _DonationFormItemState extends State<DonationFormItem> {
 
   int totalQuantity = 0;
   List<int>? itemQ;
+  Map<String, dynamic>? userDetails;
 
   void _onDecrement(int index) {
     setState(() {
-      if (itemQ![index] > 0 && totalQuantity > 2) {
+      if (itemQ![index] > 0 && totalQuantity > 0) {
         itemQ![index]--;
         totalQuantity--;
         quantityController =
@@ -67,10 +72,6 @@ class _DonationFormItemState extends State<DonationFormItem> {
           TextEditingController(text: totalQuantity.toString());
     });
   }
-
-  int totalQuantity = 0;
-  List<int>? itemQ;
-  Map<String, dynamic>? userDetails;
 
   Future<Map<String, dynamic>?> getUserDetailsByRequestId(
       String requestId) async {
@@ -102,7 +103,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
     };
   }
 
-  void _onDecrement(int index) {
+  void onDecrement(int index) {
     setState(() {
       if (itemQ![index] > 0 && totalQuantity > 2) {
         itemQ![index]--;
@@ -116,7 +117,7 @@ class _DonationFormItemState extends State<DonationFormItem> {
     });
   }
 
-  void _onIncrement(int index) {
+  void onIncrement(int index) {
     setState(() {
       itemQ![index]++;
       totalQuantity++;
@@ -128,7 +129,12 @@ class _DonationFormItemState extends State<DonationFormItem> {
   @override
   void initState() {
     _fetchUserDetails();
-    itemQ = List.filled(widget.itemsImages!.length, 1);
+    if (widget.itemsImages != null)
+      itemQ =
+          List.filled(widget.itemsImages!.length, widget.itemsImages!.length);
+    else
+      itemQ = List.filled(widget.items!.length, widget.items.length);
+
     super.initState();
     itemsController.text = widget.items.toString();
     dateController.text = DateFormat.yMMMd().format(date);
@@ -316,10 +322,17 @@ class _DonationFormItemState extends State<DonationFormItem> {
                     textEditingController: quantityController, readOnly: true),
                 addressText(context, context.translate("Items")),
                 widget.isKnn
-                    ? const Center(
-                        child: Image(
-                            image: NetworkImage(
-                                "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg")),
+                    ? SizedBox(
+                        height: context.getDefaultSize() * 25,
+                        width: double.infinity,
+                        child: ListView.builder(
+                          itemBuilder: (context, index) => photoWidget(context,
+                              File('assets/pics/defaultImage.jpg'), index),
+                          itemCount: widget.items.length,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                        ),
                       )
                     : SizedBox(
                         height: context.getDefaultSize() * 25,
@@ -592,5 +605,11 @@ class _DonationFormItemState extends State<DonationFormItem> {
       return date;
     }
     return date!;
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(IntProperty('totalQuantity', totalQuantity));
   }
 }

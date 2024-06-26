@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:aid_humanity/core/entities/request_entity.dart';
 import 'package:aid_humanity/core/models/item_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

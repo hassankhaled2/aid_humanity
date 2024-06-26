@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member, prefer_const_constructors, curly_braces_in_flow_control_structures, duplicate_ignore
+
 import 'dart:io';
 
 import 'package:aid_humanity/core/constants/strings/faliures_strings.dart';

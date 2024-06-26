@@ -72,8 +72,8 @@ class MyApp extends StatelessWidget {
         //     }
         //
         // ),
-                BlocProvider(create: (_) => DliveryLocationCubit()..getCurrentLocation(context))
-
+        BlocProvider(
+            create: (_) => DliveryLocationCubit()..getCurrentLocation(context))
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
