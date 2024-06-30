@@ -1,15 +1,21 @@
+
 class UserEntity
 {
+
   final String ?fullName;
   final String ?phoneNumber;
   final String ?email;
   final String ?address;
+  final String? displayNameGoogle;
+  final String? photoUrl;
+ // final String? idToken;
+ // final String? accessToken;
+ // final String? fcmToken;
+
+ final String? userId;
 
 
-  UserEntity({
-    required this.fullName,
-    required this.phoneNumber,
-    required this.email,
-    required this.address,
+  UserEntity({this.fullName, this.phoneNumber, this.email, this.address, this.displayNameGoogle, this.photoUrl, this.userId,
+
   });
 }

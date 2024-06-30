@@ -4,10 +4,8 @@ import 'package:aid_humanity/core/widgets/defualt_app_bar_widget.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key, required this.displayName, required this.email, required this.photoUrl});
-  final String displayName;
-  final String email;
-  final String  photoUrl;
+  const ProfilePage({super.key, });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,8 +17,9 @@ class ProfilePage extends StatelessWidget {
   AppBar _buildAppBar(BuildContext context) => getDefaultAppBarWidget(
         context: context,
         title: context.translate("profile"),
-        color: Colors.black,
+        color: Color(0xFFF8B145),
+        backgroundColor:Colors.white
       );
 
-  Widget _buildBody() =>  ProfileWidget(photoUrl: photoUrl,email:email ,displayName:displayName ,);
+  Widget _buildBody() =>  ProfileWidget();
 }

@@ -36,11 +36,11 @@ class DetailsBloc extends Bloc<DetailsEvent, DetailsState> {
     });
   }
 
-  DetailsState _mapFailureOrUnitToState(Either<Faliure, Unit> either) {
+  DetailsState _mapFailureOrUnitToState(Either<Failure, Unit> either) {
     return either.fold((failure) => AddRequestErrorState(message: _mapFaliureToMessage(failure)), (unit) => AddRequestSucccessState());
   }
 
-  String _mapFaliureToMessage(Faliure failure) {
+  String _mapFaliureToMessage(Failure failure) {
     switch (failure.runtimeType) {
       // this to get the extended types while run time :)
       // ignore: type_literal_in_constant_pattern

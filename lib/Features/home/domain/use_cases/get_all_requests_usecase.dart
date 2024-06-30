@@ -8,7 +8,7 @@ class GetAllRequestsUseCase {
   GetAllRequestsUseCase({
     required this.homeRepository,
   });
-  Future<Either<Faliure, List<RequestEntity>>> call() async {
+  Future<Either<Failure, List<RequestEntity>>> call() async {
    return homeRepository.getAllRequests();
   }
 }

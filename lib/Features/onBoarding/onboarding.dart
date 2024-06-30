@@ -1,6 +1,4 @@
-
-
-
+import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -12,6 +10,7 @@ class BoardingModels {
   final String image;
   final String title;
   final String body;
+
   final MaterialButton? welcomeButton;
 
   BoardingModels({
@@ -42,30 +41,25 @@ class _OnBoardingState extends State<OnBoarding> {
       image: 'assets/pics/onboarding2.png',
       title: 'Together, we can make a difference! Help us fight hunger',
       body:
-      'Your contribution can make a big difference in the lives of those in need.',
+          'Your contribution can make a big difference in the lives of those in need.',
     ),
     BoardingModels(
       image: 'assets/pics/onboardingWelcom.png',
       title: '',
       body:
-      'Welcome to Aid Humanity Connecting Communities, Sharing Aids', //Join our community and start sharing meals today.
+          'Welcome to Aid Humanity Connecting Communities, Sharing Aids', //Join our community and start sharing meals today.
       welcomeButton: MaterialButton(
-        onPressed: ()
-        {
-
-        },
-
+        onPressed: () {},
         color: Colors.transparent,
         textColor: AppColorsLight.primaryColor,
         elevation: 0.0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(8),
         ),
-        child: const Text('Get Started',
-          style: TextStyle
-            ( fontSize: 15.0,
-
-
+        child: const Text(
+          'Get Started',
+          style: TextStyle(
+            fontSize: 15,
           ),
         ),
       ),
@@ -81,8 +75,8 @@ class _OnBoardingState extends State<OnBoarding> {
       value: true,
     ).then((value) {
       if (value = isLast) {
-        Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.bottomNavigation, (route) => false);
-
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(AppRouter.choicePage, (route) => false);
       }
     });
   }
@@ -95,7 +89,8 @@ class _OnBoardingState extends State<OnBoarding> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pushNamedAndRemoveUntil(AppRouter.bottomNavigation, (route) => false);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  AppRouter.choicePage, (route) => false);
             },
             child: const Text(
               'SKIP',
@@ -107,10 +102,8 @@ class _OnBoardingState extends State<OnBoarding> {
         ],
       ),
       body: Padding(
-
         padding: const EdgeInsets.all(30.0),
         child: Column(
-
           children: [
             const SizedBox(height: 25.0),
             Expanded(
@@ -134,7 +127,7 @@ class _OnBoardingState extends State<OnBoarding> {
                 itemCount: boarding.length,
               ),
             ),
-            const SizedBox(height: 40.0),
+            SizedBox(height: context.getDefaultSize()),
             Visibility(
               visible: !isLast,
               child: Row(
@@ -187,12 +180,11 @@ class _OnBoardingState extends State<OnBoarding> {
             ),
           ),
           Image(image: AssetImage(models.image)),
-          const SizedBox(height: 100.0),
+          SizedBox(height: context.getDefaultSize() * 3),
           Container(
-
             decoration: BoxDecoration(
               border:
-              Border.all(color: AppColorsLight.primaryColor, width: 2.0),
+                  Border.all(color: AppColorsLight.primaryColor, width: 2.0),
               borderRadius: BorderRadius.circular(25.0),
               color: Colors.transparent,
             ),
@@ -201,17 +193,15 @@ class _OnBoardingState extends State<OnBoarding> {
                 submit();
                 index++;
               },
-              child: const Text(
+              child: Text(
                 'Get Started',
                 style: TextStyle(
-                  fontSize: 30.0,
-
+                  fontSize: context.getDefaultSize() * 3.5,
                   color: AppColorsLight.primaryColor,
                 ),
               ),
             ),
           ),
-
         ],
       );
     } else {
@@ -222,7 +212,7 @@ class _OnBoardingState extends State<OnBoarding> {
           Text(
             models.body,
             style: const TextStyle(
-              fontSize: 30.0,
+              fontSize: 30,
             ),
           ),
           const SizedBox(height: 40.0),

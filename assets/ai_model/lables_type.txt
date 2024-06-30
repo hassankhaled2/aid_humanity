@@ -1,0 +1,12 @@
+0 Blazers
+1 Shorts
+2 Jackets
+3 Skirts
+4 Hoodies
+5 Blouse
+6 Sweater
+7 T-Shirts
+8 Shirts
+9 Dress
+10 Pants
+11 Shoes
