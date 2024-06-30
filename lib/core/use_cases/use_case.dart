@@ -3,7 +3,7 @@
 //[Param--> to determine the arguments you receive here]
 import 'package:dartz/dartz.dart';
 
-import '../errors/failure.dart';
+import '../error/faliures.dart';
 
 abstract class UseCase<Type,Param>
 {

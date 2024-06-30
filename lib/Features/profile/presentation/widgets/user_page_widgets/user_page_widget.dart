@@ -4,16 +4,18 @@ import 'package:aid_humanity/Features/profile/presentation/widgets/user_page_wid
 import 'package:aid_humanity/core/extensions/mediaquery_extension.dart';
 import 'package:flutter/material.dart';
 
-class UserPageWidget extends StatefulWidget {
-  const UserPageWidget({super.key, required this.displayName, required this.email, required this.photoUrl,});
-  final String displayName;
+class UserPageWidget extends StatelessWidget {
+  const UserPageWidget({super.key, required this.fullName, required this.email, required this.phone, required this.street, required this.photoUrl, required this.region, required this.city, required this.country, required this.flatNumber, required this.floorNumber,});
+  final String fullName;
   final String email;
-  final String  photoUrl;
-  @override
-  State<UserPageWidget> createState() => _UserPageWidgetState();
-}
-
-class _UserPageWidgetState extends State<UserPageWidget> {
+  final String phone;
+  final String street;
+  final String region;
+  final String city;
+  final String country;
+  final String photoUrl;
+  final String flatNumber;
+  final String floorNumber;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,12 +25,12 @@ class _UserPageWidgetState extends State<UserPageWidget> {
             physics: BouncingScrollPhysics(),
             slivers: [
 
-              UserSliverAppBar(photoUrl:widget.photoUrl ,displayName:widget.displayName ),
-              SliverPadding(padding: EdgeInsets.all(8.0), sliver: SliverUSerFormWidget(displayName:widget.displayName,email: widget.email,photoUrl:widget.photoUrl,)),
+              UserSliverAppBar(FullName:fullName, photoUrl: photoUrl, ),
+              SliverPadding(padding: EdgeInsets.all(8.0), sliver: SliverUSerFormWidget(fullName: fullName,phone: phone,email: email,street: street, region: region, city: city, country: country, flatNumber:flatNumber,floorNumber: floorNumber,))
             ],
           ),
         ),
-        Padding(padding: EdgeInsets.all(context.getDefaultSize() * 1.3), child: const SavaChangesButtonWidget()),
+        Padding(padding: EdgeInsets.all(context.getDefaultSize() * 1.3), child:  SavaChangesButtonWidget()),
       ],
     );
   }

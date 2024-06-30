@@ -4,6 +4,6 @@ import 'package:aid_humanity/core/error/faliures.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class DetailsRepository{
-Future<Either <Faliure,Unit>> addRequest(RequestEntity requestEntity,List<ItemEntity> items);
+Future<Either <Failure,Unit>> addRequest(RequestEntity requestEntity,List<ItemEntity> items);
 }
 
